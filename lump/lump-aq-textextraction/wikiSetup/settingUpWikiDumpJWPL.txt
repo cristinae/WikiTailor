@@ -1,0 +1,124 @@
+Necessary steps to setup a Wikipedia instance for JWPL-based access
+-------------------------------------------------------------------
+
+date: 2014/04/03
+last author: Alberto Barrón
+las modification: 2014/04/03
+
+
+REQUIREMENTS
+------------
+
+- Wikipedia dumps, available at http://dumps.wikimedia.org
+
+- JWPL library, available at http://code.google.com/p/jwpl/
+	We need in particular the file JWPLDataMachine_v01.jar	
+	http://code.google.com/p/jwpl/wiki/DataMachine
+
+- Download the Wikipedia files:
+  	* [LANGCODE]wiki-[DATE]-pages-articles.xml.bz2
+  	* [LANGCODE]wiki-[DATE]-pagelinks.sql.gz
+  	* [LANGCODE]wiki-[DATE]-categorylinks.sql.gz
+
+
+DATABASE SETUP
+--------------
+
+- Create a MySQL database (use UTF-8 encoding).
+		
+	CREATE DATABASE IF NOT EXISTS wikitexts_LAN CHARACTER SET utf8 COLLATE utf8_general_ci
+	
+- Import the empty tables into the new database:
+	
+	mysql -uUSER -p DATABASE_NAME < tables.sql
+
+JWPL PREPROCESSING
+------------------
+  		
+- Run the transformation.
+ 	
+ 	java -jar JWPLDataMachine.jar [LANGUAGE] [MAIN_CATEGORY] \
+     		[DISAMBIGUATION_CATEGORY] [SOURCE_DIR] 
+    	
+    where: 
+        LANGUAGE - language name (e.g. english, russian, spanish)
+        MAIN_CATEGORY - name of the main (top) category of the Wikipedia 
+         			category hierarchy
+        DISAMBIGUATION_CATEGORY - name of the category containing the 
+         			disambiguation categories
+        SOURCE_DIR - path to the directory with the source files    
+
+	EXAMPLES:
+		java -jar JWPLDataMachine.jar english Categories Disambiguation_pages ~/enwiki/20081013
+    	java -jar JWPLDataMachine.jar russian Всё Многозначные_термины ~/ruwiki/20080420
+    	java -jar JWPLDataMachine.jar spanish Índice_de_categorías Desambiguación ~/eswiki/20080416/
+    	java -jar JWPLDataMachine.jar japanese 主要カテゴリ 曖昧さ回避 ~/jawiki/20080408/
+    	java -jar JWPLDataMachine.jar german !Hauptkategorie Begriffsklärung ~/dewiki/20080422/
+    	java -jar JWPLDataMachine.jar dutch Alles Doorverwijspagina ~/nlwiki/200810408 
+    	
+    Labels for different languages:
+    	
+    			language	Categories			Disambiguation
+    	"de",	german		!Hauptkategorie		Begriffsklärung
+		"el",	greek		Κατηγορίες			Αποσαφήνιση
+		"en",	english		Categories			Disambiguation_pages
+		"es",	spanish		Categorías			Desambiguación
+		"et",	estonian	!JuurKategooria		Täpsustusleheküljed
+		"hr",	croatian	Kategorije			Razdvojba
+		"lt",	lithuanian	Kategorijos			Nuorodiniai_straipsniai
+		"lv",	latvian		Kategorijas			Nozīmju_atdalīšana 
+		"ro",	romanian	Pagina_principală	Dezambiguizare
+		"ru",	russian		Всё					Многозначные_термины
+		"sl",	slovenian	Kategorije			Razločitev
+		
+		
+		
+		Disambiguation from interlinks at http://en.wikipedia.org/wiki/Category:Disambiguation_pages 
+		category from http://de.wikipedia.org/wiki/Kategorie:!Hauptkategorie)
+    	
+    	 Croatian from the corresponding IRC: 
+    	 		http://en.wikipedia.org/wiki/Wikipedia:IRC
+    	 		http://meta.wikimedia.org/wiki/IRC/Channels
+				http://hr.wikipedia.org/w/index.php?title=Posebno:CategoryTree&target=Kategorije&mode=categories&dotree=Poka%C5%BEi+stablo
+		
+		Mind that the names of the main category or the category marking disambiguation 
+		pages may change over time. E.g. the English category for disambiguation pages 
+		was called "Disambiguation" for a long time, while now it is "Disambiguation_pages".
+
+	
+ 
+DATA IMPORTATION
+----------------
+ 	
+The previous step should create a lot of new data files in an "output" subfolder.	 
+If only the output files are in that directory, import them by using::
+   	
+   	mysqlimport -uUSER -p --default-character-set=utf8 {database_name} `pwd`/*.txt
+ 		
+Otherwise, you need the long way:
+    
+    mysqlimport -uUSER -p --default-character-set=utf8 {database_name} {txt_file1} {txt_file2} ... {txt_file_n}
+
+
+FIRST CALL
+----------
+
+When first connecting to a newly imported database, indexes are created. This takes some time 
+(up to 30 minutes), depending on the server and the size of your Wikipedia. Subsequent 
+connections wont have this delay.
+ 
+ TODO where is this file???
+You can run AgenerateIndexes.java, using the "Hello world" article:	
+	
+	    		language	INDEXING
+    	"de",	german		Hello World
+		"el",	greek		Πρόγραμμα hello world
+		"en",	english		Hello world
+		"es", 	spanish		Hola Mundo
+		"et",	estonian	Hello world
+		"hr",	croatian	Wikipedija
+		"lt",	lithuanian	Vikipedija
+		"lv",	latvian		Vikipēdija
+		"ro",	romanian	Program_Hello,_world!
+		"ru", 	russian		Hello, world!
+		"sl",	slovenian	Pozdravljen, svet

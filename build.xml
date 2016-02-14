@@ -1,0 +1,533 @@
+<!--buildWT.xml -->
+<project name="wikitailor" basedir=".">
+
+   <description>
+       Build file for the WikiTailor packages
+   </description>
+
+   <!-- set the paths to the external libraries  -->
+   <property name="thirdparty.dir"  location="./thirdparty" />
+  
+   <!-- version -->
+   <property name="version"  value="1.0.0"/>
+	
+   <!-- set global properties for this build -->  
+   <property name="dist" location="./WT-v${version}"/>
+   <property name="classes" location="${dist}/classes"/>  
+   <property name="javadoc" location="${dist}/javadoc"/>
+   <property name="junitest" location="${dist}/junit"/>
+   <property name="libs" location="${dist}/libs"/>
+   <property name="configs" location="${dist}/configs"/>
+ 
+   <!-- set all the packages involved -->  
+   <property name="src.basics" value="./lump/lump-aq-basics/src" />
+   <property name="test.basics" value="./lump/lump-aq-basics/test" />
+
+   <property name="src.sim" value="./lump/lump-ir-sim/src" />
+   <property name="test.sim" value="./lump/lump-ir-sim/test" />
+
+   <property name="src.wikilink" location="./lump/lump-aq-wikilink/src"/>     
+   <property name="test.wikilink" location="./lump/lump-aq-wikilink/test"/>  
+
+   <property name="src.text.ext" location="./lump/lump-aq-textextraction/src"/>    
+   <property name="test.text.ext" location="./lump/lump-aq-textextraction/test"/>  
+
+   <property name="src.text.pro" location="./lump/lump-ie-textprocessing/src"/>    
+   <property name="test.text.pro" location="./lump/lump-ie-textprocessing/test"/>  
+
+   <property name="src.lucene" location="./lump/lump-ir-lucene/src"/>    
+   <property name="test.lucene" location="./lump/lump-ir-lucene/test"/>  
+
+   <property name="src.retrieval" location="./lump/lump-ir-retrievalmodels/src"/>    
+   <property name="test.retrieval" location="./lump/lump-ir-retrievalmodels/test"/>  
+
+   <!-- Set all the thirdparty libraries involved -->  
+   <property name="third.apfloat.dist" value="${thirdparty.dir}/thirdparty-apfloat-1.8.1/" />
+   <property name="third.cli.dist" value="${thirdparty.dir}/thirdparty-apache-commons-cli-1.2/" />
+   <property name="third.collect.dist" value="${thirdparty.dir}/thirdparty-apache-commons-collections-4.4.0/" />
+   <property name="third.icu4j.dist" value="${thirdparty.dir}/thirdparty-icu4j-4.8.1.1/" />
+   <property name="third.io.dist" value="${thirdparty.dir}/thirdparty-apache-commons-io-2.4/" />
+   <property name="third.lang.dist" value="${thirdparty.dir}/thirdparty-apache-commons-lang3-3.2.1/" />
+   <property name="third.log4j.dist" value="${thirdparty.dir}/thirdparty-apache-log4j-2.0/" />
+   <property name="third.lucene.dist" value="${thirdparty.dir}/thirdparty-apache-lucene/" />		
+   <property name="third.jama.dist" value="${thirdparty.dir}/thirdparty-jama-1.0.3" />
+   <property name="third.junit.dist" value="${thirdparty.dir}/thirdparty-junit-4.11" />
+   <property name="third.jwpl.dist" value="${thirdparty.dir}/thirdparty-jwpl-0.9.2/" />
+   <property name="third.math.dist" value="${thirdparty.dir}/thirdparty-apache-commons-math3-3.4.1/" />
+   <property name="third.opencsv.dist" value="${thirdparty.dir}/thirdparty-opencsv-2.3" />
+   <property name="third.opennlp.dist" value="${thirdparty.dir}/thirdparty-apache-opennlp-1.5.3/" />
+   <property name="third.snowball.dist" value="${thirdparty.dir}/thirdparty-snowball-stemmer/" />
+   <property name="third.trove.dist" value="${thirdparty.dir}/thirdparty-gnu-trove-3.0.3/" />
+
+
+   <!-- and include all their jars-->
+   <!-- the lib dir for the apfloat-1.8.1 library -->
+   <path id="lib.apfloat-1.8.1">    
+      <fileset dir="${third.apfloat.dist}">        
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the commons-cli-1.2 library -->	
+   <path id="lib.cli-1.2">    
+      <fileset dir="${third.cli.dist}">        
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the commons-collections-4.4.0 library -->
+   <path id="lib.collect-4.4.0">    
+      <fileset dir="${third.collect.dist}">        
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the icu4j-4.8.1.1 library -->
+   <path id="lib.icu4j-4.8.1.1">    
+      <fileset dir="${third.icu4j.dist}">
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>
+   <!-- the lib dir for the commons-io-2.4 library -->
+   <path id="lib.io-2.4">    
+      <fileset dir="${third.io.dist}">        
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the commons-lang3-3.2.1 library -->
+   <path id="lib.lang3-3.2.1">    
+      <fileset dir="${third.lang.dist}">
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the log4j-2.0 library -->
+   <path id="lib.log4j-2.0">    
+      <fileset dir="${third.log4j.dist}">
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the Apache lucene library -->
+   <path id="lib.lucene-3.5">
+      <fileset dir="${third.lucene.dist}">
+         <include name="*.jar"/>
+      </fileset>
+   </path>
+   <!-- the lib dir for the jama library-->
+   <path id="lib.jama">
+      <fileset dir="${third.jama.dist}">
+         <include name="*.jar"/>			
+      </fileset>
+   </path>		
+   <!-- the lib dir for the junit library -->
+   <path id="lib.junit">
+      <fileset dir="${third.junit.dist}">
+         <include name="*.jar"/>			
+      </fileset>
+   </path>		
+   <!-- the lib dir for the jwpl-0.9.2 library -->
+   <path id="lib.jwpl-0.9.2">    
+      <fileset dir="${third.jwpl.dist}">        
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>	
+   <!-- the lib dir for the opencsv library -->
+   <path id="lib.opencsv-2.3">
+      <fileset dir="${third.opencsv.dist}">
+         <include name="*.jar"/>
+      </fileset>
+   </path>	
+   <!-- the lib dir for the opennlp library -->
+   <path id="lib.opennlp-1.5.3">
+      <fileset dir="${third.opennlp.dist}">
+         <include name="*.jar"/>
+      </fileset>
+   </path>	
+   <!-- the lib dir for the commons-math3-3.4.1 library -->
+   <path id="lib.math3-3.2.1">    
+      <fileset dir="${third.math.dist}">
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>
+   <!-- the lib dir for the snowball-stemmer library -->
+   <path id="lib.snowball">    
+      <fileset dir="${third.snowball.dist}">
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>
+   <!-- the lib dir for the trove library -->
+   <path id="lib.trove">    
+      <fileset dir="${third.trove.dist}">
+         <include name="*.jar"/>    
+      </fileset>  
+   </path>
+	
+
+   <!-- set the paths to the output dirs for tests -->
+   <property name="junit.out.dir.xml"  location="${junitest}/xml"/>
+   <property name="junit.out.dir.html" location="${junitest}/html"/>
+
+   <!-- set the resulting jars name-->
+   <property name="ex-jar" location="${dist}/wikiTailor.v${version}.light.jar"/>
+   <property name="ex-dep-jar" location="${dist}/wikiTailor.v${version}.with-dependencies.jar"/>
+   <property name="test-jar" location="${dist}/wikiTailor-test.v${version}.jar"/>
+	
+	
+   <!-- Create the build directory structure used by compile -->  
+   <target name="init">    
+       <!-- Create the time stamp -->
+       <tstamp/>    
+       <mkdir dir="${dist}"/>    
+       <mkdir dir="${classes}"/>    
+       <mkdir dir="${libs}"/>
+       <mkdir dir="${configs}"/>
+   </target>
+
+   <!-- Compile the java code from ${src} into ${classes} -->
+   <target name="compile-src" depends="init" description="compile the sources " >    
+      <javac destdir="${classes}"            
+             includeantruntime="false"            
+             debug="true">
+             <src path="${src.basics}" />
+             <src path="${src.wikilink}" />
+             <src path="${src.sim}" />
+             <src path="${src.text.ext}" />
+             <src path="${src.text.pro}" />
+             <src path="${src.lucene}" />
+             <src path="${src.retrieval}" />
+             <classpath refid="lib.apfloat-1.8.1" />
+             <classpath refid="lib.cli-1.2" />
+             <classpath refid="lib.collect-4.4.0" />
+             <classpath refid="lib.icu4j-4.8.1.1" /> 
+             <classpath refid="lib.io-2.4" />
+             <classpath refid="lib.lang3-3.2.1" /> 
+             <classpath refid="lib.log4j-2.0" /> 
+             <classpath refid="lib.lucene-3.5" /> 
+             <classpath refid="lib.junit" /> 
+             <classpath refid="lib.jama" />				    
+             <classpath refid="lib.jwpl-0.9.2" />				    
+             <classpath refid="lib.math3-3.2.1" />  
+             <classpath refid="lib.opencsv-2.3" /> 
+             <classpath refid="lib.opennlp-1.5.3" />  
+             <classpath refid="lib.snowball" />    
+             <classpath refid="lib.trove" />    
+      </javac>   
+   </target>
+
+  <!-- Create the distribution directory for the source -->
+  <target name="deploy-src" depends="compile-src" description="generate the distribution jar" >
+  	
+    <!-- Copy the required config files -->
+     <copy todir="${configs}">
+        <fileset dir="./configs">
+            <include name="*.properties" />
+        </fileset>   			
+     </copy>
+ 
+    <!-- Copy the required thirdparty libraries -->
+     <copy todir="${libs}">
+        <path refid="lib.apfloat-1.8.1" />
+        <path refid="lib.cli-1.2" />
+        <path refid="lib.collect-4.4.0" />
+        <path refid="lib.icu4j-4.8.1.1" /> 
+        <path refid="lib.io-2.4" />
+        <path refid="lib.lang3-3.2.1" /> 
+        <path refid="lib.log4j-2.0" /> 
+        <path refid="lib.lucene-3.5" /> 
+        <path refid="lib.jama" /> 
+        <path refid="lib.junit" /> 
+        <path refid="lib.jwpl-0.9.2" />				    
+        <path refid="lib.math3-3.2.1" />  
+        <path refid="lib.opencsv-2.3" /> 
+        <path refid="lib.opennlp-1.5.3" />  
+        <path refid="lib.snowball" />    
+        <path refid="lib.trove" />    
+     </copy>
+     <delete>
+        <fileset dir="${libs}" includes="*sources.jar"/>
+        <fileset dir="${libs}" includes="*src.jar"/>
+        <fileset dir="${libs}" includes="*javadoc.jar"/>
+        <fileset dir="${libs}" includes="*docs.jar"/>
+     </delete>
+
+     <!-- the libs dir with all the third parties copied -->
+     <path id="libs.dir">    
+        <fileset dir="${libs}">
+           <include name="*.jar"/>    
+        </fileset>  
+     </path>
+
+     <!-- All of them will be added to the manifest -->
+     <manifestclasspath property="lib.list" jarfile="${ex-jar}" maxParentLevels="5">
+        <classpath refid="libs.dir" />
+     </manifestclasspath>
+
+     <delete file="MANIFEST.MF" />
+     <manifest file="MANIFEST.MF">
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Implementation-Version" value="${version}"/>
+        <attribute name="Main-Class" value="cat.lump.aq.textextraction.wikipedia.categories.Xecutor" />
+        <attribute name="Class-Path" value=". ${configs} ${lib.list}"/>
+     </manifest>
+  	
+
+     <!-- Copy the languageConstants file -->
+     <copy todir="${classes}/cat/lump/aq/wikilink/jwpl">
+        <fileset dir="${src.wikilink}/cat/lump/aq/wikilink/jwpl">
+            <include name="languageConstants.properties" />
+        </fileset>   			
+     </copy> 
+     <!-- Copy the lucene.properties file -->
+     <copy todir="${classes}/cat/lump/ir/lucene/index/config">
+        <fileset dir="${src.lucene}/cat/lump/ir/lucene/index/config">
+            <include name="*properties" />
+        </fileset>   			
+     </copy>
+
+     <!-- Copy the sim.properties file -->
+     <copy todir="${classes}/cat/lump/ir/sim/config">
+        <fileset dir="${src.sim}/../config">
+            <include name="*properties" />
+        </fileset>   			
+     </copy>
+		
+     <!-- Copy the logger XML configuration file -->
+     <copy todir="${classes}/cat/lump/aq/basics/log/prop">
+        <fileset dir="${src.basics}/cat/lump/aq/basics/log/prop">
+            <include name="log4j_console.xml" />
+        </fileset>
+     </copy>
+
+     <!-- Copy the stopwords files -->
+     <copy todir="${classes}/cat/lump/ie/textprocessing/stopwords/lists">
+        <fileset dir="${src.text.pro}/cat/lump/ie/textprocessing/stopwords/lists">
+            <include name="*sw" />
+        </fileset>
+     </copy>	
+	
+	
+     <!-- CRIS do we need these? -->
+     <!-- Copy the NER model files -->
+     <copy todir="${classes}/cat/lump/ie/textprocessing/ner/models">
+        <fileset dir="${src.text.pro}/cat/lump/ie/textprocessing/ner/models">
+            <include name="en-ner-person.bin" />
+            <include name="es-ner-person.bin" />
+        </fileset>
+     </copy>		
+     <!-- Copy the sentence model files -->
+     <copy todir="${classes}/cat/lump/ie/textprocessing/sentence/models">
+        <fileset dir="${src.text.pro}/cat/lump/ie/textprocessing/sentence/models">
+            <include name="ar-sent.bin" />
+            <include name="el-sent.bin" />
+            <include name="en-sent.bin" />
+            <include name="de-sent.bin" />				
+        </fileset>
+     </copy>
+
+         
+     <!-- Create the jar with dependencies outside -->
+     <jar destfile="${ex-jar}" 
+          basedir="${classes}" 
+          includes="**" 
+          manifest="MANIFEST.MF">	
+     </jar>
+
+     <!-- Create the jar with dependencies included -->
+     <jar destfile="${ex-dep-jar}" 
+          basedir="${classes}" 
+          includes="**" 
+          manifest="MANIFEST.MF">
+   	  <zipgroupfileset dir="${libs}" 
+    	    	includes="*.jar" />	
+     </jar>
+     <delete file="MANIFEST.MF" />
+
+  </target>
+
+  <!-- Compile the java code from ${test} into ${classes} -->
+  <target name="compile-test" depends="deploy-src" description="compile the test sources ">
+      <javac destdir="${classes}" 
+             includeantruntime="false" 
+             debug="true">
+             <classpath>              
+               <pathelement location="${src.basics}"/>
+               <pathelement location="${src.sim}"/>
+               <pathelement location="${src.wikilink}"/>
+               <pathelement location="${src.text.ext}"/>
+               <pathelement location="${src.text.pro}"/>
+               <pathelement location="${src.lucene}"/>
+               <pathelement location="${src.retrieval}"/>
+             </classpath>
+             <src path="${test.basics}" />
+             <src path="${test.sim}" />
+             <src path="${test.wikilink}" />
+             <src path="${test.text.ext}" />
+             <src path="${test.text.pro}" />
+             <src path="${test.lucene}" />
+             <src path="${test.retrieval}" />
+             <classpath refid="lib.apfloat-1.8.1" />
+             <classpath refid="lib.cli-1.2" />
+             <classpath refid="lib.collect-4.4.0" />
+             <classpath refid="lib.icu4j-4.8.1.1" /> 
+             <classpath refid="lib.io-2.4" />
+             <classpath refid="lib.lang3-3.2.1" /> 
+             <classpath refid="lib.log4j-2.0" /> 
+             <classpath refid="lib.lucene-3.5" /> 
+             <classpath refid="lib.jama" /> 
+             <classpath refid="lib.junit" /> 
+             <classpath refid="lib.jwpl-0.9.2" />				    
+             <classpath refid="lib.math3-3.2.1" />  
+             <classpath refid="lib.opencsv-2.3" /> 
+             <classpath refid="lib.opennlp-1.5.3" />  
+             <classpath refid="lib.snowball" />
+             <classpath refid="lib.trove" />        
+      </javac> 
+  </target>
+
+  <!-- Create the distribution directory for the test units -->
+  <target name="deploy-test" depends="compile-test" description="generate the distribution jar for the tests" >
+    <jar jarfile="${test-jar}" 
+         basedir="${classes}" 
+         includes="**/*Test.class"/>
+  </target>
+
+  <!-- Run Test -->
+  <target name="junit" description="Run unit tests for the classes that depend on the database" depends="junitNoDB">
+     <junit printsummary="yes" haltonfailure="no">		
+     <classpath>	
+        <pathelement location="${src.wikilink}"/>
+        <pathelement location="${src.text.ext}"/>
+        <pathelement location="${ex-jar}"/>	        		
+        <pathelement location="${test-jar}"/>
+     </classpath>			
+     <classpath refid="lib.junit" /> 
+     <classpath refid="lib.jwpl-0.9.2" />				    
+
+     <formatter type="xml"/>
+     <batchtest fork="yes" todir="${junit.out.dir.xml}">
+        <fileset dir="${test.wikilink}" includes="**/WikipediaJwplTest.java" />
+        <fileset dir="${test.text.ext}" includes="**/DomainKeywordsTest.java" /> 
+     </batchtest>
+     </junit>
+  </target>
+
+  <target name="junitNoDB" description="Run unit tests for all the classes that do not depend on the connexion to the database" depends="deploy-test">
+     <mkdir dir="${junitest}"/>  
+     <delete dir="${junit.out.dir.xml}"/>	
+     <mkdir  dir="${junit.out.dir.xml}"/>
+     <junit printsummary="yes" haltonfailure="no">		
+     <classpath>	
+        <pathelement location="${src.basics}"/>
+        <pathelement location="${src.sim}"/>
+        <pathelement location="${src.wikilink}"/>
+        <pathelement location="${src.text.ext}"/>
+        <pathelement location="${src.text.pro}"/>
+        <pathelement location="${src.lucene}"/>
+        <pathelement location="${src.retrieval}"/>
+        <pathelement location="${ex-jar}"/>	        		
+        <pathelement location="${test-jar}"/>
+     </classpath>			
+     <classpath refid="lib.apfloat-1.8.1" />
+     <classpath refid="lib.cli-1.2" />
+     <classpath refid="lib.collect-4.4.0" />
+     <classpath refid="lib.icu4j-4.8.1.1" /> 
+     <classpath refid="lib.io-2.4" />
+     <classpath refid="lib.lang3-3.2.1" /> 
+     <classpath refid="lib.log4j-2.0" /> 
+     <classpath refid="lib.lucene-3.5" /> 
+     <classpath refid="lib.jama" /> 
+     <classpath refid="lib.junit" /> 
+     <classpath refid="lib.jwpl-0.9.2" />				    
+     <classpath refid="lib.math3-3.2.1" />  
+     <classpath refid="lib.opencsv-2.3" /> 
+     <classpath refid="lib.opennlp-1.5.3" />  
+     <classpath refid="lib.snowball" />    
+     <classpath refid="lib.trove" />    
+
+     <formatter type="xml"/>
+     <batchtest fork="yes" todir="${junit.out.dir.xml}">
+        <fileset dir="${test.basics}" includes="**/*Test.java"/>
+        <fileset dir="${test.sim}" includes="**/*Test.java" />
+        <fileset dir="${test.wikilink}">
+           <include name="**/*Test.java" />
+           <exclude name="**/WikipediaJwplTest.java" />
+        </fileset> 
+        <fileset dir="${test.text.ext}">
+           <include name="**/*Test.java" />
+           <exclude name="**/DomainKeywordsTest.java" />
+        </fileset>
+        <fileset dir="${test.text.pro}" includes="**/*Test.java" /> 
+        <fileset dir="${test.lucene}" includes="**/*Test.java" />
+        <fileset dir="${test.retrieval}" includes="**/*Test.java" />
+     </batchtest>
+     </junit>
+  </target>
+			    
+  <!-- Create the report -->
+  <target name="junitreport" description="Create report for the test">
+     <mkdir dir="${junit.out.dir.html}"/>
+     <junitreport todir="${junit.out.dir.html}">
+        <fileset dir="${junit.out.dir.xml}">
+            <include name="*.xml"/>
+        </fileset>
+        <report format="frames" todir="${junit.out.dir.html}"/>
+     </junitreport>
+  </target>
+
+  <!-- Runs unit tests and creates a report  -->
+  <target name="test" depends="junit,junitreport"
+          description="Runs unit tests and creates a report" >
+  </target>
+
+  <target name="testNoDB" depends="junitNoDB,junitreport"
+          description="Runs unit tests and creates a report for the tests where connexion to the DB is not needed" >
+  </target>
+
+  <!-- Javadoc -->
+  <target name="javadoc" depends="compile-src">    
+     <delete dir="${javadoc}" />
+     <mkdir dir="${javadoc}"/>  
+     <javadoc                 
+    	destdir="${javadoc}"
+      	author="true"            
+    	version="true"            
+      	use="true"            
+       	windowtitle="WikiTailor">
+	        	
+	<fileset dir="${src.basics}"/>              
+	<fileset dir="${src.sim}"/>              
+	<fileset dir="${src.wikilink}"/>              
+	<fileset dir="${src.text.ext}"/>              
+	<fileset dir="${src.text.pro}"/>              
+	<fileset dir="${src.lucene}"/>              
+	<fileset dir="${src.retrieval}"/>              
+        <classpath>	
+           <pathelement location="${src.basics}"/>
+           <pathelement location="${src.sim}"/>
+           <pathelement location="${src.wikilink}"/>
+           <pathelement location="${src.text.ext}"/>
+           <pathelement location="${src.text.pro}"/>
+           <pathelement location="${src.lucene}"/>
+           <pathelement location="${src.retrieval}"/>
+        </classpath>			
+        <doctitle><![CDATA[<h1>WikiTailor</h1>]]></doctitle>
+	<tag name="TODO" scope="all" description="To do:"/>
+	<tag name="todo" scope="all" description="To do:"/>
+      </javadoc>
+   </target>
+	  		
+  <!-- Delete the ${classes} and ${dist} directory trees -->
+  <target name="clean-all" description="clean up" >
+    <delete dir="${classes}"/>
+    <delete dir="${javadoc}"/>
+    <delete dir="${junitest}"/>  
+    <delete dir="${libs}"/>  
+    <delete dir="${configs}"/>  
+    <delete file="${ex-jar}"/>
+    <delete file="${test-jar}"/>
+  </target>
+
+  <target name="clean" description="minimal clean up" >
+    <delete dir="${classes}"/>
+    <delete dir="${javadoc}"/>
+    <delete dir="${junitest}"/>  
+    <delete file="${test-jar}"/>
+  </target>
+
+</project>

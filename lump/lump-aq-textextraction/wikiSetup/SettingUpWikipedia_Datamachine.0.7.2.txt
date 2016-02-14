@@ -1,0 +1,207 @@
+[Documents preprocessing]
+
+[DATE]
+16/07/2014
+
+[contents]
+
+Overview
+Necessary files
+jwpl process
+Useful info
+
+############
+# OVERVIEW #
+############
+
+Once we have analysed the Wikipedia multilinguality we need to actually process the
+texts. In order to do that, preprocessing consists of loading the files and databases 
+with the jwpl library in order to later handle the articles through it.
+ 
+###################
+# NECESSARY FILES #
+###################
+
+Wikipedia dumps 
+
+	location: /media/dades1/cristina/wikipedia/LAN
+	
+	enwiki-20130708-pages-articles.xml.bz2
+	enwiki-20130708-pagelinks.sql.gz
+	enwiki-20130708-categorylinks.sql.gz
+	enwiki-20130708-langlinks.sql.gz  (not used by the jwpl library)
+
+jwpl library
+
+	From: http://code.google.com/p/jwpl/
+	location: /media/dades1/cristina/wikipedia/de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar
+	
+Now at
+https://dkpro.github.io/dkpro-jwpl/
+
+################
+# jwpl PROCESS #
+################
+
+Transformation:
+
+1. Pre-processing
+		
+	a)  Create a MySQL database (use UTF-8 encoding).
+			
+		CREATE DATABASE IF NOT EXISTS lump_wiki_LAN_YEAR CHARACTER SET utf8 COLLATE utf8_general_ci
+	
+	b) Use "mysql -ulump -p DATABASE_NAME <  jwpl_tables.sql" to create the tables.
+		(tables in /media/dades1/cristina/wikipedia/jwpl_tables.sql)
+
+	c) Download the Wikipedia Data from http://download.wikimedia.org/backup-index.html
+ 		You need:
+   		* [LANGCODE]wiki-[DATE]-pages-articles.xml.bz2
+   		* [LANGCODE]wiki-[DATE]-pagelinks.sql.gz
+   		* [LANGCODE]wiki-[DATE]-categorylinks.sql.gz
+
+	d) Run the transformation.
+ 	
+ 	    * java -jar -Xmx4g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar [LANGUAGE] [CATEGORY:MAIN_CATEGORY_NAME] \
+     			[CATEGORY:DISAMBIGUATION_CATEGORY_NAME] [SOURCE_DIRECTORY] 
+    	
+        where: 
+          LANGUAGE - a language string matching one in languages.txt in this release.
+          MAIN_CATEGORY_NAME - the name of the main (top) category of the Wikipedia 
+         			category hierarchy
+          DISAMBIGUATION_CATEGORY_NAME - the name of the category that contains the 
+         			disambiguation categories
+          SOURCE_DIRECTORY - the path to the directory containing the source files    
+
+
+	Examples for the languages in Wikiparable/Wikitranslators:
+
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar spanish Categoría:Índice_de_categorías  Categoría:Wikipedia:Desambiguación ./
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar catalan Categoria:Principal Categoria:Pàgines_de_desambiguació ./
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar english Category:Contents Category:All_disambiguation_pages ./
+	  java -jar -Xmx4g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar basque Kategoria:Edukiak Kategoria:Wikipediako_argipen_orriak ./
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar greek Κατηγορία:Κατηγορίες Κατηγορία:Αποσαφήνιση ./
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar german Kategorie:!Hauptkategorie Kategorie:Begriffsklärung ./
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar french Catégorie:Accueil Catégorie:Homonymie ./
+ 	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar arabic  تصنيف:محتويات_ويكيبيديا تصنيف:صفحات_توضيح ./
+	  java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-0.7.2-jar-with-dependencies.jar romanian Categorie:Pagina_principală Categorie:Dezambiguizare ./
+
+    	Mind that the names of the main category or the category marking disambiguation 
+	pages may change over time. E.g. the English category for disambiguation pages 
+	was called "Disambiguation" for a long time, while now it is "Disambiguation_pages".
+	
+	This should create a lot of new data files in a "output" subfolder of each input folder.
+ 
+ 	e) Import these data files into the database.
+ 		 
+ 		If there are only the output files in that directory you can use:
+   			'mysqlimport -uUSER -p --default-character-set=utf8 {database_name} `pwd`/*.txt'
+                         mysqlimport -ulump -h mysql-rdlab.cs.upc.edu -p --local --default-character-set=utf8 lump_wiki_ro_2013 *.txt
+ 		
+ 		Otherwise, you need to do it the long way:
+    			'mysqlimport -uUSER -p --default-character-set=utf8 {database_name} {txt_file1} {txt_file2} ... {txt_file_n}'
+
+
+        NOTE:  If we aim at accessing the installation through Wikipedia Jwpl, the language 
+		(including every parameter) must be added to the configuration.
+	        For generating the indexes, the mysql user must have writting permissions over the db.
+	        When first connecting to a newly imported database, indexes are created. This takes some 
+		time (up to 30 minutes), depending on the server and the size of your Wikipedia 
+		(it took like 1 hour). Subsequent connects won't have this delay.
+ 		I made it through T1a_HelloWorld.java (that became jwpl/AgenerateIndexes.java):	
+	
+
+###############
+# USEFUL INFO #
+###############
+
+Where to find the label for the main category for several languages:
+http://www.wikidata.org/wiki/Q1281
+
+
+List for the disambiguation label:
+af  --> Kategorie:Dubbelsinnig
+als  --> Kategorie:Begriffsklärung
+am  --> መደብ:መንታ_መንገዶች
+ar  --> تصنيف:صفحات_توضيح
+ast  --> Categoría:Uiquipedia:Dixebra
+az  --> Kateqoriya:Vikipediya:Dəqiqləşdirmə
+bat-smg  --> Kateguorėjė:Nūruodėnē_straipsnē
+be-x-old  --> Катэгорыя:Вікіпэдыя:Неадназначнасьці
+be  --> Катэгорыя:Неадназначнасці
+bg  --> Категория:Пояснителни_страници
+bn  --> বিষয়শ্রেণী:দ্ব্যর্থতা_নিরসন
+br  --> Rummad:Heñvelstummoù
+bs  --> Kategorija:Čvor_članci
+ca  --> Categoria:Pàgines_de_desambiguació
+ceb  --> Kategoriya:Pagklaro
+cs  --> Kategorie:Rozcestníky
+cv  --> Категори:Disambig
+cy  --> Categori:Gwahaniaethu
+da  --> Kategori:Flertydig
+de  --> Kategorie:Begriffsklärung
+el  --> Κατηγορία:Αποσαφήνιση
+eo  --> Kategorio:Apartigiloj
+es  --> Categoría:Wikipedia:Desambiguación
+et  --> Kategooria:Täpsustusleheküljed
+eu  --> Kategoria:Wikipediako_argipen_orriak
+fa  --> رده:صفحه‌های_ابهام‌زدایی
+fi  --> Luokka:Täsmennyssivut
+fr  --> Catégorie:Homonymie
+fy  --> Kategory:Trochferwiisside
+ga  --> Catagóir:Idirdhealáin
+gd  --> Category:Soilleireachadh
+gl  --> Categoría:Homónimos
+he  --> קטגוריה:פירושונים
+hi  --> श्रेणी:बहुविकल्पी_शब्द
+hr  --> Kategorija:Razdvojba
+ht  --> Kategori:Menm_non
+hu  --> Kategória:Egyértelműsítő_lapok
+ia  --> Categoria:Disambiguation
+id  --> Kategori:Disambiguasi
+io  --> Kategorio:Homonimi
+is  --> Flokkur:Aðgreiningarsíður
+it  --> Categoria:Disambigua
+jv  --> Kategori:Disambiguasi
+ka  --> კატეგორია:მრავალმნიშვნელოვანი
+kk  --> Санат:Айрық_беттер
+kn  --> ವರ್ಗ:ದ್ವಂದ್ವ_ನಿವಾರಣೆ
+ko  --> 분류:동음이의어_문서
+ku  --> Kategorî:Rûpelên_cudakirinê
+la  --> Categoria:Discretiva
+lb  --> Kategorie:Homonymie
+lt  --> Kategorija:Nuorodiniai_straipsniai
+lv  --> Kategorija:Nozīmju_atdalīšana
+map-bms  --> Kategori:Disambiguasi
+ms  --> Kategori:Nyahkekaburan
+nds  --> Kategorie:Mehrdüdig_Begreep
+oc  --> Categoria:Omonimia
+pl  --> Kategoria:Strony_ujednoznaczniające
+pt  --> Categoria:Desambiguação
+ro  --> Categorie:Dezambiguizare
+ru  --> Категория:Многозначные_термины
+scn  --> Catigurìa:Disambigua
+sh  --> Kategorija:Razvrstavanje
+simple  --> Category:Disambiguation
+sk  --> Kategória:Rozlišovacie_stránky
+sl  --> Kategorija:Razločitev
+sq  --> Kategoria:Kthjellime
+sr  --> Категорија:Вишезначна_одредница
+su  --> Kategori:Disambiguasi
+sv  --> Kategori:Förgreningssidor
+sw  --> Jamii:Makala_zinazotofautisha_maana
+te  --> వర్గం:అయోమయ_నివృత్తి
+tg  --> Гурӯҳ:Ибҳомзидойи
+th  --> หมวดหมู่:การแก้ความกำกวม
+tl  --> Kategorya:Paglilinaw
+tr  --> Kategori:Anlam_ayrımı
+uk  --> Категорія:Багатозначні_терміни
+ur  --> زمرہ:ضدابہام
+vi  --> Thể_loại:Trang_định_hướng
+vo  --> Klad:Telplänovapads
+wa  --> Categoreye:Omonimeye
+zh-yue  --> Category:搞清楚
+zh  --> Category:消歧义
+
+
+

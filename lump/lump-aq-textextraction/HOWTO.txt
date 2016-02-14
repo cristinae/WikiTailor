@@ -1,0 +1,85 @@
+HOWTO file for the lump2 text extraction project
+-------------------------------------------------
+
+@author Cristina 
+@last_modification Jan 31, 2016 
+
+
+HOWTO - INCLUDING A NEW LANGUAGE
+--------------------------------
+
+1) Download the Wikipedia dump and upload it into a MySQL database 
+	https://dumps.wikimedia.org/
+	You need:	
+	[LANGCODE]wiki-[DATE]-pages-articles.xml.bz2
+	[LANGCODE]wiki-[DATE]-pagelinks.sql.gz
+	[LANGCODE]wiki-[DATE]-categorylinks.sql.gz
+	Which can preprocessed and uploaded with the JWPL DataMachine
+		java -jar -Xmx2g ../de.tudarmstadt.ukp.wikipedia.datamachine-1.0.0-jar-with-dependencies.jar catalan 
+		Categoria:Principal Categoria:Pàgines_de_desambiguació ./
+	And:
+	[LANGCODE]wiki-[DATE]-langlinks.sql.gz
+	[LANGCODE]wiki-[DATE]-page.sql.gz
+	[LANGCODE]wiki-[DATE]-redirect.sql.gz
+
+2) Edition (lang, year)
+    Include the edition among the available dumps at
+    lump2-aq-textextraction/src/cat/lump/aq/textextraction/wikipedia/availableDumps.properties
+    NOW AT ./configs/availableDumps.properties
+    (WHY ARE WE KEEPING THIS?)
+
+3) Labels
+	Include labels used in wikitext (e.g. Category, Image...) at 
+    lump2-aq-wikilink/src/cat/cat/lump/aq/wikilink/jwpl/languageConstants.properties
+
+4) Preprocessor
+	Check the alphabet of your language is covered in case it is non-latin at
+	package cat.lump.ie.textprocessing
+    lump2-ie-textprocessing/src/cat/lump/ie/textprocessing/TextPreprocessor.java
+
+5) StopWords
+	Add a list of stopwords at	
+	package cat.lump.ie.textprocessing.stopwords.lists
+
+	Add your language at 
+	cat.lump.ie.textprocessing.stopwords.Stopwords.java
+	private InputStream getList(Locale language)
+	
+6) Stemmer 
+	Provide a Snowball stemmer at
+	package cat.lump.ie.textprocessing.word
+	(WE NEED A STEMMER FOR OCCITAN --USING CATALAN)
+        Include it in cat.lump.ie.textprocessing.word.StemmerFactory
+    In case there is not a Snowball one, try with Lucene 3.5
+        Include it in cat.lump.ie.textprocessing.word.AnalyzerFactoryLucene
+   
+7) Add your language in the list of available languages at
+    package cat.lump.aq.wikilink  
+    class Languages.java
+    put("ca", Language.catalan);
+    
+ 
+    
+HOWTO - INCLUDING A NEW LANGUAGE IN THE LUCENE PACKAGE
+------------------------------------------------------
+
+1) Add an Analyser for your language. Hopefully is already implemented in Lucene package.
+   Then add it in 
+   package cat.lump.lucene.engine
+   class AnalyzerFactory
+   function loadAnalyzer
+   Specify the characteristics of your stemmer in case Lucene is not using the Snowball one at
+   package cat.lump.lucene.engine
+   function loadStemFilter
+
+2) Add an Analyser for your language for queries. Hopefully is already implemented in Lucene.
+   Then add it in 
+   package cat.lump.lucene.query
+   class LuceneTokenizer
+   function setAnalyzer(Locale lan)   
+
+3) Add your language in the list of available languages at
+   package cat.lump.lucene.index;
+   /lump2-ir-lucene/src/cat/lump/lucene/index/config/lucene.properties
+   (needed? I go back to WT in order to index!)
+   
