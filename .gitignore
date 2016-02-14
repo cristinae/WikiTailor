@@ -1,0 +1,29 @@
+# Java related #
+# Binaries
+.class
+bin/
+# Package Files 
+*.jar
+*.war
+*.ear
+# virtual machine crash logs
+hs_err_pid*
+
+
+# Eclipse related #
+.classpath
+.project
+.settings/
+org.eclipse.jdt.core.prefs
+
+
+# WikiTailor related #
+WT-v* 
+wt-*.log
+*.dict
+*.articles
+*.category
+*.stats
+# Files with passwords
+configs/lump_wiki.properties
+
