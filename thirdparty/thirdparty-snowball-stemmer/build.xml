@@ -1,0 +1,91 @@
+<project name="lump2-aq-textextraction" basedir=".">
+    <description>
+        Build file for the snowball stemmers
+    </description>
+	
+	<!-- set the paths to the output dirs for tests -->
+	<property name="junit.out.dir.xml"  location="./testdir.xml"/>
+	<property name="junit.out.dir.html"  location="./testdir.html"/>
+
+	<!-- set global properties for this build -->  
+	<property name="src" location="./src"/>  
+	<property name="dist"  location="."/>
+
+	<property name="classes" location="${dist}/classes"/>  
+	<property name="javadoc" location="${dist}/javadoc"/>
+	
+	<!-- set the resulting jar name-->
+	<property name="ex-jar" location="${dist}/Snowball.jar"/>
+
+	
+	<!-- Create the build directory structure used by compile -->  
+	<target name="init">    
+		<!-- Create the time stamp -->
+		<tstamp/>    
+		<mkdir dir="${dist}"/>    
+		<mkdir dir="${classes}"/>    
+		<mkdir dir="${javadoc}"/>  
+	</target>
+
+  
+	<!-- Compile the java code from ${src} into ${classes} -->
+  
+	<target name="compile-src" depends="init" description="compile the sources " >    
+		<javac srcdir="${src}"         
+			destdir="${classes}"            
+			includeantruntime="false"            
+			debug="true">						    
+		</javac>   
+	</target>
+
+  <!-- Create the distribution directory for the source -->
+  <target name="deploy-src" depends="compile-src" description="generate the distribution jar" >
+  	
+  	<delete file="MANIFEST.MF" />
+  	<manifest file = "MANIFEST.MF">
+  		<attribute name="Built-By" value="${user.name}"/>
+  		<attribute name="Implementation-Version" value="1.0"/>  		
+  		<attribute name = "Class-Path" value = "."/>
+  	</manifest>
+  	  	
+  	<jar destfile="${ex-jar}" 
+         basedir="${classes}" 
+         includes="**" 
+  		 manifest="MANIFEST.MF">
+  		   	
+    	
+    </jar>
+  </target>
+
+	<!-- Javadoc -->
+	<target name="javadoc" depends="compile-src">    
+		<delete dir="${javadoc}" />
+	    <javadoc                 
+	    	destdir="${javadoc}"
+	      	author="true"            
+	       	version="true"            
+	       	use="true"            
+	       	windowtitle="Lump2 algebra">
+	        	
+	      	<fileset dir="${src}"/>              
+	       	<classpath>
+	       		<pathelement location="${src}"/>
+	       	</classpath>
+	        		
+	    	<classpath refid="lump.chk"/>
+	    	<classpath refid="lib.junit"/>
+	       	<doctitle><![CDATA[<h1>Lump2 Lucene</h1>]]></doctitle>
+	       	<tag name="todo" scope="all" description="To do:"/>
+	       	</javadoc>
+	</target>
+	  
+	
+	
+    <!-- Delete the ${classes} and ${dist} directory trees -->
+  <target name="clean" description="clean up" >
+    <delete dir="${classes}"/>
+    <delete dir="${javadoc}"/>
+    <delete file="${ex-jar}"/>
+    <delete file="${test-jar}"/>
+  </target>
+</project>
