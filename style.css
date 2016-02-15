@@ -27,8 +27,8 @@
         width: 40%;
         min-width: 600px;
         min-height: 98vh;
-	margin: 0 auto;
-	padding: 1em 0em 5px 0em;
+	margin: 0 auto 0 auto;
+	padding: 20px 0em 10px 0em;
 }
 
 body{
