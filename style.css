@@ -21,19 +21,65 @@
         margin: 0;
         padding: 0;
 }
+#container{
+	position: relative;
+        background: #FFF;
+        width: 40%;
+        min-width: 600px;
+        min-height: 98vh;
+	margin: 0 auto;
+	padding: 1em 0em 5px 0em;
+}
+
 body{
         background-color: #000;
         font: 100.1% "Linux Libertine","Verdana",arial,helvetica,sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	line-height: 1.3em;
         color: #444;
 }
-#container{
-        background: #FFF;
-        width: 40%;
-        min-width: 500px;
-        min-height: 93vh;
-	margin: 0 auto;
+
+/* Header content pages */
+#header {
+	position: relative;
+	height: 7em;
+	width: 100%;
+	margin: 1em 0 1.5em auto;
+	background-color: #FFF;
+}
+#header img{
+	position:absolute;
+	left: 2em;
+        bottom: 0;
+        width: 15%;	
+}
+#name {
+	position:absolute;
+        color: #000;
+	background-color: #FFF;
+	font-size: 24px;
+        bottom: 2.5em;
+	left: 19%;
+}
+/* Content Index*/
+#presentacio {
+	position: relative;	
+        min-height: 88vh;
+}
+#logo img{
+        display: block;
+        width: 30%;
+	margin: 0 auto 1em auto;	
+}
+#wt{
+        color: #000;
+	background-color: #FFF;
+        text-decoration: none;
+	text-align: center;
+	font-size: 30px;
+	margin-bottom: 2.5em;
+}
+#navigation{
 }
 #navigation a{
         display: block;
@@ -50,46 +96,11 @@ body{
 	background-color: #000;
 }
 
-/* Header content pages */
-#header {
-	position: block;
-	width: 100%;
-	margin: 0 0 0 auto;
-	background-color: #FFF;
-}
-#header img{
- 	float:left;
-        width: 15%;
-	padding: 1em 0em 0em 1em;	
-}
-
-#name {
-        color: #000;
-	background-color: #FFF;
-	font-size: 26px;
-	padding: 2.6em 0em 1.5em 0.4em;
-}
-/* Content Index*/
-#logo img{
-        display: block;
-        width: 30%;
-	margin: 0 auto 1em auto;	
-}
-#wt{
-        color: #000;
-	background-color: #FFF;
-        text-decoration: none;
-	text-align: center;
-	font-size: 30px;
-	margin-bottom: 2.5em;
-}
-
 /* Description */
 #description {
         display: block;
         font: 100.1% "Verdana",arial,helvetica,sans-serif;
-	font-size: 11px;
-	margin: 0 2em 0 2em;
+	margin: 0 3em 0 3em;
 	background-color: #FFF;
 }
 
@@ -115,31 +126,20 @@ a.section:hover, a.llista:hover {
 }
 
 #description ul {
-	font-size: 11px;
 	margin: 0 2em 0 2em;
 }
 
 /* Footer */
-footer {
-        display: block;
-        width: 40%;
-        min-width: 500px;
-        height: 4vh;
-        margin: 0 auto;
-	padding: 1em 0 0 0;
-	background-color: #FFF;
-}
-
 #footerContainer{
-        display: block;
-        width: 100%;
+	margin-top: 2em;
 	text-align: center;
 	background-color: #FFF;
 }
 
 #imagesFooter img{
 	width: 6%;
-	padding: 0 1em 0vh 1em;	
+	padding: 0 1em 0 1em;
+	background-color: #FFF;
 }
 
 
