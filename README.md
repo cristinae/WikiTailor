@@ -16,8 +16,40 @@ Available languages: Arabic, Basque, Catalan, English, French, German, Greek, Ro
 - Bilingual in-domain parallel corpora extraction build with the articles' content
 - Evaluation of the quality of the extractions
 
-### More information and manual
-See [the project webpage](http://cristinae.github.io/WikiTailor) for more information.
+### Usage
+
+For the main functionality, that is, the extraction of a corpus of a specific domain do:
+
+```
+java -jar wikiTailor.v1.0.0.jar [-c <arg> | -n <arg>] [-d <arg>] [-e <arg>] [-h]
+          -i <FILE> -l <arg> [-m <arg>]  [-o <arg>] [-s <arg>] [-t <arg>] -y <arg>
+
+where the arguments are:
+ -c,--category <arg>      Name of the main category (with '_' instead of ' ';
+                          you can use -n instead)
+ -d,--depth <arg>         depth obtained in a previous execution
+                          (default: 0)
+ -e,--end <arg>           Last step for the process
+                          (default: 7)
+ -h,--help                This help
+ -i,--ini <FILE>          Global config file for WikiTailor
+ -l,--language <arg>      Language of interest (e.g., en, es, ca)
+ -m,--model <arg>         Percentage of in-domain categories
+                          (default: 0.5)
+ -n,--numcategory <arg>   Numerical identifier of the category (you can use -c instead)
+ -o,--outpath <arg>       Save the output into this directory
+                          (default: current)
+ -s,--start <arg>         Initial step for the process
+                          (default: 1)
+ -t,--top <arg>           Number of vocabulary terms within the 10%
+                          (default: 100, all: -1)
+ -y,--year <arg>          Wikipedia year edition (2013, 2015, 2016)
+
+Ex: java -jar wikiTailor.v1.0.0.jar -l en -y 2015 -i wikiTailor.ini -c Science
+
+```
+
+For other uses see [the manual](http://cristinae.github.io/WikiTailor/dwnld/wikiTailorTechnicalManual_v1.0.pdf) and [the project webpage](http://cristinae.github.io/WikiTailor).
 
 ### References
 For a complete analysis of the methods implemented see: 
