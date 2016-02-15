@@ -32,6 +32,7 @@
 }
 
 body{
+
         background-color: #000;
         font: 100.1% "Linux Libertine","Verdana",arial,helvetica,sans-serif;
 	font-size: 12px;
@@ -131,7 +132,10 @@ a.section:hover, a.llista:hover {
 
 /* Footer */
 #footerContainer{
-	margin-top: 2em;
+	position: relative;
+	bottom: 0;
+	left:0;
+	margin-top: 5em;
 	text-align: center;
 	background-color: #FFF;
 }
