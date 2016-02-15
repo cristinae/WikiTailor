@@ -81,6 +81,8 @@ body{
 	margin-bottom: 2.5em;
 }
 #navigation{
+	background-color: #FFF;
+	padding-bottom: 4em;
 }
 #navigation a{
         display: block;
