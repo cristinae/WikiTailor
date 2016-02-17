@@ -1,7 +1,7 @@
 README file for the lump2 text extraction project
 -------------------------------------------------
 
-@last_modification Feb 12, 2015 
+@last_modification Feb 17, 2016
 @last_author Cristina 
 
 
@@ -56,21 +56,15 @@ wikipedia includes an interface to the JWPL library, as well as constants
 DEPENDENCIES
 ------------
 
-lump2-aq-check for checking the parameters introduced when calling the 
-	classes/method
+lump-aq-basics for checking the parameters introduced when calling the 
+	classes/method, saving and opening files, logging, accesing a tf-storing class
 	
-lump2-aq-config to get access to the MySQL database with the Wikipedia
+lump-aq-wikilink to get access to the MySQL database with the Wikipedia
 	preprocessed dumps
 
-lump2-aq-io for saving and opening files
+lump-ir-retrievalmodels
 
-lump2-aq-log
-
-lump2-ir-retrievalmodels
-
-lump2-aq-struct for accesing a tf-storing class
-
-lump2-ie-textprocessing for standard text preprocessing
+lump-ie-textprocessing for standard text preprocessing
 
 THIRDPARTIES:
 
@@ -83,8 +77,6 @@ log4j 2.0 to keep some logs
 commons-math3 3.4.1 for using splines 
 
 apache-opennlp 1.5.3
-
-apache-commons-math3 3.4.1
 
 junit-4.11 for unit tests
 
