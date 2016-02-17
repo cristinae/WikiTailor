@@ -219,6 +219,11 @@
             <include name="*.properties" />
         </fileset>   			
      </copy>
+     <copy todir="${dist}">
+        <fileset dir="./">
+            <include name="wikiTailor.ini" />
+        </fileset>   			
+     </copy>
  
     <!-- Copy the required thirdparty libraries -->
      <copy todir="${libs}">
