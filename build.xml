@@ -526,6 +526,9 @@
     <delete dir="${configs}"/>  
     <delete file="${ex-jar}"/>
     <delete file="${test-jar}"/>
+    <delete>
+       <fileset dir="${dist}" includes="wt-*.log"/>
+    </delete>
   </target>
 
   <target name="clean" description="minimal clean up" >
@@ -533,6 +536,9 @@
     <delete dir="${javadoc}"/>
     <delete dir="${junitest}"/>  
     <delete file="${test-jar}"/>
+    <delete>
+       <fileset dir="${dist}" includes="wt-*.log"/>
+    </delete>
   </target>
 
 </project>
