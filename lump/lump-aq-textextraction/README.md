@@ -32,19 +32,6 @@ v.0.1.4 Automatised process for extracting plain articles for a given domain
 v.0.1.5	Automatised process for the extraction of comparable fragments
 
 
-JARS DEPRECATED (Oct, 2014)
----------------
-
-ArticleTextExtractor.v2.jar	The overall jar file created with ant should be used 
-	instead (e.g. with the -cp flag). 
-	
-	This deprecated jar file was generated on Aug. 8. It extracts Wikipedia 
-	articles from a given dump (language and year). Alternatively, a list with 
-	IDs can be included to extract specific articles (entire Wikipedias are 
-	extracted otherwise). In this version, lists and tables within the articles 
-	are not extracted. 
-
-
 SUBPROJECTS
 -----------
 
