@@ -19,7 +19,7 @@ import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.aq.wikilink.WikipediaDBdata;
 import cat.lump.aq.wikilink.config.MySQLWikiConfiguration;
-import cat.lump.aq.wikilink.connexion.WikipediaDriverManager;
+import cat.lump.aq.wikilink.connection.WikipediaDriverManager;
 
 /**
  * A class to identify the common articles across n languages in Wikipedia

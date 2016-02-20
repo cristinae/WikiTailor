@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import cat.lump.aq.basics.log.LumpLogger;
-import cat.lump.aq.wikilink.connexion.WikipediaDriverManager;
+import cat.lump.aq.wikilink.connection.WikipediaDriverManager;
 
 /**
  * Utilities for querying the Wikipedia DB and dealing with its data.
