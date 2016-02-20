@@ -1,5 +1,5 @@
-README file for the lump2 algebra project
--------------------------------------------------
+README file for the lump basics project
+---------------------------------------
 
 @last_modification Feb 9, 2016 
 @last_author Cristina
@@ -14,13 +14,13 @@ general operations for text acquisition.
 SUBPROJECTS
 -----------
 
-algebra-vector - includes the class for operating over a vector.  
+algebra - includes the class for operating over vectors and matrix. 
 
 check - classes to check whether a given parameter (or any object) is 
 what is expected; e.g. it is not empty, not null, true, etc.
 It includes a few methods to throw errors.
 
-io-files - 	includes classes to read and write files in different ways 
+io-files - includes classes to read and write files in different ways 
 as well as a fool CSV reader and writer.
 	
 log - includes classes and configuration files to keep logs. 
@@ -38,3 +38,4 @@ THIRDPARTIES:
 thirdparty-junit-4.11 for junit testing
 
 log4j 2.0 to keep generate the logs
+

@@ -1,5 +1,5 @@
-README file for the lump2 lucene-based retrieval  project
--------------------------------------------------
+README file for the lump lucene-based retrieval  project
+--------------------------------------------------------
 
 @last_modification Feb 9 2016 
 @last_author Cristina
@@ -8,8 +8,8 @@ README file for the lump2 lucene-based retrieval  project
 SUMMARY
 -------
 
-This project includes information-retrieval-related classes, all built
-on top of Lucene.  
+This project includes the classes related to extraction of Wikipedia's articles 
+using IR methods, all of them built on top of Lucene.  
 
 SUBPROJECTS
 -----------
@@ -17,8 +17,8 @@ SUBPROJECTS
 DEPENDENCIES
 ------------
 
-lump2-aq-basics for logging the process, for checking the parameters introduced when calling the 
-	classes/method, for saving and opening files
+lump2-aq-basics for logging the process, for checking the parameters introduced when 
+ 	calling the classes/method, for saving and opening files
 
 lump2-ie-textprocessing for processing the text and get proper representations
 

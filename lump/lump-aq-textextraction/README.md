@@ -1,5 +1,5 @@
-README file for the lump2 text extraction project
--------------------------------------------------
+README file for the lump textextraction project
+------------------------------------------------
 
 @last_modification Feb 17, 2016
 @last_author Cristina 
@@ -9,12 +9,9 @@ SUMMARY
 -------
 
 This project includes classes to extract and manipulate text from files
-and sources that do not contain plain text. 
-As it is now, text can be extracted from Wikitext (through JWPL and a 
-local preprocessed copy of Wikipedia)
-
-TODO including other sources, such as doc, pdf, and the Web. 
-
+and sources that do not contain plain text. As it is now, text can be 
+extracted from Wikitext (through JWPL and a local preprocessed copy of Wikipedia)
+The extraction of Wikitext can be done conditional to its domain.
 
 VERSIONS
 --------
@@ -34,10 +31,6 @@ v.0.1.5	Automatised process for the extraction of comparable fragments
 
 SUBPROJECTS
 -----------
-
-wikipedia includes an interface to the JWPL library, as well as constants
-	related to the languages identifiers and Wikipedia-related keywords
-	(e.g. naming of images and categories) 
 	
 
 DEPENDENCIES

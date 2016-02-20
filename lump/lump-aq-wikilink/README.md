@@ -1,5 +1,5 @@
-README file for the lump2 configuration project
-------------------------------------------------s
+README file for the lump wikilink project
+-----------------------------------------
 
 @last_modification Feb 9, 2016 
 @last_author Cristina
@@ -9,20 +9,25 @@ SUMMARY
 -------
 
 This project includes classes to access configuration data of the database, to get 
-connected to the MySQL Wikipedias databases and manage the connexion. General 
-methods to query the database are also included here.
+connected to the MySQL Wikipedias databases and manage the connection. Includes an 
+interface to the JWPL library, as well as constants related to the languages 
+identifiers and Wikipedia-related keywords (e.g. naming of images and categories). 
+General methods to query the database are also included here.
 
 SUBPROJECTS
 -----------
 
-config includes the class to access the Wikipedia-db-related configuration
+config - includes the class to access the Wikipedia-db-related configuration
 
-connexion includes a class to manage the connexion with the MySQL database
+connection - includes a class to manage the connection with the MySQL database
 
-jwpl includes methods to initialise the database
+jwpl - includes methods to initialise the database and the language-dependant 
+keywords associated to Wikipedia
  
 	
 DEPENDENCIES
 ------------
 
-This project does not depend on any non-standard library. 
+THIRDPARTIES:
+
+jwpl 0.9.2 is used for accessing the Wikipedia contents

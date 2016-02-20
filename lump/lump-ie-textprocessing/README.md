@@ -1,4 +1,4 @@
-README file for the lump2 text processing project
+README file for the lump text processing project
 -------------------------------------------------
 
 @last_modification Feb 9, 2016
@@ -13,11 +13,14 @@ Among the preprocessing facilities, it includes a sentences' detector,
 tokenizer, both character and word n-grams, and stopworder, among other
 features.  
 
+
 SUBPROJECTS
 -----------
 
 textprocessing includes the abstract classes for decomposing a text (for 
 	instance, by extracting n-grams or tokens).
+	
+ner includes the classes to extract named entities with opennlp
 
 ngram contains the classes for extracting both word and character n-grams 
 	from a text. Note that an extractor for word 1-grams can be used as
@@ -30,14 +33,13 @@ sentence has one single class that detects sentences in different languages
 	
 stopwords contains a class to discard/capture the stopwords in a text. The
 	lists of stopwords (in [..]stopwords/lists) are currently available 
-	for Arabic, Catalan, German, Greek, English, Spanish, Basque, French, 
-	Occitan, Portuguese and Romanian. 
+	for available for Arabic, Basque, Bulgarian, Catalan, Czech, German, 
+	Greek, English, French, Occitan, Portuguese, Romanian and Spanish
 	TODO add more languages.
 	
-word contains a stemmer factory that relies on snowball stemmers (currently
-	available: Dutch, English, French, German, Italian, Spanish, among others)
+word contains a stemmer factory that relies on Snowball and Lucene's stemmers 
+	(currentlyavailable: Dutch, English, French, German, Italian, Spanish, among others)
 	and a word decomposer based on ICU4J.
-	Stemms for Arabic are obtained with Lucene stemmer
 	
 DEPENDENCIES
 ------------

@@ -1,4 +1,4 @@
-README file for the lump2 retrieval models project
+README file for the lump retrieval models project
 -------------------------------------------------
 
 @last_modification Mar 19, 2014 
@@ -17,11 +17,10 @@ TODO IR evaluation measures
 SUBPROJECTS
 -----------
 
-document includes classes to represent a document's contents with different
-	characterizarions (e.g. BoW and n-grams) 
-	
+document - includes classes to represent a document's contents with different
+	characterizations (e.g. BoW and n-grams) 
 
-similarity contains the classes to compute similarity between two document
+similarity - contains the classes to compute similarity between two document
 	vectors. Now only cosine is included.
 
 similarity.esa (TODEFINE) should include the ESA-related classes
