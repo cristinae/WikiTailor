@@ -8,7 +8,6 @@ hs_err_pid*
 
 # Eclipse related #
 .classpath
-.project
 .settings/
 org.eclipse.jdt.core.prefs
 
