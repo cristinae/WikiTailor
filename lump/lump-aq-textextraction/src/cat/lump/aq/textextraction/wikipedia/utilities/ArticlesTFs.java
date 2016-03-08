@@ -2,6 +2,7 @@ package cat.lump.aq.textextraction.wikipedia.utilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +11,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -17,6 +19,7 @@ import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.aq.basics.structure.ir.TermFrequencyTuple;
+import cat.lump.aq.textextraction.wikipedia.cli.WikipediaCliArticleTextExtractor;
 import cat.lump.aq.textextraction.wikipedia.prepro.TermExtractor;
 import cat.lump.ir.weighting.TermFrequency;
 
@@ -141,12 +144,33 @@ public class ArticlesTFs {
 	private static CommandLine parseArguments(String[] args)
 	{
 		HelpFormatter formatter = new HelpFormatter();
+		int widthFormatter = 96;
+		String header = "\nwhere the arguments are:\n";
+		String command ="";
+		String footer ="";
+		Class<ArticlesTFs> c = ArticlesTFs.class;
+		try {
+			File exe = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+			command = "java -cp " + exe.getName() + ' ' +c.getCanonicalName();
+			footer = "\nEx: "+ command +" -l en -p /home/user/wikitailor/en/ \n";
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
 		CommandLine cLine = null;
 		Options options= new Options();
 		CommandLineParser parser = new BasicParser();
 
-		options.addOption("l", "language", true, 
-					"Language of interest (e.g., en, es, ca)");		
+		options= new Options();		
+		OptionBuilder.withLongOpt("language");
+		OptionBuilder.withDescription("Language of interest (e.g., en, es, ca)");
+		OptionBuilder.hasArg();
+		OptionBuilder.withArgName("arg");
+		OptionBuilder.isRequired();
+		options.addOption(OptionBuilder.create('l'));		
+
+		//options.addOption("l", "language", true, 
+		//			"Language of interest (e.g., en, es, ca)");		
 		options.addOption("h", "help", false, "This help");
 		options.addOption("p", "path2root", true,
 				    "Path to the folder where plain/ is (default: current)");
@@ -159,12 +183,14 @@ public class ArticlesTFs {
 		
 		if (cLine == null || !(cLine.hasOption("l")) ) {
 			logger.error("Please, set the language\n");
-			formatter.printHelp(ArticlesTFs.class.getSimpleName(),options);
+			//formatter.printHelp(ArticlesTFs.class.getSimpleName(),options);
+			formatter.printHelp(widthFormatter, command, header, options, footer, true);
 			System.exit(1);
 		}		
 		
 		if (cLine.hasOption("h")) {
-			formatter.printHelp(ArticlesTFs.class.getSimpleName(),options );
+			formatter.printHelp(widthFormatter, command, header, options, footer, true);
+			//formatter.printHelp(ArticlesTFs.class.getSimpleName(),options );
 			System.exit(0);
 		}
 	
