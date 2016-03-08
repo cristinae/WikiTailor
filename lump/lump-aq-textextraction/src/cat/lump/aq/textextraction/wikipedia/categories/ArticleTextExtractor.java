@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
@@ -280,6 +281,19 @@ public class ArticleTextExtractor {
       
       WikipediaJwpl wik = new WikipediaJwpl(locale, year);
       
+      // Arantxa's modifications while<->for
+      Iterator<Integer> it = prepro.pageIDs.iterator();
+      while (it.hasNext()) {
+    	  int id = it.next(); 
+    	  Page page = wik.getPage(id); 
+    	  if (pageShouldBeRemoved(page))  {
+    		  //TODO this if does not seem to work as it queries non-existing
+    		  //information in the DB.
+    		  it.remove();
+    	  }
+      }
+
+      /*
       for (int id : prepro.pageIDs) {       
         Page page = wik.getPage(id);                      
         if (pageShouldBeRemoved(page))  {
@@ -287,7 +301,7 @@ public class ArticleTextExtractor {
           //information in the DB.
           prepro.removePage(id);
         }
-      }
+      }*/
 
       prepro.addPreprocess(TypePreprocess.PLAIN_TEXT);
       prepro.preprocessAll();
