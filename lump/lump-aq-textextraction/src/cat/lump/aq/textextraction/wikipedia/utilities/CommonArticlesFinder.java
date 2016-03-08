@@ -35,6 +35,7 @@ import cat.lump.aq.wikilink.connection.WikipediaDriverManager;
  *       (either here or generalise CommonCategoriesExtractor to deal with articles) 
  */
 
+@Deprecated
 public class CommonArticlesFinder {
 	
 	/**DB with langlinks & articles pairs*/

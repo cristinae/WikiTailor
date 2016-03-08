@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -115,19 +117,39 @@ public class CommonNamespaceFinder {
 	 */
 	private static CommandLine parseArguments(String[] args) {
 		HelpFormatter formatter = new HelpFormatter();
+		int widthFormatter = 96;
+		String header = "\nwhere the arguments are:\n";
+		String command ="";
+		String footer ="";
+		Class<CommonNamespaceFinder> c = CommonNamespaceFinder.class;
+		try {
+			File exe = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+			command = "java -cp " + exe.getName() + ' ' +c.getCanonicalName();
+			footer = "\nEx: "+ command +" -y 2015 -f ca.591034.4.articles  en.691182.4.articles  es.1733769.4.articles \n";
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+
 		CommandLine cLine = null;
 		Options options= new Options();
 		CommandLineParser parser = new BasicParser();
 
 		//MANDATORY
-		options.addOption("y", "year", true, 
-					"Dump year (e.g. 2015, 2016)");
+		OptionBuilder.withLongOpt("year");
+		OptionBuilder.withDescription("Wikipedia year edition (2013, 2015, 2016)");
+		OptionBuilder.hasArg();
+		OptionBuilder.withArgName("arg");
+		OptionBuilder.isRequired();
+		options.addOption(OptionBuilder.create('y'));		
+
+		//options.addOption("y", "year", true, 
+		//			"Dump year (e.g. 2015, 2016)");
 		Option optionFiles = new Option("f", 
 				    "List of files with the IDs of the articles \n" +
 				    "(e.g. ca.591034.4.articles  en.691182.4.articles  es.1733769.4.articles)\n" +
 				    "The first two letters must indicate the language.");
 		optionFiles.setArgs(Option.UNLIMITED_VALUES);  //we dont know how many languages
-		//optionFiles.setRequired(true);
+		optionFiles.setRequired(true);
 		optionFiles.setLongOpt("files");
 		options.addOption(optionFiles);
 		
@@ -146,14 +168,12 @@ public class CommonNamespaceFinder {
 		if (cLine == null ||
 			! ((cLine.hasOption("y") && cLine.hasOption("f"))))	{
 			System.err.println("Please, set the year and the input files\n");
-			formatter.printHelp(CommonNamespaceFinder.class.getSimpleName(), 
-								options);
+			formatter.printHelp(widthFormatter, command, header, options, footer, true);
 			System.exit(1);
 		}
 
 		if (cLine.hasOption("h")) {
-			formatter.printHelp(CommonNamespaceFinder.class.getSimpleName(),
-								options);
+			formatter.printHelp(widthFormatter, command, header, options, footer, true);
 			System.exit(0);
 		}
 

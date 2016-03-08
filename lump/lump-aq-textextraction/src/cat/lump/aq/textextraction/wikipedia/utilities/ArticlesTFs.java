@@ -19,7 +19,6 @@ import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.aq.basics.structure.ir.TermFrequencyTuple;
-import cat.lump.aq.textextraction.wikipedia.cli.WikipediaCliArticleTextExtractor;
 import cat.lump.aq.textextraction.wikipedia.prepro.TermExtractor;
 import cat.lump.ir.weighting.TermFrequency;
 
