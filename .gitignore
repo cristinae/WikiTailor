@@ -20,5 +20,5 @@ wt-*.log
 *.category
 *.stats
 # Files with passwords
-configs/lump_wiki.properties
+./configs/lump_wiki.properties
 
