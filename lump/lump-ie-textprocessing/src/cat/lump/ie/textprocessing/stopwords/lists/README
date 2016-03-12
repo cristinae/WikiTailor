@@ -4,7 +4,6 @@ Lists are not coherent among them. For instance, the Catalan list includes numer
 
 
 Sources for the lists:
-
 ____________________
 
 Catalan StopWords
@@ -45,3 +44,11 @@ ______________________
 Czech stopwords
 
 From Lucene 3.5
+
+______________________
+
+Italian stopwords
+
+From Snowball
+
+

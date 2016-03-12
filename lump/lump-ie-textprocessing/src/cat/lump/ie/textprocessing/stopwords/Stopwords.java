@@ -118,6 +118,8 @@ public class Stopwords {
 			model = "lists/eu.sw";
 		} else if (language.equals(new Locale("fr"))){
 			model = "lists/fr.sw";
+		} else if (language.equals(new Locale("it"))){
+			model = "lists/it.sw";
 		} else if (language.equals(new Locale("ro"))){
 			model = "lists/ro.sw";
 		} else if (language.equals(new Locale("oc"))){

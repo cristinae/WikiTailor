@@ -24,6 +24,7 @@ import org.apache.lucene.analysis.el.GreekAnalyzer;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.eu.BasqueAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.ro.RomanianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -94,6 +95,9 @@ public class LuceneTokenizer {
 				break;
 			case "fr":
 				analyzer = new FrenchAnalyzer(LUCENE_VERSION);
+				break;
+			case "it":
+				analyzer = new ItalianAnalyzer(LUCENE_VERSION);
 				break;
 			case "pt":
 				analyzer = new PortugueseAnalyzer(LUCENE_VERSION);

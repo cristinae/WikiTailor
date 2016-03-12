@@ -128,8 +128,8 @@ public abstract class WikipediaCliMinimum {
 		OptionBuilder.withArgName("FILE");
 		OptionBuilder.isRequired();
 		options.addOption(OptionBuilder.create('i'));		
-		options.addOption("h", "help", false,
-				"This help");
+		
+		options.addOption("h", "help", false, "This help");
 	
 	}
 	
