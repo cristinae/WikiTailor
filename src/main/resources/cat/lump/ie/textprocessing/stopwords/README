@@ -1,0 +1,54 @@
+Comments:
+
+Lists are not coherent among them. For instance, the Catalan list includes numerals while the English one does not.
+
+
+Sources for the lists:
+____________________
+
+Catalan StopWords
+
+http://latel.upf.edu/morgana/altres/pub/ca_stop.htm
+
+Pots fer-ne qualsevol ús no comercial sempre que citis:
+
+    Aquesta llista de mots buits del català ha estat obtinguda de l'àrea d'Enginyeria Lingüística de l'Institut de Lingüística Aplicada de la Universitat Pompeu Fabra
+____________________
+
+Arabic, French, Romanian StopWords
+
+https://sites.google.com/site/kevinbouge/stopwords-lists
+____________________
+
+Basque StopWords
+
+https://github.com/iucl/l2-writing-assistant/tree/master/babelnet-api-2.0/resources/jlt/stopwords
+____________________
+
+Occitan StopWords
+
+Handmade from 
+http://www.galeon.com/amanohashidate/oc.htm
+
+______________________
+
+Bulgarian stopwords
+
+From Lucene 3.5
+# This file was created by Jacques Savoy and is distributed under the BSD license.
+# See http://members.unine.ch/jacques.savoy/clef/index.html.
+# Also see http://www.opensource.org/licenses/bsd-license.html
+
+______________________
+
+Czech stopwords
+
+From Lucene 3.5
+
+______________________
+
+Italian stopwords
+
+From Snowball
+
+
