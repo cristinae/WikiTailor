@@ -29,15 +29,18 @@ public class DomainKeywordsTest {
 
 private DomainKeywords dkw;
 
-private final int year = 2013;
+private final int year = 2015;
 private final Locale catLocale = new Locale("ca");
 private final int percentage = 10;
 private final int categoryID = 508210;  
 private final String categoryName = "Fauna_per_territori";
-private final int expectedArticles = 4;
+private final int expectedArticles = 3;
 private final ArrayList<String> expectedTitles = new ArrayList<String>(
-	    Arrays.asList("Fauna_d'Austràlia","Fauna_de_Madagascar",
- 	    		      "Fauna_dels_Països_Catalans","Fauna_del_Sàhara"));
+	    Arrays.asList(
+	    		"Fauna_d'Austràlia", 
+	    		"Fauna_dels_Països_Catalans",
+	    		"Fauna_del_Sàhara")
+	    );
 
     @Before
 	public void setUp() throws Exception {
@@ -73,6 +76,8 @@ private final ArrayList<String> expectedTitles = new ArrayList<String>(
 	        WikipediaJwpl wiki = new WikipediaJwpl(catLocale, year);
 	        Category category = wiki.getCategory(categoryID);
 	        numArticles = category.getArticleIds().size();
+	        System.out.println(category.getPageId());
+	        System.out.println(numArticles);
 			Assert.assertEquals(expectedArticles, numArticles);
 
 			for (int artID : category.getArticleIds()){

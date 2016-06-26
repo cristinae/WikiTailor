@@ -23,7 +23,7 @@ import cat.lump.aq.basics.check.CHK;
 public class Dump {
 	
 	/**The file with a list of the available dumps */
-	private static final String CONFIG_FILE="/configs/availableDumps.properties";
+	private static final String CONFIG_FILE="cat/lump/aq/wikilink/config/availableDumps.properties";
 
 	/**The locale for the given dump */
 	private Locale locale;
@@ -80,8 +80,9 @@ public class Dump {
 		Class<Dump> c = Dump.class;
 		try {
 			File configPath = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-			String configFile = configPath.getParent().toString().concat(CONFIG_FILE);
-			InputStreamReader isr = new InputStreamReader(new FileInputStream(configFile), Charset.forName("UTF-8")); 
+//			String configFile = configPath.getParent().toString().concat(CONFIG_FILE);
+			//InputStreamReader isr = new InputStreamReader(new FileInputStream(CONFIG_FILE), Charset.forName("UTF-8"));
+			InputStreamReader isr = new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(CONFIG_FILE));
 			p.load(isr);
 			isr.close();
 		} catch (IOException e) { 

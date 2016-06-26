@@ -1,5 +1,7 @@
 package cat.lump.aq.wikilink.jwpl;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,6 +12,7 @@ import cat.lump.aq.wikilink.config.MySQLWikiConfiguration;
 import cat.lump.aq.wikilink.jwpl.WikipediaJwpl;
 import de.tudarmstadt.ukp.wikipedia.api.DatabaseConfiguration;
 import de.tudarmstadt.ukp.wikipedia.api.exception.WikiApiException;
+import de.tudarmstadt.ukp.wikipedia.parser.Section;
 
 public class WikipediaJwplTest {
 
@@ -69,26 +72,26 @@ public class WikipediaJwplTest {
 
 	@Test
 	public void testGetSectionsFromArticleInt() throws WikiApiException {
-		Assert.assertEquals(20, 
+		Assert.assertEquals(19, 
 				wk.getSectionsFromArticle(10).size());
 	}
 
 	@Test
 	public void testGetSectionsFromArticleString() throws WikiApiException {
-		Assert.assertEquals(13, 
+		Assert.assertEquals(11, 
 				wk.getSectionsFromArticle("Gobierno Provisional Ruso").size());
 	}
 
 	@Test
 	public void testGetParagraphsFromArticleInt() throws WikiApiException {
-		Assert.assertEquals(318, 
+		Assert.assertEquals(372, 
 				wk.getParagraphsFromArticle(10).size());
 	}
 
 	@Test
 	public void testGetParagraphsFromArticleString() throws WikiApiException {
 		System.out.println(wk.getParagraphsFromArticle("Gobierno Provisional Ruso").size());
-		Assert.assertEquals(42, 
+		Assert.assertEquals(78, 
 				wk.getParagraphsFromArticle("Gobierno Provisional Ruso").size());
 	}
 	
