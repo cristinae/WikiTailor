@@ -9,7 +9,6 @@ import cat.lump.aq.wikilink.Languages;
 import cat.lump.aq.wikilink.config.Dump;
 import cat.lump.aq.wikilink.config.MySQLWikiConfiguration;
 import cat.lump.aq.wikilink.jwpl.LanguageConstants;
-
 import de.tudarmstadt.ukp.wikipedia.api.Category;
 import de.tudarmstadt.ukp.wikipedia.api.DatabaseConfiguration;
 import de.tudarmstadt.ukp.wikipedia.api.Page;
@@ -396,13 +395,15 @@ public class WikipediaJwpl extends Wikipedia {
 	 * 
 	 * @param args
 	 * @throws WikiApiException
+	 * @throws ClassNotFoundException 
 	 */
-	public static void main(String[] args) throws WikiApiException {
+	public static void main(String[] args) throws WikiApiException, ClassNotFoundException {
 		String lang = "en";
-		int year = 2013;
+		int year = 2015;
 		
 		String wikiDB = getJwplDBprefix() + lang + "_" + year;
 
+		//Class.forName("com.mysql.jdbc.Driver");
 		DatabaseConfiguration dbConf = new DatabaseConfiguration(
 				MySQLWikiConfiguration.mysqlUrlJwpl(), wikiDB,
 				MySQLWikiConfiguration.sqlUser(),
@@ -414,6 +415,11 @@ public class WikipediaJwpl extends Wikipedia {
 		// TODO other way to give the password?
 		System.out.println(dbConf.getUser());
 		//System.out.println(dbConf.getPassword());
+
+		
+		
+		
+		
 		WikipediaJwpl wk = new WikipediaJwpl(dbConf);
 
 		// wk.getSubSectionsFromArticle("Geografía");
@@ -423,24 +429,24 @@ public class WikipediaJwpl extends Wikipedia {
 //		System.out.println(wk.isDisambiguation(wk.getPage(128)));
 //		System.out.println(wk.isRedirect(wk.getPage(128)));
 		System.out.println("@@@@@@@@@@@@");
-//		for (Category c : wk.getPage(20104565).getCategories()) {
-//			System.out.println(c.getTitle());
-//			System.out.println(c.getTitle().getPlainTitle().toLowerCase());
+		for (Category c : wk.getPage(20104565).getCategories()) {
+			System.out.println(c.getTitle());
+			System.out.println(c.getTitle().getPlainTitle().toLowerCase());
+		}
+
+		System.exit(0);
+//		System.out.println(wk.getDatabaseConfiguration());
+//		System.out.println(wk.getParsedArticle(39903509).getCategories());
+//
+//		for (Paragraph par : wk.getParagraphsFromArticle(39903509)) {
+//			System.out.println(par.getText());
+//			System.out.println("#############");
 //		}
 //
-//		System.exit(0);
-		System.out.println(wk.getDatabaseConfiguration());
-		System.out.println(wk.getParsedArticle(39903509).getCategories());
-
-		for (Paragraph par : wk.getParagraphsFromArticle(39903509)) {
-			System.out.println(par.getText());
-			System.out.println("#############");
-		}
-
-		for (Section sec : wk.getSectionsFromArticle(39903509)) {
-			System.out.println(sec.getText().trim());
-			System.out.println("#############");
-		}
+//		for (Section sec : wk.getSectionsFromArticle(39903509)) {
+//			System.out.println(sec.getText().trim());
+//			System.out.println("#############");
+//		}
 	}
 
 }

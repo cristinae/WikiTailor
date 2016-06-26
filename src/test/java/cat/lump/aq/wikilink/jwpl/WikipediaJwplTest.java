@@ -15,7 +15,7 @@ public class WikipediaJwplTest {
 
 	
 	private final String LANGUAGE = "es";
-	private final String YEAR = "2012";
+	private final String YEAR = "2015";
 	
 	private WikipediaJwpl wk; 
 	
@@ -87,6 +87,7 @@ public class WikipediaJwplTest {
 
 	@Test
 	public void testGetParagraphsFromArticleString() throws WikiApiException {
+		System.out.println(wk.getParagraphsFromArticle("Gobierno Provisional Ruso").size());
 		Assert.assertEquals(42, 
 				wk.getParagraphsFromArticle("Gobierno Provisional Ruso").size());
 	}
