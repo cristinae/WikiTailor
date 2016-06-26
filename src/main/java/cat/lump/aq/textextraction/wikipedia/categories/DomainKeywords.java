@@ -42,7 +42,7 @@ public class DomainKeywords
 	private int top;
 	
 	/**Max vocabulary size allowed even if top is present (default: 100) */
-	private int max;
+	private int max = 100;
 
 	/**Minimum number of articles required to build a dictionary */
 	private int minArticlesVoc;
