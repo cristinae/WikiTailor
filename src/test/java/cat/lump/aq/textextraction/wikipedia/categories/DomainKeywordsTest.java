@@ -75,9 +75,7 @@ private final ArrayList<String> expectedTitles = new ArrayList<String>(
 	        dkw.loadArticles(categoryName);
 	        WikipediaJwpl wiki = new WikipediaJwpl(catLocale, year);
 	        Category category = wiki.getCategory(categoryID);
-	        numArticles = category.getArticleIds().size();
-	        System.out.println(category.getPageId());
-	        System.out.println(numArticles);
+	        numArticles = category.getArticleIds().size();	        
 			Assert.assertEquals(expectedArticles, numArticles);
 
 			for (int artID : category.getArticleIds()){

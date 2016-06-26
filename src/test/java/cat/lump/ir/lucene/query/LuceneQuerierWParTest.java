@@ -47,7 +47,7 @@ public class LuceneQuerierWParTest {
 						"عرس القرن: زفاف تشيلسي كلينتون يتكلف ملايين الدولاراتhttp://www.bbc.co.uk/arabic/artandculture/2010/07/100731_chelsea_clinton_wedding.shtml"; 
 		String doc4 = "الصفحة الرئيسية home is far"; 
 		
-		String path = System.getProperty("user.dir") + relDir;
+		final String path = System.getProperty("user.dir") + relDir;
 		new File(path).mkdirs();
 		
 		try {

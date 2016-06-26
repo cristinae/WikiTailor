@@ -18,17 +18,17 @@ public class StopwordsTest {
 	@Before
 	public void setUp() throws Exception {
 		stop = new Stopwords(Locale.ENGLISH);
-		for (String x : stop.STOP_LIST) {
-			System.out.println(x);
-		}
+//		for (String x : stop.STOP_LIST) {
+//			System.out.println(x);
+//		}
 	}
 
 	/**Determine whether a token is a stopword */
 	@Test
 	public void testIsStopword() {
-		for (String x : stop.STOP_LIST) {
-			System.out.println(x);
-		}
+//		for (String x : stop.STOP_LIST) {
+//			System.out.println(x);
+//		}
 		assertTrue(stop.isStopword("again"));
 		assertTrue(stop.isStopword("whom"));
 		assertFalse(stop.isStopword("campaign"));

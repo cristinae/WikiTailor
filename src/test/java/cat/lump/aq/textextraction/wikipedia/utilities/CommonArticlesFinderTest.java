@@ -44,8 +44,10 @@ public class CommonArticlesFinderTest {
 
 		filesID[0] = "tmpCa.txt";
 		filesID[1] = "tmpEu.txt";
-		File fCa = new File(System.getProperty("user.dir"),filesID[0]);
-		File fEu = new File(System.getProperty("user.dir"),filesID[1]);
+//		File fCa = new File(System.getProperty("user.dir"),filesID[0]);
+//		File fEu = new File(System.getProperty("user.dir"),filesID[1]);
+		File fCa = new File(filesID[0]);
+		File fEu = new File(filesID[1]);
 		try {
 			FileIO.stringToFile(fCa, articlesCa, false);
 			FileIO.stringToFile(fEu, articlesEu, false);
