@@ -36,7 +36,7 @@ public class LuceneLanguages {
 		
 		//String propFile = null;
 		//AQUI VOY
-		InputStream in = LuceneLanguages.class.getResourceAsStream("config/lucene.properties");
+		InputStream in = LuceneLanguages.class.getResourceAsStream("lucene.properties");
 		try {
 			p.load(in);
 		} catch (IOException e) {

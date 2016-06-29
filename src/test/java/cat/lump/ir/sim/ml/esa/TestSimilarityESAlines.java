@@ -69,7 +69,7 @@ public class TestSimilarityESAlines {
 		esa = new SimilarityESAlines(
 				documentA,
 				documentB,
-				"/home/albarron/wikipedia/esa/lucene-index/en.2", 
+				TestSimilarityESAdocs.INDEX_PATH, 
 				"en",
 				true);
 		esa.computeVectorsA();

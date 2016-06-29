@@ -13,6 +13,7 @@ import org.junit.Test;
 import Jama.Matrix;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.ir.sim.cl.clesa.SimilarityCLESAdocs;
+import cat.lump.ir.sim.ml.esa.TestSimilarityESAdocs;
 
 /**
  * In this junit we test the operation of SimilarityESA through its 
@@ -73,8 +74,8 @@ public class TestSimilarityCLESAdocs {
 				false);	
 		
 		esa = new SimilarityCLESAdocs(
-				"/home/albarron/wikipedia/esa/lucene-index/en.2",
-				"/home/albarron/wikipedia/esa/lucene-index/en.2",
+				TestSimilarityESAdocs.INDEX_PATH,
+				TestSimilarityESAdocs.INDEX_PATH,
 				pathA,
 				pathB,				 
 				"en", 

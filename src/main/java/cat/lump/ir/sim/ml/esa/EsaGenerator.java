@@ -120,7 +120,7 @@ public class EsaGenerator {
 	 */
 	public void setIndexPath(File indexPath){
 		if (!indexPath.isDirectory()) {
-			System.err.print("I cannot read the directory " + language);
+			System.err.print("I cannot read the directory " + indexPath);
 			System.exit(1);			
 		}
 		this.indexPath = indexPath;

@@ -30,6 +30,9 @@ import cat.lump.ir.sim.ml.esa.SimilarityESAdocs;
  */
 public class TestSimilarityESAdocs {
 
+	public static final String INDEX_PATH = 
+			"/media/alberto/SeagateBackupPlusDrive/wikiUPC/indexes/en";
+	
 	/**Precision for the double results */
 	private double delta = 0.0001;
 	
@@ -75,7 +78,7 @@ public class TestSimilarityESAdocs {
 		esa = new SimilarityESAdocs(pathA, 
 				pathB, 
 				//TODO Use the .properties file
-				"/home/albarron/wikipedia/esa/lucene-index/en.2", 
+				INDEX_PATH,
 				"en", 
 				true);
 		

@@ -1,0 +1,26 @@
+############################################################
+# Configuration file with the information for the
+# connection to the database.
+############################################################
+
+# MySQL URL necessary for a "traditional" connection to the DB
+#Complete URL to the database
+# (substitute url and dbname)
+#MYSQL_URL=jdbc:mysql://url:3306/dbname
+MYSQL_URL=jdbc:mysql://localhost/lump_wiki_en_2015
+
+# MySQL URL necessary to access the DB through JWPL
+#URL to the MySQL client
+# (substitute url, the same as before)
+MYSQL_URL_JWPL=url:3306
+ 
+#Identification
+# (substitute user and password)
+MYSQL_USER=root
+MYSQL_P=M&5q1
+ 
+#Database with the tables corresponding to pairs.
+DB_PAIRS=lump_pairs
+
+#Prefix of the lump project Wikipedia DBs
+jwplDBprefix=lump_wiki_
