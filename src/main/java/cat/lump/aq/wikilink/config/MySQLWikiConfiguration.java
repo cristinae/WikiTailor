@@ -1,12 +1,7 @@
 package cat.lump.aq.wikilink.config;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.Properties;
 
 /**
@@ -24,8 +19,8 @@ public abstract class MySQLWikiConfiguration {
 	private static Properties p = new Properties();
 
 	/**File with the the information for the connection to the database. */
-//	private static final String CONFIG_FILE="/configs/lump_wiki.properties";
-	private static final String CONFIG_FILE="cat/lump/aq/wikilink/config/lump_wiki.properties";
+	private static final String CONFIG_FILE="./configs/lump_wiki.properties";
+	//private static final String CONFIG_FILE="cat/lump/aq/wikilink/config/lump_wiki.properties";
 
 	private static String mysql_url;
 	protected static String mysql_url_jwpl;
@@ -44,27 +39,18 @@ public abstract class MySQLWikiConfiguration {
 	
 	static {		
 		Class<MySQLWikiConfiguration> c = MySQLWikiConfiguration.class;
-//		try { p.load(c.getResourceAsStream("lump_wikiOLD.properties")); }
-//		catch (IOException e) { e.printStackTrace(); }
-
 		try {
-//			File configPath = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-//			String configFile = configPath.getParent().toString().concat(CONFIG_FILE);
-			InputStream configFile = ClassLoader.getSystemResourceAsStream(CONFIG_FILE);
-			//InputStreamReader isr = new InputStreamReader((configFile), Charset.forName("UTF-8"));
-			 InputStreamReader isr = new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(CONFIG_FILE));
-//			InputStreamReader isr = 
-//					new InputStreamReader(ClassLoader.getSystemResourceAsStream(CONFIG_FILE), Charset.forName("UTF-8"));
-			p.load(isr);
+//			//Configuration with config file within the jar
+//			InputStream configFile = ClassLoader.getSystemResourceAsStream(CONFIG_FILE);
+//			InputStreamReader isr = new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(CONFIG_FILE));
+//			p.load(isr);
+//			isr.close();
 			
-			System.out.println("ISR LOADED==============");
-			isr.close();
+			//Configuration with config file outside the jar
+			p.load(new FileInputStream(CONFIG_FILE));						
 		} catch (IOException e) { 
 			e.printStackTrace(); 
 		} 
-//		catch (URISyntaxException e) {
-//			e.printStackTrace();
-//		}
 		
 		mysql_url_jwpl=p.getProperty("MYSQL_URL_JWPL");
 		mysql_url=p.getProperty("MYSQL_URL");
