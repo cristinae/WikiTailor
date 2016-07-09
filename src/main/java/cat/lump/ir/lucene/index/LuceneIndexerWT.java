@@ -117,8 +117,7 @@ public class LuceneIndexerWT extends LuceneInterface{
 					f.canRead() &&
 					(filter == null || filter.accept(f))) {
 				indexFile(f);
-				if (verbose)
-				{
+				if (verbose){
 					logger.info("Indexing document " + f.getName());
 				}
 				

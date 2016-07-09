@@ -119,9 +119,7 @@ public class LuceneIndexer extends LuceneInterface{
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		//create
-
-		
+		}		//create		
 		
 	}
 	
