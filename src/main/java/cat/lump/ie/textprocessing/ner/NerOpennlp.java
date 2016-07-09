@@ -71,18 +71,6 @@ public class NerOpennlp implements Decomposition{
 		nameFinder = new NameFinderME(model);
 	}	
 
-	private void getPersonModel(Locale language) throws FileNotFoundException{
-		if (language.equals(Locale.ENGLISH)){
-			MODEL_PERSON = getClass().getResourceAsStream(PERSON_EN);
-			//new FileInputStream(PERSON_EN);
-		} else if (language.equals(new Locale("es"))){
-			MODEL_PERSON = getClass().getResourceAsStream(PERSON_ES);
-		} else {
-			CHK.CHECK(false, 
-					"No NEr models available for the requested language");
-		}
-	}
-	
 	public List<String> getStrings(String[] text){
 		StringBuffer sb = new StringBuffer();
 		
@@ -141,6 +129,18 @@ public class NerOpennlp implements Decomposition{
 //		}
 		return mySpans;
 	}
+	
+	private void getPersonModel(Locale language) throws FileNotFoundException{
+		if (language.equals(Locale.ENGLISH)){
+			MODEL_PERSON = getClass().getResourceAsStream(PERSON_EN);
+			//new FileInputStream(PERSON_EN);
+		} else if (language.equals(new Locale("es"))){
+			MODEL_PERSON = getClass().getResourceAsStream(PERSON_ES);
+		} else {
+			CHK.CHECK(false, 
+					"No NEr models available for the requested language");
+		}
+	}
 
 	public static void main(String[] args){
 		NerOpennlp ner = new NerOpennlp(Locale.ENGLISH);
@@ -152,6 +152,9 @@ public class NerOpennlp implements Decomposition{
 		List<Span> spans = ner.getSpans(text);
 		for (Span x: spans){
 			System.out.println(x.getStart() + " " + x.getEnd());
+			for (int i=x.getStart(); i< x.getEnd(); i++) {
+				System.out.println(text[i]);
+			}
 		}
 	}
 
