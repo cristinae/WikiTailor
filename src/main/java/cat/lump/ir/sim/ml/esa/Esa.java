@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import Jama.Matrix;
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.ir.sim.ml.esa.EsaVectors;
+import cat.lump.ir.retrievalmodels.distance.VectorEuclideanDistance;
 import cat.lump.ir.retrievalmodels.similarity.SimilarityMeasure;
 import cat.lump.ir.retrievalmodels.similarity.VectorCosine;
 import cat.lump.ir.sim.Similarity;
@@ -24,41 +25,53 @@ public abstract class Esa implements Similarity{
 	 * for esaVectors_A*/
 	protected EsaVectors esaVectorsB;	
 
-	private SimilarityMeasure vc;
+	protected SimilarityMeasure vc;
 	
 	 
 	/**Matrix where the computed similarities are stored */
-	private Matrix similarities;
+	private Matrix measures;
 
 	public Esa(){
-		vc = new VectorCosine();
+		this(new VectorCosine());
 	}
 	
-	/**Computes the ESA-based similarities between the previously loaded 
-	 * documents. The results are stored in a private variable which can 
-	 * be accessed either with getSimilarity() for a specific pair or with 
-	 * getSimilarities() for a nested map including all the similarities 
-	 * for every document pair.
-	 */
-	/* (non-Javadoc)
-	 * @see cat.lump.ir.sim.Similarity#computeSimilarities()
-	 */
-//	@Override
-	public void computeSimilarities(){		
-		similarities = new Matrix(new double[esaVectorsA.length()]
+	public Esa(SimilarityMeasure measure){
+		vc = measure;
+	}
+	
+	public Esa(boolean distance) {
+		if (distance) {
+			vc = new VectorEuclideanDistance();
+		} else {
+			vc = new VectorCosine();
+		}
+	}
+	
+	
+	/**Computes the ESA-based measures (similarities/distances) between the 
+	 * previously loaded documents. The results are stored in a private 
+	 * variable which can be accessed either with getMeasure() for a 
+	 * specific pair or with getMeasures() for a nested map including 
+	 * all the similarities for every document pair.
+	 */	
+	@Override
+	public void computeMeasures(){		
+		measures = new Matrix(new double[esaVectorsA.length()]
 		                                     [esaVectorsB.length()]);
 
 		
 		for (int i = 0; i < esaVectorsA.length() ; i++)
 			for (int j = 0; j< esaVectorsB.length(); j++)
-				similarities.set(i, j, 
+				measures.set(i, j, 
 						vc.compute(esaVectorsA.getVector(i),
 										  esaVectorsB.getVector(j)));		
 	}
 	
 	
-	/**Computes the similarity between two specific documents.
-	 * (if previously computed, getSimilarity() can be simply called.
+	/**
+	 * Computes the measure (similarity/distance) between two specific 
+	 * documents. (if previously computed, getMeasure() can be simply 
+	 * called.
 	 * 
 	 * @param idA
 	 * @param idB
@@ -67,7 +80,8 @@ public abstract class Esa implements Similarity{
 	/* (non-Javadoc)
 	 * @see cat.lump.ir.sim.Similarity#computeSimilarity(java.lang.String, java.lang.String)
 	 */
-	public double computeSimilarity(String idA, String idB){
+	@Override
+	public double computeMeasure(String idA, String idB){
 		if (! documentsExist(idA, idB) ){
 			log.error("One of the documents does not exist");
 			return -1;
@@ -76,8 +90,9 @@ public abstract class Esa implements Similarity{
 						 esaVectorsB.getVector(idB));
 	}
 
-	/** Obtains the similarity between texts id_A and id_B. The 
-	 * documents should have been loaded before and similarities 
+	/** 
+	 * Obtains the measure (similarity/distance) between texts id_A and id_B. 
+	 * The* documents should have been loaded before and similarities 
 	 * computed, both through computeSimilarities()
 	 * @param idA
 	 * @param idB
@@ -86,27 +101,29 @@ public abstract class Esa implements Similarity{
 	/* (non-Javadoc)
 	 * @see cat.lump.ir.sim.Similarity#getSimilarity(java.lang.String, java.lang.String)
 	 */
-	public double getSimilarity(String idA, String idB){
+	@Override
+	public double getMeasure(String idA, String idB){
 		if (! documentsExist(idA, idB) ){
 			log.error("One of the documents does not exist");
 			return -1;
 		}
-		return similarities.get(esaVectorsA.getIndex(idA), 
+		return measures.get(esaVectorsA.getIndex(idA), 
 								esaVectorsB.getIndex(idB));
 	}	
 
 	/* (non-Javadoc)
 	 * @see cat.lump.ir.sim.Similarity#displaySimilarities()
 	 */
-	public void displaySimilarities(){
+	@Override
+	public void displayMeasures(){
 		DecimalFormat df = new DecimalFormat("#.##");		
 		
 		System.out.print("   ");
-		for (int i = 0; i < similarities.getColumnDimension(); i++)
+		for (int i = 0; i < measures.getColumnDimension(); i++)
 			System.out.print(esaVectorsB.getId(i) + "  ");
 		System.out.println();
 		
-		similarities.print(df, 9);
+		measures.print(df, 9);
 		
 		//TODO potentially useful for the final ranking per document.
 //		double x = JamaUtils.getMax(JamaUtils.getrow(similarities, 0));		
@@ -133,8 +150,8 @@ public abstract class Esa implements Similarity{
 	}
 	
 	/** Compute only similarities for the matrix diagonal */
-	public void computePairwiseSimilarities(){		
-		similarities = new Matrix(new double[1][esaVectorsA.length()] );
+	public void computePairwiseMeasures(){		
+		measures = new Matrix(new double[1][esaVectorsA.length()] );
 		double sim;
 
 		for (int i = 0; i < esaVectorsA.length() ; i++){
@@ -144,32 +161,33 @@ public abstract class Esa implements Similarity{
 			//(e.g. in cases where only stopwords are included in the string)
 			//ABC: 17/05/13
 			if (! Double.isNaN(sim))
-				similarities.set(0, i, 
+				measures.set(0, i, 
 				vc.compute(esaVectorsA.getVector(i),
 									  esaVectorsB.getVector(i)));
 			else
-				similarities.set(0, i, 0);
+				measures.set(0, i, 0);
 		}
 	}	
 	
 	/**
 	 * @return a matrix with all the computed similarities
 	 */
-	public  Matrix getSimilaritiesMatrix(){
-		return similarities;
+	public  Matrix getMeasuresMatrix(){
+		return measures;
 	}
 
 	/* (non-Javadoc)
 	 * @see cat.lump.ir.sim.Similarity#getSimilarities()
 	 */
-	public Map<String, Map<String, Double>> getSimilarities(){
+	@Override
+	public Map<String, Map<String, Double>> getMeasures(){
 		Map<String, Map<String, Double>> mSims = 
 							new TreeMap<String, Map<String, Double>>();
 
 		for (String id_A : esaVectorsA.keySet()){
 			mSims.put(id_A, new TreeMap<String, Double>());
 			for (String id_B : esaVectorsB.keySet()){
-				mSims.get(id_A).put(id_B, getSimilarity(id_A, id_B));
+				mSims.get(id_A).put(id_B, getMeasure(id_A, id_B));
 			}
 		}		
 		return mSims;
@@ -192,7 +210,7 @@ public abstract class Esa implements Similarity{
 	 * @return 
 	 */
 	public double getSimilarity(String idA){
-		return similarities.get(0, esaVectorsA.getIndex(idA));
+		return measures.get(0, esaVectorsA.getIndex(idA));
 	}
 
 	protected void exitError(String message){

@@ -3,6 +3,7 @@ package cat.lump.aq.basics.algebra.vector;
 import java.io.Serializable;
 
 import cat.lump.aq.basics.check.CHK;
+import cat.lump.aq.basics.check.CheckFailedError;
 
 /**
  * A vector of doubles that allows for a number of vector-vector and 
@@ -13,6 +14,8 @@ import cat.lump.aq.basics.check.CHK;
  * <li/> product of vectors (--> scalar)
  * <li/> product by scalar (--> vector)
  * <li/> division by scalar (--> vector)
+ * <li/> Dot product against another vector (--> scalar)
+ * <li/> Euclidean distance against another vector (--> scalar)
  * </ul>
  * 
  * Properties of the vector ---magnitude, max, min, argmax, and argmin---
@@ -102,6 +105,56 @@ public class Vector implements Serializable{
 		}
 	}
 	
+	/**
+	 * @return argument of the maximum numerical value in the vector.
+	 */
+	public int argmax(){
+		float maximum = Float.NEGATIVE_INFINITY;
+		int argMax = -1;
+		for (int i = 0 ; i < vector.length ; i++) {
+			if (maximum < vector[i]){
+				maximum = vector[i];
+				argMax = i;				
+			}
+		}		
+		return argMax;
+	}	
+	
+	/**
+	 * @return argument of the minimum value in the vector.
+	 */
+	public int argmin(){
+		float minimum = Float.POSITIVE_INFINITY;
+		int argMin = -1;
+		for (int i = 0 ; i < vector.length ; i++) {
+			if (minimum > vector[i]) {
+				minimum = vector[i];
+				argMin = i;
+			}
+		}
+		return argMin;
+	}	
+	
+	/**Divides the vector by a scalar and returns the resulting array.
+	 * @param value
+	 * @return vector / d
+	 */
+	public float[] divide(float value){
+		CHK.CHECK(value != 0, "Division by 0 is not possible");
+		return times( 1/value );
+	}	
+	
+	/**Divides the vector by a scalar and updates  its value internally.
+	 * <br>
+	 * This method <b>modifies</b> the internal values of the vector.
+	 * 
+	 * @param value
+	 */
+	public void divideEquals(float value){
+		CHK.CHECK(value != 0, "Division by 0 is not possible");
+		timesEquals( 1 / value );
+	}
+	
 	/**Computes the dot product between the vector and vector v2. 
 	 * <br>
 	 * 
@@ -128,57 +181,48 @@ public class Vector implements Serializable{
 		checkSameCardinality(values);
 				
 		float result = 0;	
-		for (int i=0; i<vector.length ; i++)		
+		for (int i=0; i<vector.length ; i++) {		
 			result += (vector[i] * values[i]);
-		
-		return result;
-	}	
-		
-	////////////////////////////////
-	// VECTOR - SCALAR OPERATIONS //
-	////////////////////////////////
-	
-	/**Multiplies the vector times a scalar and returns the result.
-	 * @param value
-	 * @return vector * value
-	 */
-	public float[] times(float value){
-		float[] result = new float[vector.length];
-		for (int i = 0 ; i < vector.length ; i++){
-			result[i] = vector[i] * value;
 		}
+		
 		return result;
 	}
 	
-	/**Multiplies the vector times a scalar and updates its internal value.
-	 * <br>
-	 * This method <b>modifies</b> the internal values of the vector.
-	 * 
-	 * @param value
+	/**
+	 * Compute the Euclidean distance between the current and 
+	 * a new vector. 
+	 * @param v	vector to compute the distance against
+	 * @return	distance(u,v)
+	 * @throws CheckFailedError if null
 	 */
-	public void timesEquals(float value){
-		for (int i = 0 ; i < vector.length ; i++)
-			vector[i] = vector[i] * value;
+	public double euclideanDistance(Vector v) {
+		CHK.CHECK_NOT_NULL(v);
+		return euclideanDistance(v.get());
 	}
 	
-	/**Divides the vector by a scalar and returns the resulting array.
-	 * @param value
-	 * @return vector / d
+	/**
+	 * Compute the Euclidean distance between the current and 
+	 * a new vector. 
+	 * @param values array representation of a vector
+	 * @return	distance(u,values)
+	 * @throws CheckFailedError if null or the cardinality is different
 	 */
-	public float[] divide(float value){
-		CHK.CHECK(value != 0, "Division by 0 is not possible");
-		return times( 1/value );
-	}	
+	public double euclideanDistance(float[] values) {
+		CHK.CHECK_NOT_NULL(values);
+		checkSameCardinality(values);
+		
+		float result = 0;
+		for (int i=0; i<vector.length ; i++) {		
+			/*Computing the sum of squares of subtractions */
+			result += Math.pow((vector[i] - values[i]), 2);
+		}
+		return Math.sqrt(result);
+	}
 	
-	/**Divides the vector by a scalar and updates  its value internally.
-	 * <br>
-	 * This method <b>modifies</b> the internal values of the vector.
-	 * 
-	 * @param value
-	 */
-	public void divideEquals(float value){
-		CHK.CHECK(value != 0, "Division by 0 is not possible");
-		timesEquals( 1 / value );
+	
+	/** @return length of the vector */
+	public int length(){
+		return vector.length;		
 	}
 	
 	/**
@@ -202,43 +246,35 @@ public class Vector implements Serializable{
 	}
 	
 	/**
-	 * @return argument of the maximum numerical value in the vector.
-	 */
-	public int argmax(){
-		float maximum = Float.NEGATIVE_INFINITY;
-		int argMax = -1;
-		for (int i = 0 ; i < vector.length ; i++) {
-			if (maximum < vector[i]){
-				maximum = vector[i];
-				argMax = i;				
-			}
-		}		
-		return argMax;
-	}	
-	
-	/**
 	 * @return minimum numerical value in the vector.
 	 */
 	public float min(){
 		return vector[argmin()];
 	}
-	/**
-	 * @return argument of the minimum value in the vector.
+	
+	/**Multiplies the vector times a scalar and returns the result.
+	 * @param value
+	 * @return vector * value
 	 */
-	public int argmin(){
-		float minimum = Float.POSITIVE_INFINITY;
-		int argMin = -1;
-		for (int i = 0 ; i < vector.length ; i++) {
-			if (minimum > vector[i]) {
-				minimum = vector[i];
-				argMin = i;
-			}
+	public float[] times(float value){
+		float[] result = new float[vector.length];
+		for (int i = 0 ; i < vector.length ; i++){
+			result[i] = vector[i] * value;
 		}
-		return argMin;
-	}	
+		return result;
+	}
 	
+	/**Multiplies the vector times a scalar and updates its internal value.
+	 * <br>
+	 * This method <b>modifies</b> the internal values of the vector.
+	 * 
+	 * @param value
+	 */
+	public void timesEquals(float value){
+		for (int i = 0 ; i < vector.length ; i++)
+			vector[i] = vector[i] * value;
+	}
 
-	
 //	/**Crops the vector to the given length.
 //	 * @param newLength
 //	 * @return true if cropping was possible
@@ -296,10 +332,6 @@ public class Vector implements Serializable{
 		return vector[index];
 	}
 	
-	/** @return length of the vector */
-	public int length(){
-		return vector.length;		
-	}
 	
 	//////////////////////
 	// TESTS AND THROWS //

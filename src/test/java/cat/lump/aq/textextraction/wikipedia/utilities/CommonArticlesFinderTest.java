@@ -13,13 +13,13 @@ import cat.lump.aq.basics.io.files.FileIO;
  * Test for the {@code CommonArticlesFinder} class.
  * Methods that depend on specific tables in the database are not tested.
  * @author cristina
- * @since Feb 13, 2015
+ * @since Feb 13, 2015 
  */
 public class CommonArticlesFinderTest {
 
 	private CommonArticlesFinder artFinder;
 	
-	private final int year = 2013;
+	private final int year = 2015;
 	private final static String[] langs = {"ca", "eu"};
 	private String[] filesID = {"", ""};
 	private File folder;

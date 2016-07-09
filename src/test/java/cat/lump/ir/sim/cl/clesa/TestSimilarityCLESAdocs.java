@@ -94,14 +94,14 @@ public class TestSimilarityCLESAdocs {
 
 	/**
 	 * Test method for 
-	 * {@link cat.lump.ir.sim.ml.esa.esa.SimilarityESA#computeSimilarities()}.
+	 * {@link cat.lump.ir.sim.ml.esa.esa.SimilarityESA#computeMeasures()}.
 	 * <br/>
 	 * We check that the entire matrix is computed properly
 	 */
 	@Test
 	public void testComputeSimilarities() {
-		esa.computeSimilarities();
-		Matrix mat = esa.getSimilaritiesMatrix();
+		esa.computeMeasures();
+		Matrix mat = esa.getMeasuresMatrix();
 		Assert.assertArrayEquals(
 				new double[]{1,0}, 
 				mat.getArray()[0], 
@@ -114,14 +114,14 @@ public class TestSimilarityCLESAdocs {
 	
 	/**
 	 * Test method for 
-	 * {@link cat.lump.ir.sim.ml.esa.esa.SimilarityESA#computePairwiseSimilarities()}.
+	 * {@link cat.lump.ir.sim.ml.esa.esa.SimilarityESA#computePairwiseMeasures()}.
 	 * <br/>
 	 * We check that the pairwise similarity is computed properly.
 	 */
 	@Test
 	public void testComputePairwiseSimilarities() {
-		esa.computePairwiseSimilarities();
-		Matrix mat = esa.getSimilaritiesMatrix();
+		esa.computePairwiseMeasures();
+		Matrix mat = esa.getMeasuresMatrix();
 		Assert.assertArrayEquals(
 				new double[]{1,0}, 
 				mat.getArray()[0], 
@@ -136,7 +136,7 @@ public class TestSimilarityCLESAdocs {
 	 */
 	@Test
 	public void testGetPairwiseSimilaritiesOne() {
-		esa.computePairwiseSimilarities();		
+		esa.computePairwiseMeasures();		
 		Assert.assertEquals(1, esa.getSimilarity("doc.1.txt"), delta);
 	}
 
@@ -148,7 +148,7 @@ public class TestSimilarityCLESAdocs {
 	 */
 	@Test
 	public void testGetPairwiseSimilaritiesZero() {
-		esa.computePairwiseSimilarities();		
+		esa.computePairwiseMeasures();		
 		Assert.assertEquals(0, esa.getSimilarity("doc.2.txt"), delta);
 	}
 

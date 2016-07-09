@@ -61,7 +61,38 @@ public class VectorTest {
 				v.dotProduct(new float[]{1,2,3}), 
 				delta);		
 	}
+	
+	
+	/**
+	 * Test method for {@link cat.basset.vector.Vector#euclideanDistance(float[])}.
+	 * Checks three options:
+	 * <ul>
+	 * <li/> Two vectors, different of 0
+	 * <li/> Vector with values diff. of 0 and 0-vector
+	 * <li/> Two identical vectors
+	 * </ul> 
+	 */
+	public void testEuclideanDistance() {
+		v = new Vector(new float[]{1, 2, 3});
+		Assert.assertEquals(
+				2.23606,
+				v.euclideanDistance(new float[]{1,3,5}),
+				delta);
+		
+		Assert.assertEquals(
+				3.74165,
+				v.euclideanDistance(new float[]{0,0,0}),
+				delta);
+		
+		Assert.assertEquals(
+				0,
+				v.euclideanDistance(new float[]{1,2,3}),
+				delta);
+		
+	}
 
+	
+	
 	/**
 	 * Test method for {@link cat.basset.vector.Vector#times(float)}.
 	 */

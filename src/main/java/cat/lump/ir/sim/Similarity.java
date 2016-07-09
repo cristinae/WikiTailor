@@ -18,29 +18,34 @@ public interface Similarity{
 	/**Logger for the application*/
 	static LumpLogger log = new LumpLogger("Similarity");
 
-	/**Compute the similarity between all the texts in the collection */
-	public void computeSimilarities();
+	/**
+	 * Compute the measures (similarities/distances) between all the texts in 
+	 * the collection.
+	 */
+	public void computeMeasures();
 	
-	/**Compute the similarity between two specific texts
+	/**Compute the measure (similarity/distance) between two specific texts.
 	 * @param idA
 	 * @param idB
 	 * @return
 	 */
-	public double computeSimilarity(String idA, String idB);
+	public double computeMeasure(String idA, String idB);
 	
-	/**Get the (previously computed) similarity between the two ids 
+	/**
+	 * Get the (previously computed) measure (similarity/distance) between 
+	 * the two ids. 
 	 * @param idA
 	 * @param idB
 	 * @return
 	 */
-	public double getSimilarity(String idA, String idB);
+	public double getMeasure(String idA, String idB);
 	
 	/**
 	 * @return a nested map with all the computed similarities.
 	 */
-	public Map<String, Map<String, Double>> getSimilarities();
+	public Map<String, Map<String, Double>> getMeasures();
 	
 	/**Prints a matrix including all the similarities  */
-	public void displaySimilarities();	
+	public void displayMeasures();	
 
 }

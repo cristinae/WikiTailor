@@ -5,17 +5,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import cat.lump.aq.basics.io.files.FileIO;
+import cat.lump.ir.retrievalmodels.distance.VectorEuclideanDistance;
 import cat.lump.ir.sim.ml.esa.EsaGenerator;
 import cat.lump.ir.sim.ml.esa.EsaVectors;
 
 /**
- * Implementation of Explicit Semantic Analysis as described in:
- * <br>
- * Gabrilovich, Evgeniy, and Shaul Markovitch. "Computing Semantic
- * Relatedness Using Wikipedia-based Explicit Semantic Analysis". 
- * 1606–1611. Hyderabad, India, 2007.
+ * Implementation of Explicit Semantic Analysis as described in
+ * which Euclidean distance is computed instead of similarity. 
  * <br><br>
- * For this version the inverted index is based on Lucene.
+ * As in the implementation of similarity-based ESA {@code SimilarityESA},
+ * the representation vectors are computed as similarities against a 
+ * Lucene index
  * <br>
  * In brief, the process is as follows. Given two documents 
  * d<sub>1</sub> and d<sub>2</sub>:
@@ -25,18 +25,18 @@ import cat.lump.ir.sim.ml.esa.EsaVectors;
  * 		index (with LuceneIndexer) 
  * <li> retrieve and normalize the resulting relevance vectors for 
  * 		d<sub>1</sub> (d<sub>2</sub>)  
- * <li> compute the cosine similarity between the vector representations 
+ * <li> compute the Euclidean distance between the vector representations 
  * 		d<sub>1</sub> and d<sub>2</sub>
  * </ul>
  *
  * 
- * @since     April 18 2012
+ * @since     July 9 2016
  * @author albarron
  * @version     0.2.1                   
  *  
  * @see  cat.lump.ir.sim.EsaGenerator#
  */
-public abstract class SimilarityESA extends Esa{
+public abstract class EuclideanESA extends Esa{
 	
 	/**Path to documents A */
 	protected File textsA;
@@ -75,8 +75,8 @@ public abstract class SimilarityESA extends Esa{
 	 * @param lan			language to work with
 	 * @param overrideObjects	if previously computed vectors will be discarded
 	 */
-	public SimilarityESA(String indexPath, String lan, Boolean overrideObjects){
-		super();
+	public EuclideanESA(String indexPath, String lan, Boolean overrideObjects){
+		super(new VectorEuclideanDistance());
 		//invoke ESA generator with a given index path and language
 		esaGen = new EsaGenerator(new File(indexPath), lan);				
 		this.overrideObjects = overrideObjects;		
