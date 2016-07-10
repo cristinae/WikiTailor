@@ -159,7 +159,8 @@ public class CommonNamespaceFinder {
 			} else {
 				/* The input files includes no path. Therefore the current path is added to filesID. */
 				langs[i] = filesID[i].substring(0, 2);
-				filesID[i] = path.concat(FileIO.separator).concat(filesID[i]);
+				filesID[i] = String.format("%s%s%s", path, File.separator, filesID[i]); 
+//				filesID[i] = path.concat(FileIO.separator).concat(filesID[i]);
 			}
 			
 		}		
@@ -170,20 +171,18 @@ public class CommonNamespaceFinder {
 		artFinder.loadIDs();
 		//artFinder.loadIDsResolvingRedirects();
 
-		String largestLang = artFinder.lookForMaximumNumber();
-		artFinder.findUnion(largestLang);
-		String smallestLang = artFinder.lookForMinimumNumber();
-		artFinder.findIntersection(smallestLang);
-	
+		if (cLine.hasOption("u")) {		
+			String largestLang = artFinder.lookForMaximumNumber();
+			artFinder.findUnion(largestLang);
+		}
+		
+		if (cLine.hasOption("n")) {
+			String smallestLang = artFinder.lookForMinimumNumber();
+			artFinder.findIntersection(smallestLang);
+		}
+
 		artFinder.closeConnection();
-
 	}
-
-
-
-
-
-	
 
     /**
      * Looks for the articles that appear in all the selected languages {@code langs}
@@ -212,12 +211,14 @@ public class CommonNamespaceFinder {
 				i++;
 		    }		    	
 		}
-
-		String intersectionList = "";
-		String intersectionListLang[] = new String[numberLangs];
-		for (i=0; i<numberLangs; i++) { 
-			intersectionListLang[i] = "";
-		}
+		
+		// ABC->Cristina CHANGED STRING TO STRINGBUFFER
+		StringBuffer sb = new StringBuffer();
+//		String intersectionList = "";
+//		String intersectionListLang[] = new String[numberLangs];
+//		for (i=0; i<numberLangs; i++) { 
+//			intersectionListLang[i] = "";
+//		}
 		
 		try {
 			int countCommon = 0;
@@ -228,8 +229,11 @@ public class CommonNamespaceFinder {
 				int id = iter.next();
 				// Look for the languages that have the articles from smallestLang
 				ResultSet rsLangs = null;
-				String queryLangs = 
-						"SELECT `ll_lang`  FROM `" + titleLanglinksT + "` WHERE `ll_from` = " + id;
+				String queryLangs =
+						String.format("SELECT `ll_lang`  FROM `%s` WHERE `ll_from` = %d", 
+								titleLanglinksT, id);
+						//"SELECT `ll_lang`  FROM `" + titleLanglinksT + "` WHERE `ll_from` = " + id;
+				
 				rsLangs = dmc.runStatement(queryLangs);
 				List<String> languages = new ArrayList<String>();
 				while (rsLangs.next()){
@@ -253,9 +257,13 @@ public class CommonNamespaceFinder {
 			        String intersectionTmp[] = new String[numberLangs];
 
 					//SELECT `page_title`FROM `wikieu_2013_page` WHERE `id` = id AND `page_namespace` = 0 AND `page_is_redirect` = 0
-					String queryS = "SELECT `page_title` FROM `" + titlePageT + 
-							"` WHERE `page_id` = \"" + id + 
-							"\" AND `page_namespace` = " +type+" AND `page_is_redirect` = 0 ";
+//					String queryS = "SELECT `page_title` FROM `" + titlePageT + 
+//							"` WHERE `page_id` = \"" + id + 
+//							"\" AND `page_namespace` = " +type+" AND `page_is_redirect` = 0 ";					
+					String queryS = String.format(
+							"SELECT `page_title` FROM `%s` WHERE `page_id` = \"%d\" AND `page_namespace` = %d AND `page_is_redirect` = 0", 
+							titlePageT, id, type);
+					
 					ResultSet rsqS = dmc.runStatement(queryS);
 					if (rsqS.next()){
 						String title = WikipediaDBdata.getformatWPtitle(rsqS, "page_title");
@@ -270,19 +278,31 @@ public class CommonNamespaceFinder {
 						intersectionTmp[i] = "";
 						String titPageTab = WikipediaDBdata.getPageTableName(langsReduced[i], year);
 						//SELECT `ll_title` FROM `wikica_2013_langlinks` WHERE `ll_from` = id AND `ll_lang` = 'langsReduced[i]'   
-						String query1 = "SELECT `ll_title`  FROM `" + titleLanglinksT + 
-								"` WHERE `ll_from` = " + id + " AND `ll_lang` = '" + langsReduced[i] + "'";
+						
+//						String query1 = "SELECT `ll_title`  FROM `" + titleLanglinksT + 
+//								"` WHERE `ll_from` = " + id + " AND `ll_lang` = '" + langsReduced[i] + "'";						
+						String query1 = String.format(								
+							"SELECT `ll_title`  FROM `%s` WHERE `ll_from` = %d AND `ll_lang` = '%s'", 
+							titleLanglinksT, id, langsReduced[i]);
+						
 						ResultSet rsq1 = dmc.runStatement(query1);
 						rsq1.next();
 						String title = WikipediaDBdata.getformatWPtitle(rsq1, "ll_title");
+						
 						//SELECT page_id FROM `wikica_2013_page` WHERE `page_title` = 'title' AND `page_namespace` = 0
-						String query2 = "SELECT `page_id` FROM `" + titPageTab + 
-								"` WHERE `page_title` = \"" + title + "\" AND `page_namespace` = " + type;
+//						String query2 = "SELECT `page_id` FROM `" + titPageTab + 
+//								"` WHERE `page_title` = \"" + title + "\" AND `page_namespace` = " + type;						
+						String query2 = String.format(
+							"SELECT `page_id` FROM `%s` WHERE `page_title` = \"%s\" AND `page_namespace` = %d", 
+							titPageTab, title, type);
+								
+						
 						ResultSet rsq2 = dmc.runStatement(query2);
 						if (rsq2.next()) {   
 							String langID = rsq2.getString("page_id");
 							if (ids.get(langsReduced[i]).contains(Integer.parseInt(langID))) {
-								intersectionTmp[i] = langID + "\t" + title;
+								//intersectionTmp[i] = langID + "\t" + title;
+								intersectionTmp[i] = String.format("%s%s%s", langID, "\t", title);
 							} else { // articles can exist in all languages but haven't been extracted and
 								     // therefore are not available in the input file
 								include = false;
@@ -294,30 +314,51 @@ public class CommonNamespaceFinder {
 							missLinks++;
 							break;
 						} 
-					} //fifor remaining languages
+					} //endfor remaining languages
 
 					// print the ones to include
 					if(include) {
 						countCommon++;
 						for (i=0; i<numberLangs-1; i++) {
 							//intersectionListLang[i] = intersectionListLang[i].concat(intersectionTmp[i]).concat("\n");
-							intersectionList = intersectionList.concat(intersectionTmp[i]).concat("\t");
+//							intersectionList = intersectionList.concat(intersectionTmp[i]).concat("\t");
+							sb.append(intersectionTmp[i])
+							  .append("\t");
 						}	
-						intersectionList = intersectionList.concat(intersectionTmp[numberLangs-1]).concat("\n");
+						//ABC->Cristina not sure why this is not made inside of the for and only the \n is outside.
+//						intersectionList = intersectionList.concat(intersectionTmp[numberLangs-1]).concat("\n");
+						sb.append(intersectionTmp[numberLangs-1])
+						  .append("\n");
 						if (countCommon%100 == 0) { 
 							boolean firstTime = countCommon == 100 ? true : false;
-							logger.info("Common elements up to now " + countCommon);
-							printArticlesIDFile(prefix+"intersection", intersectionList, firstTime);
-							intersectionList = "";
+							logger.info("Common elements up to now: " + countCommon);
+							// ABC->Cristina here we convert the buffer to String to use it in printArticlesIDFile
+							// and reset the buffer for the next iteration
+							// Same a few lines later
+//							printArticlesIDFile(prefix+"intersection", intersectionList, firstTime);
+//							intersectionList = "";
+							printArticlesIDFile(prefix+"intersection", sb.toString(), firstTime);
+
+							sb.delete(0, sb.length());
 						}
 					}					
 				} //fi intersection
 			}
-			logger.warn(" at ID" + " " + iter.toString());
-			printArticlesIDFile(prefix+"intersection", intersectionList, false); // print last round of articles
-			logger.info("Elements: " + countCommon  + " common, " + numNotAligned + " existent but not common, " +
-					missLinks + " missLinks in the DB");
 			
+ 
+			logger.warn(" at ID  " + iter.toString());
+			
+//			printArticlesIDFile(prefix+"intersection", intersectionList, false); // print last round of articles
+			printArticlesIDFile(prefix+"intersection", sb.toString(), false); // print last round of articles
+			// ABC -> Here's an example of String.format instead of forcing the 
+			// garbage collector to remove 6/7 strings.
+//			logger.info("Elements: " + countCommon  + " common, " + numNotAligned + " existent but not common, " +
+//					missLinks + " missLinks in the DB");
+			logger.info(
+				String.format("Elements: %d common, %d existing but not common, %d missLinks in the DB", 
+				countCommon, numNotAligned, missLinks)
+			);
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			logger.error("MySQL error (@findIntersection())");
@@ -353,8 +394,11 @@ public class CommonNamespaceFinder {
 			while (iter.hasNext()){    
 				int id = iter.next();
 				ResultSet rsLangs = null;
-				String queryLangs = 
-						"SELECT `ll_lang`  FROM `" + titleLanglinksT + "` WHERE `ll_from` = " + id;
+//				String queryLangs = 
+//						"SELECT `ll_lang`  FROM `" + titleLanglinksT + "` WHERE `ll_from` = " + id;
+				String queryLangs = String.format(
+					"SELECT `ll_lang`  FROM `%s` WHERE `ll_from` = %d",
+					titleLanglinksT, id);
 				try {
 					rsLangs = dmc.runStatement(queryLangs);
 					List<String> languages = new ArrayList<String>();
@@ -375,15 +419,25 @@ public class CommonNamespaceFinder {
 						countCommon++;
 					// If belongs to the intersection and is another language look for the ID in the largestLang
 					} else if (isIntersection == true && !lang.equals(largestLang)){						
+						
 						//SELECT `ll_title` FROM `wikica_2013_langlinks` WHERE `ll_from` = id AND `ll_lang` = 'largestLang'   
-						String query1 = "SELECT `ll_title`  FROM `" + titleLanglinksT + 
-								"` WHERE `ll_from` = " + id + " AND `ll_lang` = '" + largestLang + "'";
+//						String query1 = "SELECT `ll_title`  FROM `" + titleLanglinksT + 
+//								"` WHERE `ll_from` = " + id + " AND `ll_lang` = '" + largestLang + "'";
+						String query1 = String.format(
+							"SELECT `ll_title`  FROM `%s` WHERE `ll_from` = %d AND `ll_lang` = '%s'", 
+							titleLanglinksT, id, largestLang);
+						
 						ResultSet rsq1 = dmc.runStatement(query1);
 						if(rsq1.next()) {
 							String title = WikipediaDBdata.getformatWPtitle(rsq1, "ll_title");
+							
 							//SELECT page_id FROM `wikien_2013_page` WHERE `page_title` = 'title' AND `page_namespace` = 0
-							String query2 = "SELECT `page_id` FROM `" + titlePageTlarge + 
-									"` WHERE `page_title` = \"" + title + "\" AND `page_namespace` = " + type;
+//							String query2 = "SELECT `page_id` FROM `" + titlePageTlarge + 
+//									"` WHERE `page_title` = \"" + title + "\" AND `page_namespace` = " + type;							
+							String query2 = String.format(
+								"SELECT `page_id` FROM `%s` WHERE `page_title` = \"%s\" AND `page_namespace` = %d",
+								titlePageTlarge, title, type);
+							
 							ResultSet rsq2 = dmc.runStatement(query2);
 							if (rsq2.next()) {   
 								int langID = Integer.parseInt(rsq2.getString("page_id"));
@@ -416,8 +470,14 @@ public class CommonNamespaceFinder {
 		int moreMissLinks = getAndPrintAllInfoUnionIDs(listUnion, largestLang);
 		missLinks = missLinks + moreMissLinks;
 		countCommon = countCommon - moreMissLinks;
-		logger.info("Elements: " + countCommon + " common, " +	missLinks + " missLinks/no title in the DB");
-		logger.info("          " + numRedirects + " redirects (resolved and unresolved)");
+		logger.info(
+			String.format(
+					"Elements: %d common, %d missLinks/no title in the DB", 
+					countCommon, missLinks)
+		);		
+		logger.info(
+			String.format("          %d redirects (resolved and unresolved)", numRedirects)
+		);
 
 	}
 
@@ -448,7 +508,10 @@ public class CommonNamespaceFinder {
 			}
 			i++;
 		}
-		logger.info("The wikipedia edition with more elements is " + maxLang + " ("  + valAnt + " elements)");
+		logger.info(
+			String.format("The Wikipedia edition with more elements is %s (%d elements)", 
+				maxLang, valAnt)
+		);
 		return maxLang;
 	}
 
@@ -486,18 +549,11 @@ public class CommonNamespaceFinder {
 	}
 	
 	
-
-	
-
-
-	
 	/** getters */
 	public String getPrefixOutputFile()
 	{		
 		return prefix;
 	}
-
-	
 	
 	/** 
 	 * Checks if all the tables needed are in the database. Exits otherwise.
@@ -671,6 +727,12 @@ public class CommonNamespaceFinder {
 		options.addOption("o", "outpath", true,
 				"Optional: save the output into this directory (default: current)");
 		
+		options.addOption("n", "intersection", false,
+				"Optional: compute the intesection of articles/categories among the defined languages");
+		
+		options.addOption("u", "union", false,
+				"Optional: compute the union of articles/categories among the defined languages");
+		
 		options.addOption("h", "help", false,
 				"This help");
 		try {			
@@ -742,7 +804,10 @@ public class CommonNamespaceFinder {
 		    }		    	
 		}
 
-        String unionList = "";
+		// ABC -> Cristina and we start again with the buffer. 
+		// You can use a better name than sb if you want
+//        String unionList = "";
+		StringBuffer sb = new StringBuffer();
 		int j = 0;
 		int missLinks = 0;
 		Iterator<Integer> iter = listUnion.iterator();
@@ -801,16 +866,23 @@ public class CommonNamespaceFinder {
 				// If all links are available, format into a string and print 
 				if(include) {
 					j++;
-					unionList = unionList.concat(unionTmp[numberLangs-1]).concat("\t");
+//					unionList = unionList.concat(unionTmp[numberLangs-1]).concat("\t");
+					sb.append(unionTmp[numberLangs-1])
+					  .append("\t");
 					for (i=0; i<numberLangs-1; i++) {
-						unionList = unionList.concat(unionTmp[i]).concat("\t");
+//						unionList = unionList.concat(unionTmp[i]).concat("\t");
+						sb.append(unionTmp[i])
+						  .append("\t");
 					}	
-					unionList = unionList.concat("\n");
+//					unionList = unionList.concat("\n");
+					sb.append("\n");
 					if (j%100 == 0) { 
 						boolean firstTime = j == 100 ? true : false;
 						logger.info("Common elements up to now " + j);
-						printArticlesIDFile(prefix+"union", unionList, firstTime);
-							unionList = "";
+//						printArticlesIDFile(prefix+"union", unionList, firstTime);
+						printArticlesIDFile(prefix+"union", sb.toString(), firstTime);
+//						unionList = "";
+						sb.delete(0, sb.length());
 					}
 				}
 			} catch (SQLException e) {
@@ -819,7 +891,8 @@ public class CommonNamespaceFinder {
 			}
 			
 		} //fi tots IDs
-		printArticlesIDFile(prefix+"union", unionList, false); // print last round of articles
+//		printArticlesIDFile(prefix+"union", unionList, false); // print last round of articles
+		printArticlesIDFile(prefix+"union", sb.toString(), false); // print last round of articles
 		
 		return missLinks;
 	}
