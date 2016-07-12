@@ -2,6 +2,7 @@ package cat.lump.ir.sim.ml.esa;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.ir.sim.ml.esa.EsaVectors;
@@ -31,7 +32,7 @@ public class EuclideanDistanceESAdocs extends EuclideanESA{
 	public EuclideanDistanceESAdocs(File documentsApath,
 						File documentsBpath,
 						String indexPath,
-						String language,
+						Locale language,
 						boolean overrideObjects) 
 				{
 		super(indexPath, language, overrideObjects);

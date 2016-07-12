@@ -4,6 +4,7 @@
 package cat.lump.ir.sim.ml.esa;
 
 import java.io.File;
+import java.util.Locale;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -79,7 +80,7 @@ public class TestSimilarityESAdocs {
 				pathB, 
 				//TODO Use the .properties file
 				INDEX_PATH,
-				"en", 
+				new Locale("en"), 
 				true);
 		
 		esa.computeVectorsA();

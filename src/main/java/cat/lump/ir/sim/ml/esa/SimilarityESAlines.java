@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Scanner;
 
 import cat.lump.aq.basics.io.files.FileIO;
@@ -42,7 +43,7 @@ public class SimilarityESAlines extends SimilarityESA{
 					String indexPath,
 					String language,
 					Boolean overrideObjects) {
-		super(indexPath, "en", overrideObjects);
+		super(indexPath, new Locale("en"), overrideObjects);
 		setDocumentsPath(docA, docB);		
 		setObjects();			
 	}

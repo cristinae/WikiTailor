@@ -3,6 +3,7 @@ package cat.lump.ir.sim.ml.esa;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Locale;
 
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.ir.sim.ml.esa.EsaGenerator;
@@ -75,7 +76,7 @@ public abstract class SimilarityESA extends Esa{
 	 * @param lan			language to work with
 	 * @param overrideObjects	if previously computed vectors will be discarded
 	 */
-	public SimilarityESA(String indexPath, String lan, Boolean overrideObjects){
+	public SimilarityESA(String indexPath, Locale lan, Boolean overrideObjects){
 		super();
 		//invoke ESA generator with a given index path and language
 		esaGen = new EsaGenerator(new File(indexPath), lan);				

@@ -2,6 +2,7 @@ package cat.lump.ir.sim.cl.clesa;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.ir.sim.ml.esa.EsaGenerator;
@@ -47,10 +48,10 @@ public abstract class SimilarityCLESA extends SimilarityESA{
 							String lanB,
 							boolean overrideObjects
 							) {
-		super(indexApath, lanA, overrideObjects);
+		super(indexApath, new Locale(lanA), overrideObjects);
 
 		//esaGen is in SimilarityESA and has the generator for the source language
-		esaGenB =  new EsaGenerator(new File(indexBpath), lanB);
+		esaGenB =  new EsaGenerator(new File(indexBpath), new Locale(lanB));
 		if (esaGen.getIndexDimension() != esaGenB.getIndexDimension())
 			log.errorEnd("The source and target languages indexes should have"
 					+ "the same amount of (comparable) documents");

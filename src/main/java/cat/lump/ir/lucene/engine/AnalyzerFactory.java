@@ -21,6 +21,7 @@ import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.eu.BasqueAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
+import org.apache.lucene.analysis.lv.LatvianAnalyzer;
 import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.ro.RomanianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -86,8 +87,12 @@ public class AnalyzerFactory {
 		case "it":
 			analyzer = new ItalianAnalyzer(LUCENE_VERSION);
 			break;
+		case "lv":
+			analyzer = new LatvianAnalyzer(LUCENE_VERSION);
+			break;	
 		case "oc":
-			analyzer = new CatalanAnalyzer(LUCENE_VERSION);             //TODO Solve this!
+			//TODO Solve this!
+			analyzer = new CatalanAnalyzer(LUCENE_VERSION);             
 			CHK.CHECK(false, "Using the Catalan stemmer for language "+
 					language.getDisplayLanguage() );
 			break;
