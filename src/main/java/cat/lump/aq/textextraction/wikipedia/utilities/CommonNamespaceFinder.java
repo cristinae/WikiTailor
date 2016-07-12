@@ -382,6 +382,11 @@ public class CommonNamespaceFinder {
 		String titlePageTlarge = WikipediaDBdata.getPageTableName(largestLang, year);
 		int missLinks = 0;
 		int countCommon = 0;
+		int id;
+		int langID;
+		int langIDr;
+		boolean isIntersection;
+		
 		List<Integer> listUnion = new ArrayList<Integer>();
 
 		// for every language
@@ -392,7 +397,7 @@ public class CommonNamespaceFinder {
 			
 			// for every ID within the language
 			while (iter.hasNext()){    
-				int id = iter.next();
+				id = iter.next();
 				ResultSet rsLangs = null;
 //				String queryLangs = 
 //						"SELECT `ll_lang`  FROM `" + titleLanglinksT + "` WHERE `ll_from` = " + id;
@@ -406,9 +411,9 @@ public class CommonNamespaceFinder {
 						  languages.add(rsLangs.getString("ll_lang"));
 					}
 					// Look if an ID is in all the remaining languages according to langlinks table
-					boolean isIntersection = true;
+					isIntersection = true;
 					for (String lng : langs) {
-						if (!languages.contains(lng) && !lng.equals(lang)) {
+						if (!lng.equals(lang) && !languages.contains(lng)) {
 							isIntersection = false;
 							break;
 						}
@@ -440,9 +445,9 @@ public class CommonNamespaceFinder {
 							
 							ResultSet rsq2 = dmc.runStatement(query2);
 							if (rsq2.next()) {   
-								int langID = Integer.parseInt(rsq2.getString("page_id"));
+								langID = Integer.parseInt(rsq2.getString("page_id"));
 								//Let's be sure is not a redirect in this language
-								int langIDr = WikipediaDBdata.resolveIfRedirect(langID, type, largestLang, year, dmc);
+								langIDr = WikipediaDBdata.resolveIfRedirect(langID, type, largestLang, year, dmc);
 								//logger.warn("red abans: " + langID + "red despres: " + langIDr + " Lang: " + largestLang);
 								if (langIDr != langID) {
 									numRedirects++;
