@@ -4,14 +4,9 @@ import gnu.trove.map.hash.TIntIntHashMap;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.de.GermanAnalyzer;
-import org.apache.lucene.analysis.el.GreekAnalyzer;
-import org.apache.lucene.analysis.es.SpanishAnalyzer;
-import org.apache.lucene.analysis.lv.LatvianAnalyzer;
-import org.apache.lucene.analysis.ro.RomanianAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -23,8 +18,9 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import cat.lump.ir.lucene.query.Document2Query;
-import cat.lump.ir.lucene.index.LuceneLanguages;
+import cat.lump.ir.lucene.engine.AnalyzerFactory;
 import cat.lump.aq.basics.algebra.vector.Vector;
+import cat.lump.aq.basics.check.CHK;
 
 
 /**A class that allows for passing from a text (collection) 
@@ -34,9 +30,9 @@ import cat.lump.aq.basics.algebra.vector.Vector;
  * @since Dec 17, 2013
  */
 public class EsaGenerator {
-	
-	/**The identifier of the language.*/
-	private String language;
+
+	/**Lucene instance*/
+	private Analyzer analyzer;
 	
 	/**Path to the Lucene index*/
 	private File indexPath;
@@ -50,8 +46,6 @@ public class EsaGenerator {
 	/**Lucene parser*/
 	private QueryParser parser;
 	
-	private Analyzer analyzer;
-	
 	/**Dimension of the reference index */
 	private int indexDimension;
 	
@@ -61,60 +55,57 @@ public class EsaGenerator {
 	/**Whether the characteristic vector is going to be normalized*/
 	private Boolean normaliseVector = false;
 	
-	private Document2Query d2q = new Document2Query();
+	private final Document2Query d2q = new Document2Query();
 	
-	/**Invokes an instance of the EsaGenerator by loading the
-	 * index and the analyzer for the required language
-	 * <br/><br/>
-	 * TODO whether the indexpath should be established by 
-	 * default depending on the language
+	/**Invokes an instance of the EsaGenerator by loading the index and the 
+	 * analyzer for the required language
+	 * TODO delete this invocation 
 	 * @param indexPath
 	 * @param language
 	 */
-	public EsaGenerator(File indexPath, String language){
-		setLanguage(language);
+//	public EsaGenerator(File indexPath, String language){
+//		setLanguage(language);
+//		//setAnalyzer();
+//		setIndexPath(indexPath);
+//		
+//		loadIndex();
+//	}	
+	
+	/**Invokes an instance of the EsaGenerator by loading the index and the 
+	 * analyzer for the required language
+	 * 
+	 * @param indexPath
+	 * @param language
+	 */
+	public EsaGenerator(File indexPath, Locale language){		
+		setAnalyzer(language);
 		setIndexPath(indexPath);
-		setAnalyzer();		
+		
 		loadIndex();
-	}	
+	}
+	
+	
 	
 	/**Set the Lucene analyzer to use according to the given language
 	 * @param myAnalyzer
 	 */
-	public void setAnalyzer(){
-		if ("de".equals(language))		
-			//	analyzer= new StandardAnalyzer(Version.LUCENE_35);			
-			analyzer= new GermanAnalyzer(Version.LUCENE_35);
-		//apparently the analyzer is not ready in version 3.5
-
-		else if ("el".equals(language))	
-			analyzer = new GreekAnalyzer(Version.LUCENE_35);
-
-		else if ("en".equals(language))	
-			analyzer = new StandardAnalyzer(Version.LUCENE_35);
-
-		else if ("es".equals(language))	
-			analyzer = new SpanishAnalyzer(Version.LUCENE_35);
-
-		else if ("lv".equals(language))	
-			analyzer = new LatvianAnalyzer(Version.LUCENE_35);
-
-		else if ("ro".equals(language))	
-			analyzer = new RomanianAnalyzer(Version.LUCENE_35);		
-		
-		else	//default analyzer: English 					
-			analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		
+	public void setAnalyzer(Locale lang){
+		analyzer = AnalyzerFactory.loadAnalyzer(lang);
+		// Properly implement this if we really wan to analyse a language,
+		// even if we don't have its corresponding analyser.
+//		try {
+//			analyzer = AnalyzerFactory.loadAnalyzer(lang);
+//		} catch (){
+//			analyzer = AnalyzerFactory.loadAnalyzer(new Locale("en"));
+//		}
 	}
 	
-	private void setLanguage(String language){
-		if (! LuceneLanguages.isIndexAvailable(language)){			
-			System.err.print("No index is available for language " + language);
-			System.exit(1);
-		}
-		this.language = language;
-	}
-	
+//	private void setLanguage(String lang){
+//		CHK.CHECK(! LuceneLanguages.isIndexAvailable(lang), 
+//				"No index is available for language " + language);
+//		language = new Locale(lang);
+//	}
+//	
 	/**Set the path to Lucene's index
 	 * @param index_path
 	 */
