@@ -32,7 +32,7 @@ import cat.lump.aq.basics.check.CHK;
 public class EsaGenerator {
 
 	/**Lucene instance*/
-	private Analyzer analyzer;
+	protected Analyzer analyzer;
 	
 	/**Path to the Lucene index*/
 	private File indexPath;

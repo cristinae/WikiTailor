@@ -48,6 +48,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 	private IndexReader reader; 
 	/**Lucene searcher instance */
 	private IndexSearcher searcher;
+
 	/**Lucene parser*/
 	private QueryParser parser;
 	

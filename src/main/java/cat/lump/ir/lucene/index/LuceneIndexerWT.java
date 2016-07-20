@@ -169,14 +169,14 @@ public class LuceneIndexerWT extends LuceneInterface{
 		// and potentially allows for computing the cosine similarity between 
 		//documents' vectors 		
 		
-		doc.add(new Field("contents", new FileReader(f),       //Index file content
+		doc.add(new Field("contents", new FileReader(f),	//Index file content
 				TermVector.WITH_POSITIONS_OFFSETS)); 
 		
-		doc.add(new Field("filename", f.getName(),		       //Index file name
+		doc.add(new Field("filename", f.getName(),	//Index file name
 				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
 		
-		doc.add(new Field("fullpath", f.getCanonicalPath(),	   //Index file full path
-				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
+		doc.add(new Field("fullpath", f.getCanonicalPath(),	//Index file full path
+				Field.Store.YES, Field.Index.NOT_ANALYZED));
 		
 		//System.out.println(doc.toString());
 		

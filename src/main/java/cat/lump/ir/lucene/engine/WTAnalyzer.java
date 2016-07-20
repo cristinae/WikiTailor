@@ -26,7 +26,8 @@ import cat.lump.aq.textextraction.wikipedia.prepro.TermExtractor;
 //public class WTAnalyzer extends ReusableAnalyzerBase{
 public class WTAnalyzer extends Analyzer{
 
-	/** The language for this tokenisation, needed because of the modification */
+	/** The language for this tokenisation, needed because of the modification 
+	 * TODO because of what modification??*/
 	private Locale lan;
 	/** Lucene version*/
 	private Version LUCENE_VERSION;

@@ -31,7 +31,7 @@ public class LuceneQuerier extends LuceneInterface{
 	
 	/**Lucene searcher instance */
 	private IndexSearcher searcher;
-	
+
 	/**Lucene parser*/
 	private QueryParser parser;
 	
