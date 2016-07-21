@@ -15,6 +15,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import cat.lump.aq.basics.algebra.vector.Vector;
+import cat.lump.aq.basics.algebra.vector.VectorStorageAbstract;
+import cat.lump.aq.basics.algebra.vector.VectorStorageSparse;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.aq.textextraction.wikipedia.experiments.CorrelationsxCategory;
@@ -98,13 +100,17 @@ public class EsaRepresentationComputer {
 	
 	private void computeVectors() throws IOException {
 		List<String> files = FileIO.getFilesRecursively(inputPath, "txt");
-		Map<String, Vector> esaVectors = new HashMap<String, Vector>();
+		VectorStorageSparse esaVectors = new VectorStorageSparse();
 		for (String f : files) {
-			esaVectors.put(
+			esaVectors.add(
 					f, 
-					esaGen.computeVector(FileIO.fileToString(new File(f)))
+					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
 			);
 		}
+		
+		esaVectors.display();
+		
+		System.out.println(files.get(0).toString());
 		//I'M HERE
 		//DO SOMETHING
 	}
