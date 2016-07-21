@@ -17,6 +17,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import cat.lump.ir.lucene.LuceneInterface;
 import cat.lump.ir.lucene.query.Document2Query;
 import cat.lump.ir.lucene.engine.AnalyzerFactory;
 import cat.lump.ir.lucene.engine.WTAnalyzer;
@@ -41,7 +42,6 @@ public class EsaGeneratorWT extends EsaGenerator{
 
 	
 	
-	private final Version LUCENE_VERSION = Version.LUCENE_35;
 //	/**Lucene instance*/
 //	private Analyzer analyzer;
 //	
@@ -89,7 +89,7 @@ public class EsaGeneratorWT extends EsaGenerator{
 	 */
 	@Override
 	public void setAnalyzer(Locale lang){
-		analyzer = new WTAnalyzer(LUCENE_VERSION, lang);
+		analyzer = new WTAnalyzer(LuceneInterface.LUCENE_VERSION, lang);
 		// Properly implement this if we really wan to analyse a language,
 		// even if we don't have its corresponding analyser.
 //		try {
@@ -130,7 +130,7 @@ public class EsaGeneratorWT extends EsaGenerator{
 //		}		
 //		
 //		searcher = new IndexSearcher(reader);		
-//		parser = new QueryParser(Version.LUCENE_30, 
+//		parser = new QueryParser(LuceneInterface.LUCENE_VERSION, 
 //								"contents",
 //								analyzer
 //					);		

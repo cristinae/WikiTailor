@@ -87,7 +87,6 @@ public class LuceneQuerierWT extends LuceneInterface{
 	
 	/**
 	 * Sets the analyzer as a new instance of WTAnalyzer
-	 * @param LUCENE_VERSION
 	 * @param lan
 	 * 
 	 */
@@ -99,8 +98,6 @@ public class LuceneQuerierWT extends LuceneInterface{
 		analyzer = new WhitespaceAnalyzer(LUCENE_VERSION);
 	}
 
-	
-	
 	/**Loads the Lucene index (previously created) with the reference 
 	 * corpus.
 	 * @throws IOException

@@ -15,8 +15,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
+import cat.lump.ir.lucene.LuceneInterface;
 import cat.lump.ir.lucene.query.Document2Query;
 import cat.lump.ir.lucene.engine.AnalyzerFactory;
 import cat.lump.aq.basics.algebra.vector.Vector;
@@ -54,7 +54,7 @@ public class EsaGenerator {
 	
 	/**Whether the characteristic vector is going to be normalized*/
 	private Boolean normaliseVector = false;
-	
+		
 	private final Document2Query d2q = new Document2Query();
 	
 	/**Invokes an instance of the EsaGenerator by loading the index and the 
@@ -131,7 +131,7 @@ public class EsaGenerator {
 		}		
 		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(Version.LUCENE_30, 
+		parser = new QueryParser(LuceneInterface.LUCENE_VERSION, 
 								"contents",
 								analyzer
 					);		

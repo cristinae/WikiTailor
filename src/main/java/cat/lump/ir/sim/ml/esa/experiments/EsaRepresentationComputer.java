@@ -54,12 +54,12 @@ public class EsaRepresentationComputer {
 
 		options.addOption("l", "language", true, 
 					"Language of interest (e.g., en, es, ca)");		
-		options.addOption("i", "index", true, 
+		options.addOption("x", "index", true, 
 			        "Path to the previously-generated Lucene index");		
 		options.addOption("h", "help", false, "This help");
-		options.addOption("d", "input", true,
+		options.addOption("d", "inputDir", true,
 				    "Input folder (with txt files)");
-		options.addOption("f", "outputFile", true,
+		options.addOption("o", "outputFile", true,
 			        "Output file, where the vectors are going to be serialized");
 
 		CommandLine cLine = null;
@@ -71,17 +71,17 @@ public class EsaRepresentationComputer {
 		}	
 		
 		if (cLine == null ||
-			(cLine.hasOption("l") && cLine.hasOption("i") && cLine.hasOption("d"))	
+			! (cLine.hasOption("l") && cLine.hasOption("x") && cLine.hasOption("d"))	
 			) {
 			logger.error("Please, provide the necessary parametets");
 			formatter.printHelp(CorrelationsxCategory.class.getSimpleName(),options);
 			System.exit(1);
 		}
 		
-		loadIndex(cLine.getOptionValue("i"), cLine.getOptionValue("l"));
-		setInputFolder(new File(cLine.getOptionValue("-d")));
-		if (cLine.hasOption("x")) {
-			setOutputFile(new File(cLine.getOptionValue("f")));
+		loadIndex(cLine.getOptionValue("x"), cLine.getOptionValue("l"));
+		setInputFolder(new File(cLine.getOptionValue("d")));
+		if (cLine.hasOption("o")) {
+			setOutputFile(new File(cLine.getOptionValue("o")));
 		} else {
 			setOutputFile(
 				new File(cLine.getOptionValue("d") + File.separator + DEFAULT_OUTPUT_FILE));
@@ -118,7 +118,7 @@ public class EsaRepresentationComputer {
 	}
 		
 	private static void setOutputFile(File outFile) {
-		if (outputFile.exists()) {
+		if (outFile.exists()) {
 			System.err.print("The given output fie already exists ");
 			System.exit(1);		
 		}	

@@ -17,7 +17,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.util.Version;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.io.files.FileIO;
@@ -43,8 +42,6 @@ public class LuceneIndexerWT extends LuceneInterface{
 	
 	private static LumpLogger logger = 
 			new LumpLogger(LuceneIndexerWT.class.getSimpleName());
-
-	private final Version LUCENE_VERSION = Version.LUCENE_35;
 	
 	private Analyzer analyzer;
 	

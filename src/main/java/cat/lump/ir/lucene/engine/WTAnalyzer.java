@@ -13,6 +13,7 @@ import org.apache.lucene.analysis.WhitespaceTokenizer;
 import org.apache.lucene.util.Version;
 
 import cat.lump.aq.textextraction.wikipedia.prepro.TermExtractor;
+import cat.lump.ir.lucene.LuceneInterface;
 
 
 /**
@@ -33,10 +34,13 @@ public class WTAnalyzer extends Analyzer{
 	private Version LUCENE_VERSION;
 
 	  
+	public WTAnalyzer(Locale lan) {
+		this(LuceneInterface.LUCENE_VERSION, lan);
+	}
+	
 	public WTAnalyzer(Version LUCENE_VERSION, Locale lan) {
 		this.lan = lan;
 		this.LUCENE_VERSION = LUCENE_VERSION;
-
 	}
 
 	/**

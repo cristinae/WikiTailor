@@ -36,7 +36,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.util.Version;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.io.files.FileIO;
@@ -74,8 +73,6 @@ public class LuceneIndexer extends LuceneInterface{
 	/**Directory where the Lucene index has to be stored*/
 		
 	protected boolean verbose = false;
-	
-	private final Version LUCENE_VERSION = Version.LUCENE_35;
 	
 	private Analyzer analyzer;
 	
