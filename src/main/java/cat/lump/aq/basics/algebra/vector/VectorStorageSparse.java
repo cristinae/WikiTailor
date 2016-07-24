@@ -1,5 +1,6 @@
 package cat.lump.aq.basics.algebra.vector;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,23 +41,17 @@ import cat.lump.aq.basics.check.CHK;
  * TODO best way to check the integrity of the data before returning it 
  *
  */
-public class VectorStorageSparse extends VectorStorageAbstract{
+public class VectorStorageSparse extends VectorStorageAbstract implements Serializable{
 
-	/** Dictionary with the names of the features in the representation. */
+	/** */
+	private static final long serialVersionUID = 8133772799039527762L;
+
+	/** Set with an index of the vector fields. */
 	protected Set<Integer> indexOfValues;
 
 	/** Internal storage for all the sparse values in the dataset.  */
 	private List<TreeMap<Integer, Float>> allValues;
-
-	//  /**
-	//   * Dictionary with the names of the features in the sparse representation. 
-//   * It is dynamic as the sparse features are unknown in advance.
-//   */
-//  private Map<String, Short> mapOfFeatures;
   
-  /** Keeps track of the max current index available in the sparse representation */
-//  private short maxIndexValues;
-
   /**
    * Initialise all the internal data structures to store the instances with
    * their sparse representation. 
@@ -65,7 +60,6 @@ public class VectorStorageSparse extends VectorStorageAbstract{
     super();
     indexOfValues = new TreeSet<Integer>();
     allValues = new ArrayList<TreeMap<Integer, Float>>();
-//    maxIndexValues = 0;
   }
   
   /**
@@ -90,13 +84,17 @@ public class VectorStorageSparse extends VectorStorageAbstract{
     		.put(index, value);
   }
   
-  
   public void add(String instanceId, float[] values) {
-	for (int i = 0; i < values.length; i++) {
-		if (values[i] != 0) {
-			add(instanceId, i, values[i]);
-		}
-	}
+	  int counter =0;
+	  int all=0;
+	  for (int i = 0; i < values.length; i++) {
+		  if (values[i] != 0) {
+			  add(instanceId, i, values[i]);
+			  counter++;
+		  }
+		  all++;
+	  }
+	  System.out.println(counter + " " + all);
   }
   
   /**
@@ -105,7 +103,7 @@ public class VectorStorageSparse extends VectorStorageAbstract{
    */
   public void add(VectorStorageDense denseValues) {
     for (String id : denseValues.getIds()) {      
-      for (Map.Entry<Integer, Float> values : denseValues.getFeatures(id).entrySet()) {
+      for (Map.Entry<Integer, Float> values : denseValues.getValues(id).entrySet()) {
         add(id, values.getKey(), values.getValue());
       }
     }
@@ -114,7 +112,7 @@ public class VectorStorageSparse extends VectorStorageAbstract{
   //TODO do this for the abstract
   public void add(VectorStorageSparse sparseValues) {
     for (String id : sparseValues.getIds()) {      
-      for (Map.Entry<Integer, Float> values : sparseValues.getFeatures(id).entrySet()) {
+      for (Map.Entry<Integer, Float> values : sparseValues.getValues(id).entrySet()) {
         add(id, values.getKey(), values.getValue());
       }
     }
@@ -146,28 +144,6 @@ public class VectorStorageSparse extends VectorStorageAbstract{
     }
   }
 
-//  /**
-//   * @return  List of instances with sparse features. The features are stored 
-//   *          in a map 
-//   */
-//  public List<Map<String, Double>> getSparseFeatures() {
-//    List<Map<String, Double>> features = new ArrayList<Map<String, Double>>();
-//    for (int i = 0; i < mapOfInstances.size() ; i++) {
-//      features.add(getSparseFeatures(i));
-//    }
-//    return features;
-//  }
-
-//  /**
-//   * @param id for the instance
-//   * @return Map with the sparse feature representation for the given instance 
-//   */
-//  public Map<String, Double> getSparseFeatures (String id) {
-//    CHK.CHECK(checkInstanceExists(id), 
-//        String.format("No instance with id %s exists", id));
-//    return getSparseFeatures(mapOfInstances.get(id));
-//  }
-  
   /**
    * @param ind index of the instance in the dataset
    * @return  Map with the sparse representation for the given instance 
@@ -177,7 +153,6 @@ public class VectorStorageSparse extends VectorStorageAbstract{
         String.format("No instance in index %d exists", ind));
     
     Map<Integer, Float> instanceValues = new HashMap<Integer, Float>();
-    
     for (int entry : indexOfValues) {
       if (allValues.get(ind).containsKey(entry)) {
         instanceValues.put(
@@ -187,28 +162,16 @@ public class VectorStorageSparse extends VectorStorageAbstract{
     return instanceValues;
   }
   
-//  /**
-//   * @param ind index of the instance in the dataset
-//   * @return  Map with all (dense+sparse) feature representation for the given instance
-//   */
-//  public Map<String, Double> getFeatures(int ind) {
-//    CHK.CHECK(checkInstanceIndexExist(ind), 
-//        String.format("No instance in index %d exists", ind));
-//    return getSparseFeatures(ind);
-//  }
-
-//  /**
-//   * @param ind  index of the instance in the dataset
-//   * @return treemap with the <short_key, value> for an instance
-//   */
-//  public TreeMap<Short, Double> getSortedFeatures(int ind) {
-//    CHK.CHECK(checkInstanceIndexExist(ind), 
-//        String.format("No instance in index %d exists", ind));
-//    return allFeatures.get(ind);
-//  }
+  /**
+   * @return (max) size of the vectors
+   */
+  public int getVectorSize() {
+	  return indexOfValues.size();
+  }
   
   public double[] getVector(int ind) {
-	  CHK.CHECK(checkInstanceIndexExist(ind), "No instance wuth this index exists");
+	  CHK.CHECK(checkInstanceIndexExist(ind), 
+			  "No instance in this position exists");
 	  double[] values = new double[indexOfValues.size()];
 	  for (short i = 0; i < indexOfValues.size(); i++) {
 		  values[i] = allValues.get(ind).get(i);
@@ -251,6 +214,4 @@ public class VectorStorageSparse extends VectorStorageAbstract{
         String.format("Instance %s has been assigned the sparse feature %s already!", 
             instance, featureName));
   }
-
-
 }

@@ -2,10 +2,8 @@ package cat.lump.ir.sim.ml.esa.experiments;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -14,8 +12,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import cat.lump.aq.basics.algebra.vector.Vector;
-import cat.lump.aq.basics.algebra.vector.VectorStorageAbstract;
 import cat.lump.aq.basics.algebra.vector.VectorStorageSparse;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
@@ -35,7 +31,7 @@ import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
  * 
  *
  */
-public class EsaRepresentationComputer {
+public class A_EsaRepresentationComputer {
 
 	private static LumpLogger logger = 
 			new LumpLogger (CorrelationsxCategory.class.getSimpleName());
@@ -98,26 +94,39 @@ public class EsaRepresentationComputer {
 		
 	}
 	
+	private String getIdFromFile(String file) {
+		file = file.replace(".txt", "");
+		if (file.contains(File.separator)) {
+			file = file.substring(file.lastIndexOf(File.separator) + 1);
+		}
+		return file;
+		
+	}
+	 
 	private void computeVectors() throws IOException {
 		List<String> files = FileIO.getFilesRecursively(inputPath, "txt");
 		VectorStorageSparse esaVectors = new VectorStorageSparse();
 		for (String f : files) {
 			esaVectors.add(
-					f, 
+					getIdFromFile(f), 
 					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
 			);
+		} 
+		
+		for (String k : esaVectors.getIds()) {
+			System.out.format("%s: %d%n", k, esaVectors.getValues(k).size());
 		}
+		System.out.println(esaVectors.getVectorSize());
 		
-		esaVectors.display();
-		
-		System.out.println(files.get(0).toString());
 		//I'M HERE
 		//DO SOMETHING
+		logger.info("Storing the vectors into " + outputFile);
+		FileIO.writeObject(esaVectors, outputFile);
 	}
 	
 	private static void setInputFolder(File path) {
 		if (!path.isDirectory()) {
-			System.err.print("I cannot read the directory " + path);
+			logger.error("I cannot read the directory " + path);
 			System.exit(1);			
 		}
 		inputPath = path;
@@ -125,18 +134,20 @@ public class EsaRepresentationComputer {
 		
 	private static void setOutputFile(File outFile) {
 		if (outFile.exists()) {
-			System.err.print("The given output fie already exists ");
+			logger.error(String.format("Output file %s already exists", outFile));
 			System.exit(1);		
-		}	
-		
-		//TODO validate the file does not exist
+		}
 		outputFile = outFile;
 	}
-	
+//	
+//	public void storeVectors() {
+//		logger.info("Storing the vectors into " + outputFile);
+//		FileIO.writeObject(esaGen, outputFile);
+//	}
 	
 	
 	public static void main(String[] args) {
-		EsaRepresentationComputer erc = new EsaRepresentationComputer();
+		A_EsaRepresentationComputer erc = new A_EsaRepresentationComputer();
 		erc.setup(args);
 		try {
 			erc.computeVectors();
@@ -144,7 +155,7 @@ public class EsaRepresentationComputer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+//		erc.storeVectors();
 		
 	}
 	

@@ -180,7 +180,7 @@ public class EsaGenerator {
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
 			Query query = parser.parse(q);			
-			TopDocs hits = searcher.search(query, 100);
+			TopDocs hits = searcher.search(query, searcher.maxDoc());
 
 			//fill the array with the scores
 			for (ScoreDoc scoreDoc : hits.scoreDocs) {			
@@ -200,7 +200,7 @@ public class EsaGenerator {
 		//normalize by max_sim if normalise_vector
 		if (normaliseVector && ! emptyQuery)
 			vector.divideEquals(maxSim);
-
+		//System.out.println(vector.length());
 		return vector;
 	}
 	
