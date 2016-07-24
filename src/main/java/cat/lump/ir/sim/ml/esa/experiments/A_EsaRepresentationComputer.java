@@ -26,6 +26,10 @@ import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
  *  INPUT:
  *  - index folder
  *  - language
+ *  - [output file]
+ *  
+ *  OUTPUT
+ *  - Serialized object with the vectors
  * 
  * @author alberto
  * 
@@ -35,7 +39,7 @@ public class A_EsaRepresentationComputer {
 
 	private static LumpLogger logger = 
 			new LumpLogger (CorrelationsxCategory.class.getSimpleName());
-	private static final String DEFAULT_OUTPUT_FILE = "esa_vectors.obj";
+	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors.obj";
 	
 	private static File inputPath ;
 	
@@ -70,7 +74,7 @@ public class A_EsaRepresentationComputer {
 		
 		if (cLine == null ||
 			! (cLine.hasOption("l") && cLine.hasOption("x") && cLine.hasOption("d"))	
-			) {
+		   ) {
 			logger.error("Please, provide the necessary parametets");
 			formatter.printHelp(CorrelationsxCategory.class.getSimpleName(),options);
 			System.exit(1);
@@ -82,7 +86,11 @@ public class A_EsaRepresentationComputer {
 			setOutputFile(new File(cLine.getOptionValue("o")));
 		} else {
 			setOutputFile(
-				new File(cLine.getOptionValue("d") + File.separator + DEFAULT_OUTPUT_FILE));
+				new File(
+					String.format("%s%s%s.%s", 
+						cLine.getOptionValue("d"), File.separator, 
+						cLine.getOptionValue("l"), DEFAULT_OUTPUT_FILE_SUFFIX))
+				);
 		}
 		//return cLine;		
 	}
