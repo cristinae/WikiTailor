@@ -31,14 +31,15 @@ import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
  *  OUTPUT
  *  - Serialized object with the vectors
  * 
- * @author alberto
- * 
+ * @author albarron
+ * @since July, 2016
  *
  */
 public class A_EsaRepresentationComputer {
 
 	private static LumpLogger logger = 
 			new LumpLogger (CorrelationsxCategory.class.getSimpleName());
+
 	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors.obj";
 	
 	private static File inputPath ;
@@ -46,6 +47,35 @@ public class A_EsaRepresentationComputer {
 	private static File outputFile;
 	
 	private static EsaGenerator esaGen;
+	
+	private static void loadIndex(String path, String lan) {
+		//LOAD THE INDEX TO COMPUTE THE REPRESENTATIONS
+		esaGen = new EsaGeneratorWT(new File(path), new Locale(lan));
+	}
+	 
+	private void computeVectors() throws IOException {
+		List<String> files = FileIO.getFilesRecursively(inputPath, "txt");
+		VectorStorageSparse esaVectors = new VectorStorageSparse();
+		int counter =0;
+		for (String f : files) {
+			esaVectors.add(
+					getIdFromFile(f), 
+					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
+			);
+			if (counter++ % 500 == 0) {
+				logger.info(String.format("Computing %d of %d", counter-1, files.size())
+						);
+			}
+		} 
+		
+//		for (String k : esaVectors.getIds()) {
+//			System.out.format("%s: %d%n", k, esaVectors.getValues(k).size());
+//		}
+//		System.out.println(esaVectors.getVectorSize());
+
+		logger.info("Storing the vectors into " + outputFile);
+		FileIO.writeObject(esaVectors, outputFile);
+	}
 	
 	private void setup(String[] args) {
 		HelpFormatter formatter = new HelpFormatter();
@@ -94,42 +124,14 @@ public class A_EsaRepresentationComputer {
 		}
 		//return cLine;		
 	}
-	
-	
-	private static void loadIndex(String path, String lan) {
-		//LOAD THE INDEX TO COMPUTE THE REPRESENTATIONS
-		esaGen = new EsaGeneratorWT(new File(path), new Locale(lan));
-		
-	}
-	
+
+
 	private String getIdFromFile(String file) {
 		file = file.replace(".txt", "");
 		if (file.contains(File.separator)) {
 			file = file.substring(file.lastIndexOf(File.separator) + 1);
 		}
 		return file;
-		
-	}
-	 
-	private void computeVectors() throws IOException {
-		List<String> files = FileIO.getFilesRecursively(inputPath, "txt");
-		VectorStorageSparse esaVectors = new VectorStorageSparse();
-		for (String f : files) {
-			esaVectors.add(
-					getIdFromFile(f), 
-					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
-			);
-		} 
-		
-		for (String k : esaVectors.getIds()) {
-			System.out.format("%s: %d%n", k, esaVectors.getValues(k).size());
-		}
-		System.out.println(esaVectors.getVectorSize());
-		
-		//I'M HERE
-		//DO SOMETHING
-		logger.info("Storing the vectors into " + outputFile);
-		FileIO.writeObject(esaVectors, outputFile);
 	}
 	
 	private static void setInputFolder(File path) {

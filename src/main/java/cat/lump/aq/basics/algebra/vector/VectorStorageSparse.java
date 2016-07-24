@@ -94,7 +94,8 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
 		  }
 		  all++;
 	  }
-	  System.out.println(counter + " " + all);
+	  //TODO decide if we use all non-zero or not
+	  //System.out.println(counter + " " + all);
   }
   
   /**
