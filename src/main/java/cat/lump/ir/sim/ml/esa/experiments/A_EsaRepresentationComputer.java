@@ -25,6 +25,7 @@ import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
  * 
  *  INPUT:
  *  - index folder
+ *  - input file
  *  - language
  *  - [output file]
  *  
@@ -42,9 +43,11 @@ public class A_EsaRepresentationComputer {
 
 	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors.obj";
 	
+	private static final int MAX_VECTORS_PER_FILE = 5000;
+	
 	private static File inputPath ;
 	
-	private static File outputFile;
+	private static String outputFile;
 	
 	private static EsaGenerator esaGen;
 	
@@ -57,24 +60,32 @@ public class A_EsaRepresentationComputer {
 		List<String> files = FileIO.getFilesRecursively(inputPath, "txt");
 		VectorStorageSparse esaVectors = new VectorStorageSparse();
 		int counter =0;
+		int idx = 0;
 		for (String f : files) {
 			esaVectors.add(
 					getIdFromFile(f), 
 					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
 			);
+			if (counter > 0 && counter % MAX_VECTORS_PER_FILE == 0) {
+				//Save the current instances into an obj file.
+				//reset the esaVectors (remove all the current instances)
+				
+				logger.info("Storing the vectors up to " + counter);
+				FileIO.writeObject(
+						esaVectors, 
+						new File(outputFile + "." + String.valueOf(idx++))
+						);
+				esaVectors.removeAllVectors();
+				
+			}
 			if (counter++ % 500 == 0) {
 				logger.info(String.format("Computing %d of %d", counter-1, files.size())
 						);
 			}
 		} 
-		
-//		for (String k : esaVectors.getIds()) {
-//			System.out.format("%s: %d%n", k, esaVectors.getValues(k).size());
-//		}
-//		System.out.println(esaVectors.getVectorSize());
 
-		logger.info("Storing the vectors into " + outputFile);
-		FileIO.writeObject(esaVectors, outputFile);
+		logger.info("Storing the vectors up to " + counter);
+		FileIO.writeObject(esaVectors, new File(outputFile + "." + String.valueOf(idx)));
 	}
 	
 	private void setup(String[] args) {
@@ -106,6 +117,7 @@ public class A_EsaRepresentationComputer {
 			! (cLine.hasOption("l") && cLine.hasOption("x") && cLine.hasOption("d"))	
 		   ) {
 			logger.error("Please, provide the necessary parametets");
+			//formatter.printHelp(widthFormatter, command, header, options, footer, true)
 			formatter.printHelp(CorrelationsxCategory.class.getSimpleName(),options);
 			System.exit(1);
 		}
@@ -113,13 +125,12 @@ public class A_EsaRepresentationComputer {
 		loadIndex(cLine.getOptionValue("x"), cLine.getOptionValue("l"));
 		setInputFolder(new File(cLine.getOptionValue("d")));
 		if (cLine.hasOption("o")) {
-			setOutputFile(new File(cLine.getOptionValue("o")));
+			setOutputFile(cLine.getOptionValue("o"));
 		} else {
 			setOutputFile(
-				new File(
 					String.format("%s%s%s.%s", 
 						cLine.getOptionValue("d"), File.separator, 
-						cLine.getOptionValue("l"), DEFAULT_OUTPUT_FILE_SUFFIX))
+						cLine.getOptionValue("l"), DEFAULT_OUTPUT_FILE_SUFFIX)
 				);
 		}
 		//return cLine;		
@@ -142,8 +153,8 @@ public class A_EsaRepresentationComputer {
 		inputPath = path;
 	}
 		
-	private static void setOutputFile(File outFile) {
-		if (outFile.exists()) {
+	private static void setOutputFile(String outFile) {
+		if (new File(outFile).exists()) {
 			logger.error(String.format("Output file %s already exists", outFile));
 			System.exit(1);		
 		}

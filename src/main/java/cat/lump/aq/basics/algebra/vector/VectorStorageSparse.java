@@ -3,6 +3,7 @@ package cat.lump.aq.basics.algebra.vector;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -118,6 +119,13 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
       }
     }
   }
+  
+  public void removeAllVectors() {
+	  allValues = new ArrayList<TreeMap<Integer, Float>>();  
+	  mapOfInstances = new LinkedHashMap<String, Integer>();
+	  maxIndexInstances = 0;
+  }
+  
   
   /* (non-Javadoc)
    * @see qa.qcri.iyas.features.FeatureStorageAbstract#display()
