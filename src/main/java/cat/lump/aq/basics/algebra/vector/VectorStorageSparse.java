@@ -53,6 +53,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
 	/** Internal storage for all the sparse values in the dataset.  */
 	private List<TreeMap<Integer, Float>> allValues;
   
+	
   /**
    * Initialise all the internal data structures to store the instances with
    * their sparse representation. 

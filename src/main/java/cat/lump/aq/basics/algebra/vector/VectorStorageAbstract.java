@@ -1,5 +1,7 @@
 package cat.lump.aq.basics.algebra.vector;
 
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,7 +21,12 @@ import cat.lump.aq.basics.log.LumpLogger;
  * @author albarron
  * @since Jul 2016
  */
-public abstract class VectorStorageAbstract {
+public abstract class VectorStorageAbstract implements Serializable{
+
+	/***/
+	private static final long serialVersionUID = -4099197495256673465L;
+
+
 
 	protected static LumpLogger logger = 
 			new LumpLogger (VectorStorageAbstract.class.getSimpleName());

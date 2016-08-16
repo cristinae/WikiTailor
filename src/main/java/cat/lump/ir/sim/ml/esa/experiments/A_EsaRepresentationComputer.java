@@ -39,7 +39,7 @@ import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
 public class A_EsaRepresentationComputer {
 
 	private static LumpLogger logger = 
-			new LumpLogger (CorrelationsxCategory.class.getSimpleName());
+			new LumpLogger (A_EsaRepresentationComputer.class.getSimpleName());
 
 	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors.obj";
 	
@@ -62,10 +62,12 @@ public class A_EsaRepresentationComputer {
 		int counter =0;
 		int idx = 0;
 		for (String f : files) {
+			System.out.println(f);
 			esaVectors.add(
 					getIdFromFile(f), 
 					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
 			);
+			System.out.println(esaVectors.size());
 			if (counter > 0 && counter % MAX_VECTORS_PER_FILE == 0) {
 				//Save the current instances into an obj file.
 				//reset the esaVectors (remove all the current instances)
@@ -75,7 +77,7 @@ public class A_EsaRepresentationComputer {
 						esaVectors, 
 						new File(outputFile + "." + String.valueOf(idx++))
 						);
-				esaVectors.removeAllVectors();
+				//esaVectors.removeAllVectors();
 				
 			}
 			if (counter++ % 500 == 0) {
