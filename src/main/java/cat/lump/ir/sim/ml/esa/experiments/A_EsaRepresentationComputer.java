@@ -62,12 +62,12 @@ public class A_EsaRepresentationComputer {
 		int counter =0;
 		int idx = 0;
 		for (String f : files) {
-			System.out.println(f);
+			//System.out.println(f);
 			esaVectors.add(
 					getIdFromFile(f), 
 					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
 			);
-			System.out.println(esaVectors.size());
+			
 			if (counter > 0 && counter % MAX_VECTORS_PER_FILE == 0) {
 				//Save the current instances into an obj file.
 				//reset the esaVectors (remove all the current instances)
@@ -77,7 +77,7 @@ public class A_EsaRepresentationComputer {
 						esaVectors, 
 						new File(outputFile + "." + String.valueOf(idx++))
 						);
-				//esaVectors.removeAllVectors();
+				esaVectors.removeAllVectors();
 				
 			}
 			if (counter++ % 500 == 0) {
@@ -87,6 +87,9 @@ public class A_EsaRepresentationComputer {
 		} 
 
 		logger.info("Storing the vectors up to " + counter);
+		//System.out.println(esaVectors.getIds());
+		
+		//esaVectors.display();
 		FileIO.writeObject(esaVectors, new File(outputFile + "." + String.valueOf(idx)));
 	}
 	

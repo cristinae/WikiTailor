@@ -177,6 +177,7 @@ public class EsaGenerator {
 		//query the document and retrieve the top hits
 		//TODO this is why the Doc2query class does not have an analyzer/language. It is set from here		
 		String q = d2q.str2FlatQuery(analyzer, text);		
+		//System.out.println(q);
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
 			Query query = parser.parse(q);			
