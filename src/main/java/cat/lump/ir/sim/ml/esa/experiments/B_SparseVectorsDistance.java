@@ -67,22 +67,7 @@ public class B_SparseVectorsDistance {
 
 	}
 	
-	@Deprecated
-	public static void computeDeprecated() {
-		if (inputFileA.equals(inputFileB)) {
-//			VectorStorageSparse x =  (VectorStorageSparse) FileIO.readObject(new File(inputFileA));
-			//System.out.println(x.size());
-//			System.out.println(x.allValues.size());
-//			x
-//			for (TreeMap<Integer, Float> y : x.allValues) {
-//				System.out.println(y.ky);
-//			}
-			compute((VectorStorageAbstract) FileIO.readObject(new File(inputFileA)));
-		} else {
-			compute((VectorStorageSparse) FileIO.readObject(new File(inputFileA)),
-					(VectorStorageSparse) FileIO.readObject(new File(inputFileB)));
-		}
-	}
+
 
 	public static void compute(VectorStorageAbstract vss) {
     //System.out.println(vss.size());
@@ -130,22 +115,24 @@ public class B_SparseVectorsDistance {
     
   }
 	
-	private static Map<String, Double> computeMagnitudes(VectorStorageAbstract vss) {
-	  Map<String, Double> magnitudes = new HashMap<String, Double> ();
-	  double magn;
-	  for (String s : vss.getIds()) {
-	    magn = 0;
-	    for (float val : vss.getValues(s).values()) {
-	      magn += val * val; 
-	    }
-	    magnitudes.put(s, Math.sqrt(magn));
-	  }
-	  
-	  return magnitudes;
-	}
-	
 
-	
+
+  @Deprecated
+  public static void computeDeprecated() {
+    if (inputFileA.equals(inputFileB)) {
+//      VectorStorageSparse x =  (VectorStorageSparse) FileIO.readObject(new File(inputFileA));
+      //System.out.println(x.size());
+//      System.out.println(x.allValues.size());
+//      x
+//      for (TreeMap<Integer, Float> y : x.allValues) {
+//        System.out.println(y.ky);
+//      }
+      compute((VectorStorageAbstract) FileIO.readObject(new File(inputFileA)));
+    } else {
+      compute((VectorStorageSparse) FileIO.readObject(new File(inputFileA)),
+          (VectorStorageSparse) FileIO.readObject(new File(inputFileB)));
+    }
+  }	
 	
 	@Deprecated
 	public static void computeDeprecated(VectorStorageAbstract vss) {
@@ -177,67 +164,80 @@ public class B_SparseVectorsDistance {
 	}
 	
 	
+	 private static Map<String, Double> computeMagnitudes(VectorStorageAbstract vss) {
+	    Map<String, Double> magnitudes = new HashMap<String, Double> ();
+	    double magn;
+	    for (String s : vss.getIds()) {
+	      magn = 0;
+	      for (float val : vss.getValues(s).values()) {
+	        magn += val * val; 
+	      }
+	      magnitudes.put(s, Math.sqrt(magn));
+	    }
+	    
+	    return magnitudes;
+	  }
+	  
+	 
+	  private static double distance(Map<Integer, Float> v1, Map<Integer, Float> v2) {
+	    Set<Integer> indexOnly1 = new HashSet<Integer>();
+	    Set<Integer> indexOnly2 = new HashSet<Integer>();
+	    Set<Integer> indexBoth  = new HashSet<Integer>();
+	    
+	    indexOnly1.addAll(v1.keySet());
+	    indexOnly1.removeAll(v2.keySet());
+	    
+	    indexOnly2.addAll(v2.keySet());
+	    indexOnly2.removeAll(v1.keySet());
+	    
+	    indexBoth.addAll(v1.keySet());
+	    indexBoth.retainAll(v2.keySet());
+	        
+	    double sum =0;
+	    
+	    //squares for inds only in v1
+	    for (int i : indexOnly1) {
+	      sum += v1.get(i) * v1.get(i);     
+	    }
+	    
+	    //squares for inds only in v2
+	    for (int i : indexOnly2) {
+	      sum += v2.get(i) * v2.get(i);     
+	    }
+	    
+	    //squares for inds in both; difference
+	    for (int i : indexBoth) {
+	      sum += Math.pow(v1.get(i) - v2.get(i),2);
+	    }
+	    
+	    return Math.sqrt(sum);
+	  }
+	 
 	/**
 	 * Compute the dot product between two sparse representations.
    *  
    * @param v1
    * @param v2
    * @return dotproduct(v1, v2)
-   * TODO test this method
+   * TODO test this method; I guess it should be part of the sparse and
+   * dense representation classes.
 	 */
 	private static double dotProduct(Map<Integer, Float> v1, Map<Integer, Float> v2) {
 	  double dp = 0;
-	  if (v1.size() <= v2.size()) {
-	    for (int i : v1.keySet()) {
-	      if (v2.containsKey(i)) {
-	        dp += v1.get(i) * v2.get(i);
-	      }
-	    }
-	  } else {
-	    for (int i : v2.keySet()) {
-        if (v1.containsKey(i)) {
-          dp += v1.get(i) * v2.get(i);
-        }
-      }
-	  }	  
+	  Set<Integer> intersection  = new HashSet<Integer>();
+	  
+	  intersection.addAll(v1.keySet());
+	  intersection.retainAll(v2.keySet());
+	  
+    for (int i : intersection) {
+        dp += v1.get(i) * v2.get(i);
+    }  
 	  return dp;
 	}
 
 	
 	
-	private static double distance(Map<Integer, Float> v1, Map<Integer, Float> v2) {
-		Set<Integer> indexOnly1 = new HashSet<Integer>();
-		Set<Integer> indexOnly2 = new HashSet<Integer>();
-		Set<Integer> indexBoth  = new HashSet<Integer>();
-		
-		indexOnly1.addAll(v1.keySet());
-		indexOnly1.removeAll(v2.keySet());
-		
-		indexOnly2.addAll(v2.keySet());
-		indexOnly2.removeAll(v1.keySet());
-		
-		indexBoth.addAll(v1.keySet());
-		indexBoth.retainAll(v2.keySet());
-				
-		double sum =0;
-		
-		//squares for inds only in v1
-		for (int i : indexOnly1) {
-			sum += v1.get(i) * v1.get(i);			
-		}
-		
-		//squares for inds only in v2
-		for (int i : indexOnly2) {
-			sum += v2.get(i) * v2.get(i);			
-		}
-		
-		//squares for inds in both; difference
-		for (int i : indexBoth) {
-			sum += Math.pow(v1.get(i) - v2.get(i),2);
-		}
-		
-		return Math.sqrt(sum);
-	}
+
 	
 	
 	private void setInputFileA(String file) {
