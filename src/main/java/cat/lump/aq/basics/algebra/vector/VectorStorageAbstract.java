@@ -182,6 +182,12 @@ public abstract class VectorStorageAbstract implements Serializable{
 		return getValues(mapOfInstances.get(id));
 	}
 
+  public abstract void addInstance(String instanceId);
+
+  public abstract int getCardinality();
+
+  public abstract void sum(String instanceId, int id, float value);
+	
 	/**
 	 * Check if the instance with the given id exists already.
 	 * @param instanceId
@@ -190,5 +196,10 @@ public abstract class VectorStorageAbstract implements Serializable{
 	protected boolean instanceExists(String instanceId) {
 		return mapOfInstances.containsKey(instanceId);
 	}
+
+
+
+ 
+
 
 }

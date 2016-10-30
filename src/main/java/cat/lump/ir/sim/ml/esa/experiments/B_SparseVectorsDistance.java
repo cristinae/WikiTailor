@@ -66,24 +66,32 @@ public class B_SparseVectorsDistance {
 	    }
 
 	}
-	
-
 
 	public static void compute(VectorStorageAbstract vss) {
     //System.out.println(vss.size());
     List<String> ids = vss.getIds();
     double angDist;
+    StringBuffer sb = new StringBuffer();
     //Compute magnitudes
     Map<String, Double> magnitudes = computeMagnitudes (vss);
     for (int i = 0; i < ids.size() -1 ; i++) {
+      
       for (int j = i; j < ids.size() ; j++) {
+        sb.append(ids.get(i))
+          .append(" ")
+          .append(ids.get(j))
+          .append(" ");
         angDist = 
             Math.acos(
                 dotProduct(vss.getValues(ids.get(i)), vss.getValues(ids.get(j)) ) /
                 (magnitudes.get(ids.get(i)) * magnitudes.get(ids.get(j)))
             );
-        System.out.format("%s\t%s\t%f%n", ids.get(i),ids.get(j), angDist); 
+        sb.append(angDist)
+          .append("\n");
+         
       }
+      System.out.println(sb.toString());
+      sb.delete(0, sb.length());
     }
   }
 
@@ -101,16 +109,25 @@ public class B_SparseVectorsDistance {
   //Compute magnitudes
     Map<String, Double> magnitudes = computeMagnitudes (vss1);
     magnitudes.putAll(computeMagnitudes(vss2));
+    StringBuffer sb = new StringBuffer();
+    
     for (int i = 0; i < ids1.size() ; i++) {
       for (int j = 0; j < ids2.size() ; j++) {
+        sb.append(ids1.get(i))
+        .append(" ")
+        .append(ids2.get(j))
+        .append(" ");
       //compute angular distance
         angDist = 
             Math.acos(
                 dotProduct(vss1.getValues(ids1.get(i)), vss2.getValues(ids2.get(j)) ) /
                 (magnitudes.get(ids1.get(i)) * magnitudes.get(ids2.get(j)))
             );
-        System.out.format("%s\t%s\t%f%n", ids1.get(i),ids2.get(j), angDist); 
+        sb.append(angDist)
+        .append("\n");
       }
+      System.out.println(sb.toString());
+      sb.delete(0, sb.length());
     }
     
   }

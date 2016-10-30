@@ -53,6 +53,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
 	/** Internal storage for all the sparse values in the dataset.  */
 	private List<TreeMap<Integer, Float>> allValues;
   
+	private int cardinality;
 	
   /**
    * Initialise all the internal data structures to store the instances with
@@ -62,6 +63,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
     super();
     indexOfValues = new TreeSet<Integer>();
     allValues = new ArrayList<TreeMap<Integer, Float>>();
+    cardinality = 0;
   }
   
   /**
@@ -76,7 +78,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
     if (! instanceExists(instanceId)) {
       addInstance(instanceId);
     }
-    
+   
     //Add a new value if I don't have it beforehand.
     if (! indexOfValues.contains(index)) {
       indexOfValues.add(index);
@@ -84,6 +86,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
     checkPossibleOverriding(instanceId, index);
     allValues.get(mapOfInstances.get(instanceId))
     		.put(index, value);
+    cardinality = Math.max(index, cardinality);
   }
   
   public void add(String instanceId, float[] values) {
@@ -127,7 +130,15 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
 	  maxIndexInstances = 0;
   }
   
+  public void sum(String instanceId, int id, float value) {
+    CHK.CHECK( hasValue(instanceId, id), 
+        "I cannot sum because the item does not exist");
+    allValues.get(mapOfInstances.get(instanceId)).put(id,
+        allValues.get(mapOfInstances.get(instanceId)).get(id) + value
+    );
+  }
   
+
   /* (non-Javadoc)
    * @see qa.qcri.iyas.features.FeatureStorageAbstract#display()
    */
@@ -154,6 +165,15 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
     }
   }
 
+  public boolean hasValue(String instance, int feature) {
+    return allValues.get(mapOfInstances.get(instance))
+        .containsKey(feature);
+  }
+  
+  public int getCardinality() {
+    return cardinality;
+  }
+  
   /**
    * @param ind index of the instance in the dataset
    * @return  Map with the sparse representation for the given instance 
@@ -200,7 +220,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
    *  
    * @param instanceId
    */
-  private void addInstance(String instanceId) {
+  public void addInstance(String instanceId) {
     if (checkInstanceExists(instanceId)) {
       logger.error(String.format("[ERROR] Instance %s already exists", instanceId));
       System.exit(1);
@@ -219,8 +239,7 @@ public class VectorStorageSparse extends VectorStorageAbstract implements Serial
    */
   private void checkPossibleOverriding(String instance, int featureName) {
     CHK.CHECK(
-        ! allValues.get(mapOfInstances.get(instance))
-              .containsKey(featureName),
+        ! hasValue(instance, featureName),
         String.format("Instance %s has been assigned the sparse feature %s already!", 
             instance, featureName));
   }

@@ -65,6 +65,8 @@ public class VectorStorageDense extends VectorStorageAbstract {
     this.dimension = dimension;
   }
   
+
+  
   /**
    * Add a value to the vector storage. If the index is higher than expected,  
    * it triggers an error. 
@@ -233,7 +235,7 @@ public class VectorStorageDense extends VectorStorageAbstract {
    *  
    * @param instanceId
    */
-  private void addInstance(String instanceId) {
+  public void addInstance(String instanceId) {
     if (checkInstanceExists(instanceId)) {
       logger.error(String.format("[ERROR] Instance %s already exists", instanceId));
       System.exit(1);
@@ -264,9 +266,20 @@ public class VectorStorageDense extends VectorStorageAbstract {
             );
   }
 
-@Override
-public Map<Integer, Float> getValues(int i) {
-	// TODO Auto-generated method stub
-	return null;
-}
+  public int getCardinality() {
+    return (int) dimension;
+  }
+  
+  @Override
+  public Map<Integer, Float> getValues(int i) {
+    throw new UnsupportedOperationException();
+  }
+
+
+
+  @Override
+  public void sum(String instanceId, int id, float value) {
+    throw new UnsupportedOperationException();
+
+  }
 }
