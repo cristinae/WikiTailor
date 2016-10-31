@@ -41,7 +41,9 @@ public class A_EsaRepresentationComputer {
 	private static LumpLogger logger = 
 			new LumpLogger (A_EsaRepresentationComputer.class.getSimpleName());
 
-	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors.obj";
+	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors";
+	
+	private static final String DEFAULT_OUTPUT_FILE_EXT = "obj";
 	
 	private static final int MAX_VECTORS_PER_FILE = 5000;
 	
@@ -73,10 +75,14 @@ public class A_EsaRepresentationComputer {
 				//reset the esaVectors (remove all the current instances)
 				
 				logger.info("Storing the vectors up to " + counter);
+				// TODO move this to xxx.idx.obj instead of xxx.obj.idx. This was currently made
+				// manually on previously-generated vectors
 				FileIO.writeObject(
 						esaVectors, 
-						new File(outputFile + "." + String.valueOf(idx++))
+						new File(String.format("%s.%d.%s", outputFile, idx++, DEFAULT_OUTPUT_FILE_EXT))
 						);
+				    
+				
 				esaVectors.removeAllVectors();
 				
 			}
@@ -159,10 +165,10 @@ public class A_EsaRepresentationComputer {
 	}
 		
 	private static void setOutputFile(String outFile) {
-		if (new File(outFile).exists()) {
-			logger.error(String.format("Output file %s already exists", outFile));
-			System.exit(1);		
-		}
+//		if (new File(outFile).exists()) {
+//			logger.error(String.format("Output file %s already exists", outFile));
+//			System.exit(1);		
+//		}
 		outputFile = outFile;
 	}
 //	
