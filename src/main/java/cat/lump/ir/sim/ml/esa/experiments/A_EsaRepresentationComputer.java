@@ -96,7 +96,11 @@ public class A_EsaRepresentationComputer {
 		//System.out.println(esaVectors.getIds());
 		
 		//esaVectors.display();
-		FileIO.writeObject(esaVectors, new File(outputFile + "." + String.valueOf(idx)));
+		FileIO.writeObject(
+		    esaVectors, 
+		    new File(String.format("%s.%d.%s", outputFile, idx, DEFAULT_OUTPUT_FILE_EXT))
+		 );
+		          
 	}
 	
 	private void setup(String[] args) {
