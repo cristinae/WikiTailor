@@ -15,8 +15,8 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
+import cat.lump.ir.lucene.LuceneInterface;
 import cat.lump.ir.lucene.query.Document2Query;
 import cat.lump.ir.lucene.engine.AnalyzerFactory;
 import cat.lump.aq.basics.algebra.vector.Vector;
@@ -32,7 +32,7 @@ import cat.lump.aq.basics.check.CHK;
 public class EsaGenerator {
 
 	/**Lucene instance*/
-	private Analyzer analyzer;
+	protected Analyzer analyzer;
 	
 	/**Path to the Lucene index*/
 	private File indexPath;
@@ -54,7 +54,7 @@ public class EsaGenerator {
 	
 	/**Whether the characteristic vector is going to be normalized*/
 	private Boolean normaliseVector = false;
-	
+		
 	private final Document2Query d2q = new Document2Query();
 	
 	/**Invokes an instance of the EsaGenerator by loading the index and the 
@@ -131,7 +131,7 @@ public class EsaGenerator {
 		}		
 		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(Version.LUCENE_30, 
+		parser = new QueryParser(LuceneInterface.LUCENE_VERSION, 
 								"contents",
 								analyzer
 					);		
@@ -177,10 +177,11 @@ public class EsaGenerator {
 		//query the document and retrieve the top hits
 		//TODO this is why the Doc2query class does not have an analyzer/language. It is set from here		
 		String q = d2q.str2FlatQuery(analyzer, text);		
+		//System.out.println(q);
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
 			Query query = parser.parse(q);			
-			TopDocs hits = searcher.search(query, 100);
+			TopDocs hits = searcher.search(query, searcher.maxDoc());
 
 			//fill the array with the scores
 			for (ScoreDoc scoreDoc : hits.scoreDocs) {			
@@ -200,7 +201,7 @@ public class EsaGenerator {
 		//normalize by max_sim if normalise_vector
 		if (normaliseVector && ! emptyQuery)
 			vector.divideEquals(maxSim);
-
+		//System.out.println(vector.length());
 		return vector;
 	}
 	

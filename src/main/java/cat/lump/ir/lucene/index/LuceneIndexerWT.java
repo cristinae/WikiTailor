@@ -17,7 +17,6 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.util.Version;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.io.files.FileIO;
@@ -43,8 +42,6 @@ public class LuceneIndexerWT extends LuceneInterface{
 	
 	private static LumpLogger logger = 
 			new LumpLogger(LuceneIndexerWT.class.getSimpleName());
-
-	private final Version LUCENE_VERSION = Version.LUCENE_35;
 	
 	private Analyzer analyzer;
 	
@@ -169,14 +166,14 @@ public class LuceneIndexerWT extends LuceneInterface{
 		// and potentially allows for computing the cosine similarity between 
 		//documents' vectors 		
 		
-		doc.add(new Field("contents", new FileReader(f),       //Index file content
+		doc.add(new Field("contents", new FileReader(f),	//Index file content
 				TermVector.WITH_POSITIONS_OFFSETS)); 
 		
-		doc.add(new Field("filename", f.getName(),		       //Index file name
+		doc.add(new Field("filename", f.getName(),	//Index file name
 				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
 		
-		doc.add(new Field("fullpath", f.getCanonicalPath(),	   //Index file full path
-				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
+		doc.add(new Field("fullpath", f.getCanonicalPath(),	//Index file full path
+				Field.Store.YES, Field.Index.NOT_ANALYZED));
 		
 		//System.out.println(doc.toString());
 		

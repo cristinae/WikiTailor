@@ -12,7 +12,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.ir.lucene.LuceneInterface;
@@ -31,7 +30,7 @@ public class LuceneQuerier extends LuceneInterface{
 	
 	/**Lucene searcher instance */
 	private IndexSearcher searcher;
-	
+
 	/**Lucene parser*/
 	private QueryParser parser;
 	
@@ -75,7 +74,7 @@ public class LuceneQuerier extends LuceneInterface{
 		}		
 		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(Version.LUCENE_30, 
+		parser = new QueryParser(LUCENE_VERSION, 
 								"contents",
 								d2q.getAnalyzer()
 					);		

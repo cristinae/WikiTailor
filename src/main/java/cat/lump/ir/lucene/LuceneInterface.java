@@ -3,6 +3,8 @@ package cat.lump.ir.lucene;
 import java.io.File;
 import java.util.Locale;
 
+import org.apache.lucene.util.Version;
+
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.log.LumpLogger;
 
@@ -15,7 +17,9 @@ import cat.lump.aq.basics.log.LumpLogger;
  */
 public abstract class LuceneInterface {	
 
-  /**Directory where the Lucene index has to be stored*/
+	public static final Version LUCENE_VERSION = Version.LUCENE_35;
+	
+	/**Directory where the Lucene index has to be stored*/
 	protected static String indexDir;
 	
 	/**Language of the texts*/
@@ -24,7 +28,7 @@ public abstract class LuceneInterface {
 	protected boolean verbose = false;
 	
 	protected LumpLogger logger;
-	
+		
 	protected long PROCESS_START;
 //	protected long PROCESS_END;
 	

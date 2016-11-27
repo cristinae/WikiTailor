@@ -25,9 +25,9 @@ import org.apache.lucene.analysis.lv.LatvianAnalyzer;
 import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.ro.RomanianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.util.Version;
 
 import cat.lump.aq.basics.check.CHK;
+import cat.lump.ir.lucene.LuceneInterface;
 
 /**
  * Factory that allows for getting a Lucene {@code Analyzer} with all the preprocess needed 
@@ -39,7 +39,6 @@ import cat.lump.aq.basics.check.CHK;
  */
 public class AnalyzerFactory {
 	
-	private final static Version LUCENE_VERSION = Version.LUCENE_35;	
 	protected static Analyzer analyzer; 
 
 
@@ -55,52 +54,52 @@ public class AnalyzerFactory {
 		
 		switch(lang){
 		case "ar":
-			analyzer = new ArabicAnalyzer(LUCENE_VERSION);
+			analyzer = new ArabicAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "bg":
-			analyzer = new BulgarianAnalyzer(LUCENE_VERSION);
+			analyzer = new BulgarianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "ca":
-			analyzer = new CatalanAnalyzer(LUCENE_VERSION);
+			analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "cs":
-			analyzer = new CzechAnalyzer(LUCENE_VERSION);
+			analyzer = new CzechAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "de":
-			analyzer = new GermanAnalyzer(LUCENE_VERSION);
+			analyzer = new GermanAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "el":
-			analyzer = new GreekAnalyzer(LUCENE_VERSION);
+			analyzer = new GreekAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "en":
-			analyzer = new StandardAnalyzer(LUCENE_VERSION);
+			analyzer = new StandardAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "es":
-			analyzer = new SpanishAnalyzer(LUCENE_VERSION);
+			analyzer = new SpanishAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "eu":
-			analyzer = new BasqueAnalyzer(LUCENE_VERSION);
+			analyzer = new BasqueAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "fr":
-			analyzer = new FrenchAnalyzer(LUCENE_VERSION);
+			analyzer = new FrenchAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "it":
-			analyzer = new ItalianAnalyzer(LUCENE_VERSION);
+			analyzer = new ItalianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "lv":
-			analyzer = new LatvianAnalyzer(LUCENE_VERSION);
+			analyzer = new LatvianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;	
 		case "oc":
 			//TODO Solve this!
-			analyzer = new CatalanAnalyzer(LUCENE_VERSION);             
+			analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);             
 			CHK.CHECK(false, "Using the Catalan stemmer for language "+
 					language.getDisplayLanguage() );
 			break;
 		case "ro":
-			analyzer = new RomanianAnalyzer(LUCENE_VERSION);
+			analyzer = new RomanianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "pt":
-			analyzer = new PortugueseAnalyzer(LUCENE_VERSION);
+			analyzer = new PortugueseAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		default:
 			CHK.CHECK(false, "No Lucene Analyzer is available for language "+
@@ -141,7 +140,7 @@ public class AnalyzerFactory {
 		case "de":
 			break;
 		case "el":
-			ts = new GreekLowerCaseFilter(LUCENE_VERSION, ts);
+			ts = new GreekLowerCaseFilter(LuceneInterface.LUCENE_VERSION, ts);
 			ts = new GreekStemFilter(ts);
 			break;
 		case "en":
