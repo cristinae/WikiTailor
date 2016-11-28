@@ -102,6 +102,10 @@ public class B_EsaCategoryCentroidComputer {
   
     Set<String> articlesInDomain = getArticleIds();
     List<String> vectorFiles =  FileIO.getFilesRecursively(pathToFolder, ".obj");
+    LOGGER.info(                                              
+        String.format("Files considered from %s: %d ",        
+            pathToFolder.toString(), vectorFiles.size())      
+    );
     
     // Dictionary with the objects we need to load for the distances. Passed 
     // to method computeCentroid to be filled while computing the centroid
