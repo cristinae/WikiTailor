@@ -65,6 +65,11 @@
 		<version>3.5.0</version>
 	</dependency>
 	<dependency>
+		<groupId>org.apache.lucene</groupId>
+		<artifactId>lucene-queries</artifactId>
+		<version>3.5.0</version>
+	</dependency>
+	<dependency>
 		<groupId>org.apache.opennlp</groupId>
 		<artifactId>opennlp-tools</artifactId>
 		<version>1.5.3</version>
