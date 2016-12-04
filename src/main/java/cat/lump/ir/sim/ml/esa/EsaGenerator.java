@@ -4,6 +4,8 @@ import gnu.trove.map.hash.TIntIntHashMap;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -13,6 +15,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.similar.MoreLikeThis;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -21,6 +24,7 @@ import cat.lump.ir.lucene.query.Document2Query;
 import cat.lump.ir.lucene.engine.AnalyzerFactory;
 import cat.lump.aq.basics.algebra.vector.Vector;
 import cat.lump.aq.basics.check.CHK;
+import de.tudarmstadt.ukp.wikipedia.revisionmachine.common.logging.Logger;
 
 
 /**A class that allows for passing from a text (collection) 
@@ -32,13 +36,16 @@ import cat.lump.aq.basics.check.CHK;
 public class EsaGenerator {
 
 	/**Lucene instance*/
-	protected Analyzer analyzer;
+	protected final Analyzer analyzer;
 	
 	/**Path to the Lucene index*/
-	private File indexPath;
+	private final File indexPath;
 	
 	/**Lucene reader instance*/
 	private IndexReader reader; 
+	
+	/** Lucene MoreLikeThis instance */
+	private MoreLikeThis moreLikeThis;
 	
 	/**Lucene searcher instance */
 	private IndexSearcher searcher;
@@ -78,8 +85,8 @@ public class EsaGenerator {
 	 * @param language
 	 */
 	public EsaGenerator(File indexPath, Locale language){		
-		setAnalyzer(language);
-		setIndexPath(indexPath);
+	  analyzer = setAnalyzer(language);
+		this.indexPath = setIndexPath(indexPath);
 		
 		loadIndex();
 	}
@@ -89,8 +96,8 @@ public class EsaGenerator {
 	/**Set the Lucene analyzer to use according to the given language
 	 * @param myAnalyzer
 	 */
-	public void setAnalyzer(Locale lang){
-		analyzer = AnalyzerFactory.loadAnalyzer(lang);
+	public Analyzer setAnalyzer(Locale lang){
+		return AnalyzerFactory.loadAnalyzer(lang);
 		// Properly implement this if we really wan to analyse a language,
 		// even if we don't have its corresponding analyser.
 //		try {
@@ -108,13 +115,14 @@ public class EsaGenerator {
 //	
 	/**Set the path to Lucene's index
 	 * @param index_path
+	 * @return 
 	 */
-	public void setIndexPath(File indexPath){
+	public File setIndexPath(File indexPath){
 		if (!indexPath.isDirectory()) {
 			System.err.print("I cannot read the directory " + indexPath);
 			System.exit(1);			
 		}
-		this.indexPath = indexPath;
+		return  indexPath;
 	}
 	
 	/**Loads the Lucene index (previously created) with the reference 
@@ -131,6 +139,8 @@ public class EsaGenerator {
 		}		
 		
 		searcher = new IndexSearcher(reader);		
+    moreLikeThis = new MoreLikeThis(reader);
+
 		parser = new QueryParser(LuceneInterface.LUCENE_VERSION, 
 								"contents",
 								analyzer
@@ -204,6 +214,46 @@ public class EsaGenerator {
 		//System.out.println(vector.length());
 		return vector;
 	}
+	
+	
+	 public Vector computeVectorMoreLikeThis(String text) {
+	    float[] v = new float[docIds.size()];
+	    //used to normalize the fields at the end of the computation
+	    float maxSim = 0.0f;  
+	    
+	    boolean emptyQuery = false;
+	    
+	    //query the document and retrieve the top hits
+	    //TODO this is why the Doc2query class does not have an analyzer/language. It is set from here    
+	    String q = d2q.str2FlatQuery(analyzer, text);   
+	    //System.out.println(q);
+	    try {
+	      //Necessary if the query is empty (e.g. text ha stopwords only)
+	      Reader reader = new StringReader(text);
+	      Query query = moreLikeThis.like(reader);      
+	      TopDocs hits = searcher.search(query, searcher.maxDoc());
+
+	      //fill the array with the scores
+	      for (ScoreDoc scoreDoc : hits.scoreDocs) {      
+	        v[docIds.get(scoreDoc.doc)] = scoreDoc.score;
+	        maxSim = Math.max(maxSim, scoreDoc.score);
+	      }
+	    } catch (Exception e) {
+	      System.out.println(e);
+	      emptyQuery = true;
+	      v = new float[docIds.size()];
+
+	    }
+
+	    //create the vector and 
+	    Vector vector = new Vector(v);
+
+	    //normalize by max_sim if normalise_vector
+	    if (normaliseVector && ! emptyQuery)
+	      vector.divideEquals(maxSim);
+	    //System.out.println(vector.length());
+	    return vector;
+	  }
 	
 	
 	/**Determines whether the ESA vectors are going to be normalised.

@@ -36,19 +36,21 @@ import cat.lump.ir.lucene.engine.WTAnalyzer;
 public class LuceneIndexerWT extends LuceneInterface{
 	
 	/**Directory where the text files are located*/
-	private String dataDir;
-		
-	protected boolean verbose = false;
+  //TODO I think we don't need this to be global
+	private final String dataDir;
+	
+	/** The name for the field storing the contents */
+	public static final String CONTENTS_NAME = "contents";
+	
+	protected final boolean verbose = false;
 	
 	private static LumpLogger logger = 
 			new LumpLogger(LuceneIndexerWT.class.getSimpleName());
 	
-	private Analyzer analyzer;
+//	private final Analyzer analyzer;
 	
-	private IndexWriter writer;
-	
-	private int numIndexed = 0;
-	
+	private final IndexWriter INDEX_WRITER;
+		
 	/** Default invocation for English */
 	public LuceneIndexerWT(String dataDir, String indexDir){
 		this(Locale.ENGLISH, dataDir, indexDir);
@@ -56,40 +58,11 @@ public class LuceneIndexerWT extends LuceneInterface{
 	
 	public LuceneIndexerWT(Locale language, String dataDir, String indexDir){
 		super(indexDir);		
-		setLanguage(language);
-		setAnalyzer();
-		setDataDir(dataDir);
 		
-		
-		Directory dir = null;
-		try {
-			dir = FSDirectory.open(new File(indexDir));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		IndexWriterConfig iwc = new IndexWriterConfig(
-				LUCENE_VERSION, 
-				analyzer 	//the analyser of the considered language
-				);
-		//We use the simple similarity model (tf-only)
-//		iwc.setSimilarity(new TFSimilarity());		
-		//if we want to define a different similarity measure
-//		writer.setSimilarity(new DefaultSimilarity());
-		try {			 			
-			writer = new IndexWriter(dir,	//directory 
-									iwc);	//configuration
-		} catch (CorruptIndexException e) {
-			e.printStackTrace();
-		} catch (LockObtainFailedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		//create		
-		
+		this.dataDir = setDataDir(dataDir);		
+		INDEX_WRITER = getIndexWriter(language, indexDir);
 	}
-	
-	
+
 	public void index() throws IOException{
 		index(dataDir, new TextFilesFilter());		
 	}
@@ -120,44 +93,48 @@ public class LuceneIndexerWT extends LuceneInterface{
 				
 			}
 		}
-		numIndexed = writer.numDocs();
+
 		//ESBORRAR NOMES MIRO QUE FAIG
 		//IndexReader reader = IndexReader.open(writer, false);
 		//System.out.print(reader.getTermFreqVector(1, "contents").toString());
 	}
 	
 	/**
-	 * Closes the Lucene index
+	 * Closes the Lucene index and gives the number of indexed documents
 	 * @throws IOException
 	 */
 	public void close() throws IOException{
-		writer.close();	
-		logger.info(String.format(
-			"PROCESS TERMINATED\n %d documents indexed in %d miliseconds", 
-			numIndexed, System.currentTimeMillis() - PROCESS_START));	
+	  logger.info(String.format(
+	      "PROCESS TERMINATED:  %d documents indexed in %d miliseconds", 
+	      INDEX_WRITER.numDocs(), System.currentTimeMillis() - PROCESS_START)); 
+		INDEX_WRITER.close();	
+		
 	}
 	
 
 	/**
 	 * Sets the analyzer as a new instance of WTAnalyzer
-	 * @param LUCENE_VERSION
-	 * @param lan
+	 * @param language 
+	 *             The locale for the required language
+	 * @return
+	 *             An analyzer for the right Lucene version and locale.
 	 * 
 	 */
-	public void setAnalyzer(){
-		analyzer = new WTAnalyzer(LUCENE_VERSION, lan);
+	public Analyzer setAnalyzer(Locale language){
+		return new WTAnalyzer(LUCENE_VERSION, language);
 	}
 	
 	
-	public void setDataDir(String data){
+	public String setDataDir(String data){
 		CHK.CHECK_NOT_NULL(data);		
 		if (new File(data).isDirectory()){
 			logger.info("Data directory found");
-			dataDir = data;			
+						
 		} else {
 		   	logger.error("I cannot read the data directory");
 		   	System.exit(1);
-		}		    
+		}
+		return data;
 	}
 	
 	protected Document getDocument(File f) throws IOException{
@@ -166,7 +143,7 @@ public class LuceneIndexerWT extends LuceneInterface{
 		// and potentially allows for computing the cosine similarity between 
 		//documents' vectors 		
 		
-		doc.add(new Field("contents", new FileReader(f),	//Index file content
+		doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
 				TermVector.WITH_POSITIONS_OFFSETS)); 
 		
 		doc.add(new Field("filename", f.getName(),	//Index file name
@@ -180,10 +157,52 @@ public class LuceneIndexerWT extends LuceneInterface{
 		return doc;
 	}
 	
-	
+	 /**
+   * Checks that the indexPath exists and can be read. Sets up the writier for the 
+   * required language and (default) Lucene version.
+   * @param language
+   *               Language for the required documents
+   * @param indexPath
+   *               Path to the desired index directory. 
+   * @return
+   *       An IndexWrited with the necessary configuration.
+   */
+  private IndexWriter getIndexWriter(Locale language, String indexPath) {
+    IndexWriter idxWriter = null;
+    //Setup the index path
+    Directory indexDir = null;
+    try {
+      indexDir = FSDirectory.open(new File(indexPath));
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.exit(-1);
+    }
+
+    IndexWriterConfig iwc = new IndexWriterConfig(
+        LUCENE_VERSION, 
+        setAnalyzer(language)   //the analyser of the considered language
+        );
+    //We use the simple similarity model (tf-only)
+    //    iwc.setSimilarity(new TFSimilarity());    
+    //if we want to define a different similarity measure
+    //    writer.setSimilarity(new DefaultSimilarity());
+    try {           
+      idxWriter = new IndexWriter(indexDir, //directory 
+          iwc); //configuration
+    } catch (CorruptIndexException e) {
+      e.printStackTrace();
+    } catch (LockObtainFailedException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }   //create
+
+    return idxWriter;
+  }
+  
 	private void indexFile(File f) throws IOException{
 		Document doc = getDocument(f);
-		writer.addDocument(doc);
+		INDEX_WRITER.addDocument(doc);
 	}	
 	
 	public static class TextFilesFilter implements FileFilter{

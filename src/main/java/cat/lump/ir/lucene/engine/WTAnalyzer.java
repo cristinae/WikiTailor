@@ -29,9 +29,9 @@ public class WTAnalyzer extends Analyzer{
 
 	/** The language for this tokenisation, needed because of the modification 
 	 * TODO because of what modification??*/
-	private Locale lan;
+	private final Locale lan;
 	/** Lucene version*/
-	private Version LUCENE_VERSION;
+	private final Version LUCENE_VERSION;
 
 	  
 	public WTAnalyzer(Locale lan) {

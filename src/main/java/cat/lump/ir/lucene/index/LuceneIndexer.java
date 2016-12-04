@@ -67,6 +67,10 @@ public class LuceneIndexer extends LuceneInterface{
 	
 //	protected int n_gram_length;
 	
+  /** The name for the field storing the contents */
+  public static final String CONTENTS_NAME = "contents";
+
+  
 	/**Directory where the text files are located*/
 	private String dataDir;
 	
@@ -88,8 +92,8 @@ public class LuceneIndexer extends LuceneInterface{
 	public  LuceneIndexer(Locale language, String dataDir, String indexDir){
 		super(indexDir);		
 		setLanguage(language);
-		setAnalyzer();
-		setDataDir(dataDir);
+		this.analyzer = setAnalyzer();
+		this.dataDir = setDataDir(dataDir);
 		
 		
 		Directory dir = null;
@@ -169,7 +173,8 @@ public class LuceneIndexer extends LuceneInterface{
 	 * @param indexDir
 	 * @return
 	 */
-	public void setAnalyzer(){
+	public Analyzer setAnalyzer(){
+	  Analyzer analyzer;
 		switch (lan.getLanguage()) {
 			case "ar":	
 				analyzer = new ArabicAnalyzer(LUCENE_VERSION);
@@ -226,18 +231,20 @@ public class LuceneIndexer extends LuceneInterface{
 				logger.warn("I cannot process the required language. "
 						+ "English used.");
 				analyzer = new StandardAnalyzer(LUCENE_VERSION);
-		}		
+		}
+		return analyzer;
 	}
 	
-	public void setDataDir(String data){
+	public String setDataDir(String data){
 		CHK.CHECK_NOT_NULL(data);		
 		if (new File(data).isDirectory()){
 			logger.info("Data directory found");
-			dataDir = data;			
+						
 		} else {
 		   	logger.error("I cannot read the data directory");
 		   	System.exit(1);
-		}		    
+		}		
+		return data;
 	}
 	
 	protected Document getDocument(File f) throws IOException{
@@ -246,7 +253,7 @@ public class LuceneIndexer extends LuceneInterface{
 		// and potentially allows for computing the cosine similarity between 
 		//documents' vectors 		
 		
-		doc.add(new Field("contents", new FileReader(f),	//Index file content
+		doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
 				TermVector.WITH_POSITIONS_OFFSETS)); 
 		
 		doc.add(new Field("filename", f.getName(),	//Index file name

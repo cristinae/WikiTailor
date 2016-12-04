@@ -20,7 +20,7 @@ public abstract class LuceneInterface {
 	public static final Version LUCENE_VERSION = Version.LUCENE_35;
 	
 	/**Directory where the Lucene index has to be stored*/
-	protected static String indexDir;
+	protected final String indexDir;
 	
 	/**Language of the texts*/
 	protected Locale lan;
@@ -37,8 +37,8 @@ public abstract class LuceneInterface {
 	 */
 	public LuceneInterface(String indexDir){
 		logger = new LumpLogger("Lucene");
-		CHK.CHECK_NOT_NULL(indexDir);
-		setIndexDir(indexDir);
+		
+		this.indexDir = setIndexDir(indexDir);
 		//lan = Locale.ENGLISH;
 		PROCESS_START = System.currentTimeMillis();		 
 	}
@@ -59,15 +59,16 @@ public abstract class LuceneInterface {
 		this.lan = lan;
 	}
 	
-	public void setIndexDir(String ind){
+	public String setIndexDir(String ind){
 		CHK.CHECK_NOT_NULL(ind);		
 		if (new File(ind).isDirectory()){
 			logger.info("Index directory found");
-			indexDir = ind;
 		} else {
 		   	logger.error("I cannot read the index directoy");
 		   	System.exit(1);	
 		}
+		
+		return ind;
 	}
 
 
