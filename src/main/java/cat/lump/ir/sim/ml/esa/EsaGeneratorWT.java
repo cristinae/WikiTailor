@@ -12,7 +12,7 @@ import cat.lump.ir.lucene.engine.WTAnalyzer;
  * into its ESA vector representation.
  * 
  * Different to EsaGenerator, in this case the analysers, and other
- * preprocessing tools used, are the same as in the rest of *WT
+ * pre-processing tools used, are the same as in the rest of *WT
  * classes.
  * 
  * In the near future the classes should converge into one single 
@@ -43,7 +43,7 @@ public class EsaGeneratorWT extends EsaGenerator{
 	 * @param myAnalyzer
 	 */
 	@Override
-	public Analyzer setAnalyzer(Locale lang){
+	protected Analyzer getAnalyzer(Locale lang){
 		return new WTAnalyzer(LuceneInterface.LUCENE_VERSION, lang);
 		// Properly implement this if we really wan to analyse a language,
 		// even if we don't have its corresponding analyser.

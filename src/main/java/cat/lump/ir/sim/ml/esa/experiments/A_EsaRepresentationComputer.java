@@ -38,14 +38,18 @@ import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
  */
 public class A_EsaRepresentationComputer {
 
-	private static LumpLogger logger = 
+	private static final LumpLogger logger = 
 			new LumpLogger (A_EsaRepresentationComputer.class.getSimpleName());
 
-	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors";
+	private static final String DEFAULT_INPUT_FILE_EXT = "txt";
 	
+	private static final String DEFAULT_OUTPUT_FILE_SUFFIX = "esa_vectors";
+		
 	private static final String DEFAULT_OUTPUT_FILE_EXT = "obj";
 	
 	private static final int MAX_VECTORS_PER_FILE = 5000;
+	
+	private final boolean COMPUTE_MORE_LIKE_THIS = true;
 	
 	private static File inputPath ;
 	
@@ -59,27 +63,39 @@ public class A_EsaRepresentationComputer {
 	}
 	 
 	private void computeVectors() throws IOException {
-		List<String> files = FileIO.getFilesRecursively(inputPath, "txt");
+		List<String> files = FileIO.getFilesRecursively(inputPath, DEFAULT_INPUT_FILE_EXT);
 		VectorStorageSparse esaVectors = new VectorStorageSparse();
 		int counter =0;
 		int idx = 0;
+		esaGen.displayDocIds();
 		for (String f : files) {
 			//System.out.println(f);
-			esaVectors.add(
-					getIdFromFile(f), 
-					esaGen.computeVector(FileIO.fileToString(new File(f))).get()
-			);
+		  System.out.println(getIdFromFile(f));
+		  if (COMPUTE_MORE_LIKE_THIS) {
+  			esaVectors.add(
+  					getIdFromFile(f), 
+  					esaGen.computeVectorMoreLikeThis(FileIO.fileToString(new File(f))).get()
+  			);
+			} else {
+			  esaVectors.add(
+	          getIdFromFile(f), 
+	          esaGen.computeVector(FileIO.fileToString(new File(f))).get()
+	      );
+			}
 			
 			if (counter > 0 && counter % MAX_VECTORS_PER_FILE == 0) {
 				//Save the current instances into an obj file.
 				//reset the esaVectors (remove all the current instances)
 				
-				logger.info("Storing the vectors up to " + counter);
+			  String outFile = String.format("%s.%d.%s", outputFile, idx++, DEFAULT_OUTPUT_FILE_EXT);
+			  
+				logger.info(String.format("Storing the vectors up to %d in %s", counter, outFile));
 				// TODO move this to xxx.idx.obj instead of xxx.obj.idx. This was currently made
 				// manually on previously-generated vectors
 				FileIO.writeObject(
 						esaVectors, 
-						new File(String.format("%s.%d.%s", outputFile, idx++, DEFAULT_OUTPUT_FILE_EXT))
+//						new File(String.format("%s.%d.%s", outputFile, idx++, DEFAULT_OUTPUT_FILE_EXT))
+						new File(outFile)
 						);
 				    
 				

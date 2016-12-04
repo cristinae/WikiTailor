@@ -22,6 +22,7 @@ import org.apache.lucene.store.FSDirectory;
 import cat.lump.ir.lucene.LuceneInterface;
 import cat.lump.ir.lucene.query.Document2Query;
 import cat.lump.ir.lucene.engine.AnalyzerFactory;
+import cat.lump.ir.lucene.index.LuceneIndexerWT;
 import cat.lump.aq.basics.algebra.vector.Vector;
 import cat.lump.aq.basics.check.CHK;
 import de.tudarmstadt.ukp.wikipedia.revisionmachine.common.logging.Logger;
@@ -35,34 +36,28 @@ import de.tudarmstadt.ukp.wikipedia.revisionmachine.common.logging.Logger;
  */
 public class EsaGenerator {
 
-	/**Lucene instance*/
-	protected final Analyzer analyzer;
-	
-	/**Path to the Lucene index*/
-	private final File indexPath;
+	/**Lucene analyzer instance*/
+	protected final Analyzer LUCENE_ANALYZER;
 	
 	/**Lucene reader instance*/
-	private IndexReader reader; 
+	private IndexReader INDEX_READER; 
 	
 	/** Lucene MoreLikeThis instance */
-	private MoreLikeThis moreLikeThis;
+	private final MoreLikeThis MORE_LIKE_THIS;
 	
 	/**Lucene searcher instance */
-	private IndexSearcher searcher;
+	private final IndexSearcher INDEX_SEARCHER;
 	
 	/**Lucene parser*/
-	private QueryParser parser;
-	
-	/**Dimension of the reference index */
-	private int indexDimension;
+	private final QueryParser QUERY_PARSER;
 	
 	/**identifiers for the reference corpus documents within the index. */
-	private TIntIntHashMap docIds;	
+	private final TIntIntHashMap DOCUMENT_IDS;	
 	
 	/**Whether the characteristic vector is going to be normalized*/
 	private Boolean normaliseVector = false;
 		
-	private final Document2Query d2q = new Document2Query();
+	private final Document2Query D2Q;
 	
 	/**Invokes an instance of the EsaGenerator by loading the index and the 
 	 * analyzer for the required language
@@ -85,27 +80,60 @@ public class EsaGenerator {
 	 * @param language
 	 */
 	public EsaGenerator(File indexPath, Locale language){		
-	  analyzer = setAnalyzer(language);
-		this.indexPath = setIndexPath(indexPath);
-		
-		loadIndex();
+	  indexPath = checkIndexPath(indexPath);
+	  D2Q = new Document2Query();
+	  
+	  LUCENE_ANALYZER = getAnalyzer(language);
+
+	  Directory dir;
+	  try {
+	    dir = FSDirectory.open(indexPath);
+	    INDEX_READER = IndexReader.open(dir);
+	  } catch (IOException e) {
+	    e.printStackTrace();
+	  }   
+
+	  INDEX_SEARCHER = new IndexSearcher(INDEX_READER);  
+	  
+	  MORE_LIKE_THIS = new MoreLikeThis(INDEX_READER);
+	  MORE_LIKE_THIS.setAnalyzer(LUCENE_ANALYZER);
+	  System.out.println(MORE_LIKE_THIS.describeParams());
+	  MORE_LIKE_THIS.setMinTermFreq(1);
+	  QUERY_PARSER = new QueryParser(LuceneInterface.LUCENE_VERSION, 
+	      LuceneIndexerWT.CONTENTS_NAME,
+	      LUCENE_ANALYZER
+	      );    
+	  DOCUMENT_IDS = loadDocIds();   
 	}
+
+//	
+//	 /**Loads the Lucene index (previously created) with the reference 
+//   * corpus.
+//   * @throws IOException
+//   */
+//  public void loadIndex(){
+//    Directory dir;
+//    try {
+//      dir = FSDirectory.open(indexPath);
+//      reader = IndexReader.open(dir);
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }   
+//    
+//    searcher = new IndexSearcher(reader);   
+//    moreLikeThis = new MoreLikeThis(reader);
+//
+//    parser = new QueryParser(LuceneInterface.LUCENE_VERSION, 
+//                "contents",
+//                analyzer
+//          );    
+//    indexDimension = reader.numDocs();    
+//    loadDocIds();   
+//  }
 	
 	
 	
-	/**Set the Lucene analyzer to use according to the given language
-	 * @param myAnalyzer
-	 */
-	public Analyzer setAnalyzer(Locale lang){
-		return AnalyzerFactory.loadAnalyzer(lang);
-		// Properly implement this if we really wan to analyse a language,
-		// even if we don't have its corresponding analyser.
-//		try {
-//			analyzer = AnalyzerFactory.loadAnalyzer(lang);
-//		} catch (){
-//			analyzer = AnalyzerFactory.loadAnalyzer(new Locale("en"));
-//		}
-	}
+
 	
 //	private void setLanguage(String lang){
 //		CHK.CHECK(! LuceneLanguages.isIndexAvailable(lang), 
@@ -113,64 +141,12 @@ public class EsaGenerator {
 //		language = new Locale(lang);
 //	}
 //	
-	/**Set the path to Lucene's index
-	 * @param index_path
-	 * @return 
-	 */
-	public File setIndexPath(File indexPath){
-		if (!indexPath.isDirectory()) {
-			System.err.print("I cannot read the directory " + indexPath);
-			System.exit(1);			
-		}
-		return  indexPath;
-	}
-	
-	/**Loads the Lucene index (previously created) with the reference 
-	 * corpus.
-	 * @throws IOException
-	 */
-	public void loadIndex(){
-		Directory dir;
-		try {
-			dir = FSDirectory.open(indexPath);
-			reader = IndexReader.open(dir);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
-		
-		searcher = new IndexSearcher(reader);		
-    moreLikeThis = new MoreLikeThis(reader);
 
-		parser = new QueryParser(LuceneInterface.LUCENE_VERSION, 
-								"contents",
-								analyzer
-					);		
-		indexDimension = reader.numDocs();		
-		loadDocIds();		
-	}
 	
-	/**
-	 * @return the dimension of the index (henceforth, the vector)
-	 */
-	public int getIndexDimension(){
-		return indexDimension;
-	}
+
 	
-	/**
-	 * Loads the identifiers for the documents. Indeed, the index for the 
-	 * arrays should be the same as for the index. However, an index document 
-	 * could have been deleted, hence leaving behind an empty number.
-	 */
-	private void loadDocIds()	{		
-		docIds = new TIntIntHashMap();		
-		int j = 0;
-		
-		for (int i=0; i<reader.maxDoc(); i++) {
-		    if (reader.isDeleted(i))
-		        continue;
-		    docIds.put(i, j++);
-		}	
-	}
+
+
 	
 	/**Computes the ESA vector representation for the given text.  
 	 *
@@ -178,7 +154,7 @@ public class EsaGenerator {
 	 * @return
 	 */
 	public Vector computeVector(String text) {
-		float[] v = new float[docIds.size()];
+		float[] v = new float[DOCUMENT_IDS.size()];
 		//used to normalize the fields at the end of the computation
 		float maxSim = 0.0f;	
 		
@@ -186,22 +162,23 @@ public class EsaGenerator {
 		
 		//query the document and retrieve the top hits
 		//TODO this is why the Doc2query class does not have an analyzer/language. It is set from here		
-		String q = d2q.str2FlatQuery(analyzer, text);		
+		String q = D2Q.str2FlatQuery(LUCENE_ANALYZER, text);		
 		//System.out.println(q);
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
-			Query query = parser.parse(q);			
-			TopDocs hits = searcher.search(query, searcher.maxDoc());
+			Query query = QUERY_PARSER.parse(q);			
+			TopDocs hits = INDEX_SEARCHER.search(query, INDEX_SEARCHER.maxDoc());
 
 			//fill the array with the scores
 			for (ScoreDoc scoreDoc : hits.scoreDocs) {			
-				v[docIds.get(scoreDoc.doc)] = scoreDoc.score;
+				v[DOCUMENT_IDS.get(scoreDoc.doc)] = scoreDoc.score;
 				maxSim = Math.max(maxSim, scoreDoc.score);
 			}
 		} catch (Exception e) {
-		  System.out.println(e);
-			emptyQuery = true;
-			v = new float[docIds.size()];
+//		  System.out.println(e);
+		  CHK.CHECK(false, "e");
+//			emptyQuery = true;
+//			v = new float[DOCUMENT_IDS.size()];
 
 		}
 
@@ -212,12 +189,13 @@ public class EsaGenerator {
 		if (normaliseVector && ! emptyQuery)
 			vector.divideEquals(maxSim);
 		//System.out.println(vector.length());
+		System.out.println(vector.toString());
 		return vector;
 	}
 	
 	
 	 public Vector computeVectorMoreLikeThis(String text) {
-	    float[] v = new float[docIds.size()];
+	    float[] v = new float[DOCUMENT_IDS.size()];
 	    //used to normalize the fields at the end of the computation
 	    float maxSim = 0.0f;  
 	    
@@ -225,23 +203,23 @@ public class EsaGenerator {
 	    
 	    //query the document and retrieve the top hits
 	    //TODO this is why the Doc2query class does not have an analyzer/language. It is set from here    
-	    String q = d2q.str2FlatQuery(analyzer, text);   
+//	    String q = D2Q.str2FlatQuery(LUCENE_ANALYZER, text);   
 	    //System.out.println(q);
 	    try {
 	      //Necessary if the query is empty (e.g. text ha stopwords only)
 	      Reader reader = new StringReader(text);
-	      Query query = moreLikeThis.like(reader);      
-	      TopDocs hits = searcher.search(query, searcher.maxDoc());
+	      Query query = MORE_LIKE_THIS.like(reader, LuceneIndexerWT.CONTENTS_NAME);      
+	      TopDocs hits = INDEX_SEARCHER.search(query, INDEX_SEARCHER.maxDoc());
 
 	      //fill the array with the scores
 	      for (ScoreDoc scoreDoc : hits.scoreDocs) {      
-	        v[docIds.get(scoreDoc.doc)] = scoreDoc.score;
+	        v[DOCUMENT_IDS.get(scoreDoc.doc)] = scoreDoc.score;
 	        maxSim = Math.max(maxSim, scoreDoc.score);
 	      }
 	    } catch (Exception e) {
 	      System.out.println(e);
 	      emptyQuery = true;
-	      v = new float[docIds.size()];
+	      v = new float[DOCUMENT_IDS.size()];
 
 	    }
 
@@ -252,10 +230,24 @@ public class EsaGenerator {
 	    if (normaliseVector && ! emptyQuery)
 	      vector.divideEquals(maxSim);
 	    //System.out.println(vector.length());
+	    System.out.println(vector.toString());
 	    return vector;
 	  }
 	
 	
+	  /**
+	   * @return the dimension of the index (henceforth, the vector)
+	   */
+	  public int getIndexDimension(){
+	    return INDEX_READER.numDocs();
+	  }
+	  
+	 
+	  public void displayDocIds() {
+	    
+	    System.out.println(DOCUMENT_IDS);
+	  }
+	  
 	/**Determines whether the ESA vectors are going to be normalised.
 	 * <br>
 	 * If true, the vectors are normalised by the maximum score in order 
@@ -274,11 +266,57 @@ public class EsaGenerator {
 	 */
 	protected void finalize() {				
 		try {
-			searcher.close();
-			reader.close();
+			INDEX_SEARCHER.close();
+			INDEX_READER.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 	}
+
+  
+   /**Set the Lucene analyzer to use according to the given language
+   * @param myAnalyzer
+   */
+  protected Analyzer getAnalyzer(Locale lang){
+    return AnalyzerFactory.loadAnalyzer(lang);
+    // Properly implement this if we really wan to analyse a language,
+    // even if we don't have its corresponding analyser.
+//    try {
+//      analyzer = AnalyzerFactory.loadAnalyzer(lang);
+//    } catch (){
+//      analyzer = AnalyzerFactory.loadAnalyzer(new Locale("en"));
+//    }
+  }
 	
+  /**Set the path to Lucene's index
+   * @param index_path
+   * @return 
+   */
+  private File checkIndexPath(File indexPath){
+    if (!indexPath.isDirectory()) {
+      System.err.print("I cannot read the directory " + indexPath);
+      System.exit(1);     
+    }
+    return  indexPath;
+  }
+  
+  /**
+  * Loads the identifiers for the documents. Indeed, the index for the 
+  * arrays should be the same as for the index. However, an index document 
+  * could have been deleted, hence leaving behind an empty number.
+  * @return 
+  */
+ private TIntIntHashMap loadDocIds() {   
+   TIntIntHashMap ids = new TIntIntHashMap();    
+   int j = 0;
+   
+   for (int i=0; i<INDEX_READER.maxDoc(); i++) {
+       if (INDEX_READER.isDeleted(i))
+           continue;
+       ids.put(i, j++);
+   }
+   return ids;
+ }
+  
+  
 }
