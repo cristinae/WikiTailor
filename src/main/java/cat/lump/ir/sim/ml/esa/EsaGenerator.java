@@ -189,7 +189,7 @@ public class EsaGenerator {
 				maxSim = Math.max(maxSim, scoreDoc.score);
 			}
 		} catch (Exception e) {
-
+		  System.out.println(e);
 			emptyQuery = true;
 			v = new float[docIds.size()];
 
