@@ -67,10 +67,8 @@ public class A_EsaRepresentationComputer {
 		VectorStorageSparse esaVectors = new VectorStorageSparse();
 		int counter =0;
 		int idx = 0;
-		esaGen.displayDocIds();
-		for (String f : files) {
-			//System.out.println(f);
-		  System.out.println(getIdFromFile(f));
+//		esaGen.displayDocIds();
+		for (String f : files) {			
 		  if (COMPUTE_MORE_LIKE_THIS) {
   			esaVectors.add(
   					getIdFromFile(f), 

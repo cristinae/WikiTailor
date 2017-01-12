@@ -278,14 +278,14 @@ public class Vector implements Serializable{
 	@Override
 	public String toString() {
 	  StringBuilder sb = new StringBuilder();
-	  sb.append("[");
+	  sb.append("[ ");
 	  for (int i = 0 ; i < vector.length ; i++){
 	    sb.append(vector[i])
 	      .append("\t");
 	  }
 	  
 	  sb.deleteCharAt(sb.length() - 1);
-    sb.append("]");
+    sb.append(" ]");
 	  
 	  return sb.toString();
 	}

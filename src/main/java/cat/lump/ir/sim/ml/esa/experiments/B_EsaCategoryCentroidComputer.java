@@ -103,7 +103,7 @@ public class B_EsaCategoryCentroidComputer {
     Set<String> articlesInDomain = getArticleIds();
     List<String> vectorFiles =  FileIO.getFilesRecursively(pathToFolder, ".obj");
     LOGGER.info(                                              
-        String.format("Files considered from %s: %d ",        
+        String.format("Vector files considered from %s: %d ",        
             pathToFolder.toString(), vectorFiles.size())      
     );
     
@@ -156,6 +156,7 @@ public class B_EsaCategoryCentroidComputer {
   computeCentroid(List<String> vectorFiles, Set<String> articlesInDomain,
       Map<String, Set<String>> filesWithDomainArticles) {
 
+    LOGGER.info(String.format("Number of articles in the domain: %s", articlesInDomain.size()));
     float[] centroid= new float[ESA_CARDINALITY];
     int counter = 0;
     VectorStorageAbstract vss;
@@ -186,6 +187,9 @@ public class B_EsaCategoryCentroidComputer {
         for (Map.Entry<Integer, Float> dimensionValuePair : vss.getValues(id).entrySet()) {
           centroid[dimensionValuePair.getKey()] += dimensionValuePair.getValue();
         }
+      }
+      if (counter == articlesInDomain.size()) {
+        break;
       }
     }
     
