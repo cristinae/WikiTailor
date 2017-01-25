@@ -24,7 +24,7 @@ import cat.lump.ir.sim.ml.esa.SimilarityESA;
  * @author albarron
  * @version     0.2.2                   
  *  
- * @see  cat.lump.ir.sim.Esa# 
+ * @see  cat.lump.ir.sim.ml.esa.SimilarityESA#
  */
 public abstract class SimilarityCLESA extends SimilarityESA{
 	
