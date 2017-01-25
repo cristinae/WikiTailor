@@ -37,7 +37,7 @@ public class LuceneIndexerWT extends LuceneInterface{
 	
 	/**Directory where the text files are located*/
   //TODO I think we don't need this to be global
-	private final String dataDir;
+	protected final String dataDir;
 	
 	/** The name for the field storing the contents */
 	public static final String CONTENTS_NAME = "contents";
@@ -167,7 +167,7 @@ public class LuceneIndexerWT extends LuceneInterface{
    * @return
    *       An IndexWrited with the necessary configuration.
    */
-  private IndexWriter getIndexWriter(Locale language, String indexPath) {
+  protected IndexWriter getIndexWriter(Locale language, String indexPath) {
     IndexWriter idxWriter = null;
     //Setup the index path
     Directory indexDir = null;
