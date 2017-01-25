@@ -18,6 +18,8 @@ import cat.lump.aq.basics.algebra.vector.Vector;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.aq.textextraction.wikipedia.experiments.CorrelationsxCategory;
+import cat.lump.ir.retrievalmodels.similarity.SimilarityMeasure;
+import cat.lump.ir.retrievalmodels.similarity.VectorCosine;
 import cat.lump.ir.sim.ml.esa.EsaGenerator;
 import cat.lump.ir.sim.ml.esa.EsaGeneratorWT;
 
@@ -95,9 +97,9 @@ public class CLEsaSimilarityComputer {
 		Vector src;
 		Vector trg;
 		String[] lines = FileIO.fileToLines(INPUT_FILE);
-		
+		SimilarityMeasure cosine = new VectorCosine();
 		BufferedWriter bf = new BufferedWriter(new FileWriter(OUTPUT_FILE));
-		
+		double cos;
 		for (int i = 0 ; i < lines.length ; i ++) {
 		  String[] pair = lines[i].split("\t");
 		
@@ -108,8 +110,10 @@ public class CLEsaSimilarityComputer {
 			  src = new Vector(esaGen.computeVector(pair[0]).get());
         trg = new Vector(esaGen2.computeVector(pair[1]).get());
 			}
-		  System.out.println(cosineSim(src, trg));
-		  bf.write(String.valueOf(cosineSim(src, trg)));
+		  
+		  cos=cosine.compute(src, trg);
+		  System.out.println(cos);
+		  bf.write(String.valueOf(cos));
 		  bf.write("\n");
 		}
 		
