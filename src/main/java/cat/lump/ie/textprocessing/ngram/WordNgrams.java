@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Map;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.ie.textprocessing.Decomposition;
@@ -102,6 +103,11 @@ public  class WordNgrams implements Decomposition{
 		return result;
 	}
 	
+	public Map<String, Integer> getFreqs(String text) {
+	  System.err.println("Method not implemented yet");
+	  System.exit(-1);
+	  return null;
+	}
 	
 //	public List<String> getNgramStrings(String[] t){
 //		StringBuffer sb = new StringBuffer();

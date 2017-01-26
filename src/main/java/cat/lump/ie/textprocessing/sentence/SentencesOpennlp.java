@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -107,5 +108,11 @@ public class SentencesOpennlp implements Decomposition{
 		}
 		return mySpans;		
 	}
+
+  @Override
+  public Map<String, Integer> getFreqs(String text) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
 }
