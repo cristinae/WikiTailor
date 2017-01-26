@@ -80,17 +80,18 @@ public class CharacterNgrams  implements Decomposition{
 				
 		return ngr;	
 	}	
-
-	public Map<String, Integer> getFreqs(String text) {
-	  Map<String, Integer> ngr = new LinkedHashMap<String, Integer>();
-	  for (String n : getStrings(text)) {
-	    if (! ngr.containsKey(n)) {
-	      ngr.put(n, 0);
-	    }
-	    ngr.put(n, ngr.get(n)+1);
-	  }
-	  return ngr;
-	}
+	
+//	@Override
+//	public Map<String, Integer> getFreqs(String text) {
+//	  Map<String, Integer> ngr = new LinkedHashMap<String, Integer>();
+//	  for (String n : getStrings(text)) {
+//	    if (! ngr.containsKey(n)) {
+//	      ngr.put(n, 0);
+//	    }
+//	    ngr.put(n, ngr.get(n)+1);
+//	  }
+//	  return ngr;
+//	}
 	
 	
 	

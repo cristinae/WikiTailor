@@ -109,10 +109,10 @@ public class SentencesOpennlp implements Decomposition{
 		return mySpans;		
 	}
 
-  @Override
-  public Map<String, Integer> getFreqs(String text) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+//  @Override
+//  public Map<String, Integer> getFreqs(String text) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
 
 }

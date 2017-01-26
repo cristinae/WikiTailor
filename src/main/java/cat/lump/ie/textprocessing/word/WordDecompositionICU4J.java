@@ -73,11 +73,11 @@ public class WordDecompositionICU4J implements Decomposition{
 		return spans;
 	}
 
-  @Override
-  public Map<String, Integer> getFreqs(String text) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+//  @Override
+//  public Map<String, Integer> getFreqs(String text) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
 	
 	
 	

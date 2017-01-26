@@ -15,7 +15,7 @@ public interface Decomposition {
 	//TODO we here consider the spans only, instead of returning the actual text
 	public abstract List<Span> getSpans(String text);
 
-	public abstract Map<String, Integer> getFreqs(String text);
+//	public abstract Map<String, Integer> getFreqs(String text);
 	
 }
 
