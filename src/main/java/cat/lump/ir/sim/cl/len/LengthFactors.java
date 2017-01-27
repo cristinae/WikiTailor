@@ -67,6 +67,9 @@ public class LengthFactors {
     {1.056 , 0.545},  //en-eu  // TODO idem
     {1.005 , 0.087},	//ca-es  // From El Periodico
     {1.002 , 0.094},	//es-ca  // FIXME It seems it should be closer to the inverse ca-es
+    // this last factor is intended for comparing texts in the same language
+    {1.000 , 0.317}
+    
   };	
 	
 	/**Stores the index to access the different default values */
@@ -89,6 +92,9 @@ public class LengthFactors {
 			put("en-eu", 13);
 			put("ca-es", 14);
 			put("es-ca", 15);
+			put("en-en", 16);
+			put("es-es", 16);
+			put("ar-ar", 16);
 		}};
      	
 	/**

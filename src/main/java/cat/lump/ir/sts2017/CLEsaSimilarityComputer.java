@@ -65,6 +65,8 @@ public class CLEsaSimilarityComputer {
 	/** Has the index for the second language */
 	private static EsaGenerator esaGen2;
 	
+	private final int FEATURE_NUMBER = 3;
+	
 	/**
 	 * Load the index for the first language 
 	 * @param path
