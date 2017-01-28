@@ -23,7 +23,7 @@ import cat.lump.aq.basics.check.CHK;
  * <ul>
  * <li>casefolding</li>
  * <li>if it's a cognate exclusively composed of letters, then it's truncated to
- * 4 letters</li>
+ * 4 letters (by default)</li>
  * </ul>
  * 
  * WARN: Code copied from cat.talp.lump.aq.text.SimardCognateness (project lump)
@@ -39,11 +39,19 @@ public class PseudoCognates extends Representation {
 	private final static int JUST_LETTERS = 2;
 	private final static int PUNCTUATION = 3;
 
-	protected PseudoCognates(Dictionary dictionary, Locale language) {
-		super(dictionary, language);
-		// TODO Auto-generated constructor stub
+	private final static int TRUNCATE_DEFAULT = 4;
+	private static int TRUNCATE_TO;
+	
+	public PseudoCognates(Dictionary dictionary, Locale language) {
+		this(dictionary, language, TRUNCATE_DEFAULT);
 	}
 
+	public PseudoCognates(Dictionary dictionary, Locale language, int truncateTo) {
+    super(dictionary, language);
+    TRUNCATE_TO = truncateTo;
+  }
+
+	
 	@Override
 	public void setText(String text) {
 		CHK.CHECK_NOT_NULL(text);
@@ -86,7 +94,7 @@ public class PseudoCognates extends Representation {
 			return text.toLowerCase();
 
 		if (kindIsLetters(getKind(text)))
-			return text.toLowerCase().substring(0, 4);
+			return text.toLowerCase().substring(0, TRUNCATE_TO);
 		return "";
 	}
 

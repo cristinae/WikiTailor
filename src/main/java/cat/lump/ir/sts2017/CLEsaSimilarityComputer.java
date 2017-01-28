@@ -231,6 +231,7 @@ public class CLEsaSimilarityComputer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+//		-f /data/alt/corpora/semeval2017/task1/en.train.1_fold/MINI_ENGLISH_ARABIC.txt -l en -m ar -x /data/alt/corpora/semeval2017/task1/clesa/index
 		
 	}
 	
