@@ -17,7 +17,7 @@ import cat.lump.aq.basics.algebra.vector.Vector;
 //import cat.lump.aq.basics.algebra.vector.VectorStorageSparse;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
-import cat.lump.aq.textextraction.wikipedia.experiments.CorrelationsxCategory;
+//import cat.lump.aq.textextraction.wikipedia.experiments.CorrelationsxCategory;
 import cat.lump.ir.retrievalmodels.similarity.SimilarityMeasure;
 import cat.lump.ir.retrievalmodels.similarity.VectorCosine;
 import cat.lump.ir.sim.ml.esa.EsaGenerator;
@@ -67,6 +67,8 @@ public class CLEsaSimilarityComputer {
 	
 	private final int FEATURE_NUMBER = 3;
 	
+	private static final int MIN_DOC_FREQ = 2;
+	
 	/**
 	 * Load the index for the first language 
 	 * @param path
@@ -76,7 +78,7 @@ public class CLEsaSimilarityComputer {
 	 */
 	private static void loadIndex(String path, String lan) {
 	  path = String.format("%s%s%s", path, File.separator, lan);
-		esaGen = new EsaGeneratorWT(new File(path), new Locale(lan));
+		esaGen = new EsaGeneratorWT(new File(path), new Locale(lan), MIN_DOC_FREQ);
 	}
 	
 	 /**
@@ -88,7 +90,7 @@ public class CLEsaSimilarityComputer {
    */
   private static void loadIndex2(String path, String lan) {
     path = String.format("%s%s%s", path, File.separator, lan);
-    esaGen2 = new EsaGeneratorWT(new File(path), new Locale(lan));
+    esaGen2 = new EsaGeneratorWT(new File(path), new Locale(lan), MIN_DOC_FREQ);
   }
 	
 	
@@ -114,7 +116,7 @@ public class CLEsaSimilarityComputer {
 			}
 		  
 		  cos=cosine.compute(src, trg);
-		  System.out.println(cos);
+//		  System.out.println(cos);
 		  bf.write(String.valueOf(cos));
 		  bf.write("\n");
 		}
@@ -167,7 +169,7 @@ public class CLEsaSimilarityComputer {
 		   ) {
 			logger.error("Please, provide the necessary parameters");
 			//formatter.printHelp(widthFormatter, command, header, options, footer, true)
-			formatter.printHelp(CorrelationsxCategory.class.getSimpleName(),options);
+			formatter.printHelp(CLEsaSimilarityComputer.class.getSimpleName(),options);
 			System.exit(1);
 		}
 		

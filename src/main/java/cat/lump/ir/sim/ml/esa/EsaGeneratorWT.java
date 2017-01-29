@@ -23,6 +23,10 @@ import cat.lump.ir.lucene.engine.WTAnalyzer;
  */
 public class EsaGeneratorWT extends EsaGenerator{
 
+  public EsaGeneratorWT(File indexPath, Locale language, int minimumDocFreq) {
+    super(indexPath, language, minimumDocFreq);
+  }
+  
 	/**Invokes an instance of the EsaGenerator by loading the index and the 
 	 * analyzer for the required language
 	 * 

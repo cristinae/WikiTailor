@@ -46,6 +46,8 @@ public class EsaGenerator {
   
   private final int MINIMUM_TERM_FREQ = 1;
   
+  private static final int MINIMUM_DOC_FREQ_DEFAULT = 4;
+  
 	/** Lucene analyzer instance */
 	protected final Analyzer LUCENE_ANALYZER;
 	
@@ -84,6 +86,12 @@ public class EsaGenerator {
 //		loadIndex();
 //	}	
 	
+	
+	public EsaGenerator(File indexPath, Locale language) {
+	  this(indexPath, language, MINIMUM_DOC_FREQ_DEFAULT);
+	}
+	
+	
 	/**
 	 * Invokes an instance of the EsaGenerator by loading the index and the 
 	 * analyzer for the required language
@@ -93,7 +101,7 @@ public class EsaGenerator {
 	 * @param language
 	 *               locale of the language in hand
 	 */
-	public EsaGenerator(File indexPath, Locale language){		
+	public EsaGenerator(File indexPath, Locale language, int minimumDocFreq){		
 	  indexPath = checkIndexPath(indexPath);
 	  D2Q = new Document2Query();
 	  
@@ -112,6 +120,7 @@ public class EsaGenerator {
 	  MORE_LIKE_THIS = new MoreLikeThis(INDEX_READER);
 	  MORE_LIKE_THIS.setAnalyzer(LUCENE_ANALYZER);
 	  MORE_LIKE_THIS.setMinTermFreq(MINIMUM_TERM_FREQ);
+	  MORE_LIKE_THIS.setMinDocFreq(minimumDocFreq);
 	  
 	  QUERY_PARSER = new QueryParser(LuceneInterface.LUCENE_VERSION, 
 	      LuceneIndexerWT.CONTENTS_NAME,
