@@ -46,7 +46,7 @@ import java.util.Map;
  *
  */
 public class LengthFactors {
-
+  
 	/**Stores the default mean and sd values for different language pairs.
 	 * The values are only for test purposes. They should be confirmed */
 	private static final double means_sd[][] = {
@@ -58,7 +58,8 @@ public class LengthFactors {
     {1.176 , 0.926},	//en-de
     {1.133 , 0.415},	//en-es
     {1.158 , 0.411},	//en-fr
-    {1.157 , 0.678},	//en-ru	      	      
+    {1.157 , 0.678},	//en-ru
+    {1.040 , 0.577},  //en-tr
     {0.926 , 0.441},	//es-en
     {0.914 , 0.313},	//fr-en
     {1.069 , 0.668},	//ru-en	
@@ -68,8 +69,8 @@ public class LengthFactors {
     {1.005 , 0.087},	//ca-es  // From El Periodico
     {1.002 , 0.094},	//es-ca  // FIXME It seems it should be closer to the inverse ca-es
     // this last factor is intended for comparing texts in the same language
+    {1.112 , 0.564},  //tr-en
     {1.000 , 0.317}
-    
   };	
 	
 	/**Stores the index to access the different default values */
@@ -85,16 +86,18 @@ public class LengthFactors {
 			put("en-es", 6);
 			put("en-fr", 7);
 			put("en-ru", 8);
-			put("es-en", 9);
-			put("fr-en", 10);
-			put("ru-en", 11);
-			put("es-eu", 12);
-			put("en-eu", 13);
-			put("ca-es", 14);
-			put("es-ca", 15);
-			put("en-en", 16);
-			put("es-es", 16);
-			put("ar-ar", 16);
+			put("en-tr", 9);
+			put("es-en", 10);
+			put("fr-en", 11);
+			put("ru-en", 12);
+			put("es-eu", 13);
+			put("en-eu", 14);
+			put("ca-es", 15);
+			put("es-ca", 16);
+			put("tr-en", 17);
+			put("en-en", 18);
+			put("es-es", 18);
+			put("ar-ar", 18);
 		}};
      	
 	/**
