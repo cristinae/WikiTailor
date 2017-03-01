@@ -66,6 +66,21 @@ public class LengthFactors {
 	      {1.002 , 0.094},	//es-ca  // FIXME It seems it should be closer to the inverse ca-es
 	    };	
 	
+	/*
+	    Some factors obtained within the clubs project and semeval2017
+	    
+		{0.946, 0.663}, //de-en	     
+		{1.167, 0.766}, //en-de
+		{0.996, 0.314}, //de-es
+		{1.105, 1.323}, //es-de
+		{1.023, 0.537}, //fr-de
+		{1.030, 0.304}, //de-fr 
+		{1.044, 0.381}, //es-fr 
+		{1.016, 0.326}, //es-fr 
+		{1.112, 0.564}, //tr-en
+		{1.040, 0.577}, //en-tr
+	*/
+	
 	/**Stores the index to access the different default values */
 	private static final Map<String, Integer> index = new HashMap<String, Integer>(){
 		private static final long serialVersionUID = 1L;
