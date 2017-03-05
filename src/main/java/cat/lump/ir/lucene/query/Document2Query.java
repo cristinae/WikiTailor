@@ -100,7 +100,6 @@ public class Document2Query {
 
 	
 	/**Generates a query in which every token has the same relevance
-	 * @param analyzer
 	 * @param text string representation of the query
 	 * @return string with space-separated tokens
 	 */

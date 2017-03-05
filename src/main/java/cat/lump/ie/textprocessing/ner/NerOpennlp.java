@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import opennlp.tools.namefind.NameFinderME;
 import opennlp.tools.namefind.TokenNameFinderModel;
@@ -157,6 +158,12 @@ public class NerOpennlp implements Decomposition{
 			}
 		}
 	}
+
+//  @Override
+//  public Map<String, Integer> getFreqs(String text) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
 
 
 }

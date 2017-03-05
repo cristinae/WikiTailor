@@ -161,7 +161,7 @@ public class LengthModelEstimate {
 	 * @param trgLen Length of the target text
 	 * @return Length factor between source and target text
 	 */
-	private double lengthFactor(double srcLen, double trgLen) {
+	public double lengthFactor(double srcLen, double trgLen) {
 		double inner = ((trgLen / srcLen) - mu) / sigma;
 		double pot = -0.5 * Math.pow(inner, 2);
 		return Math.exp(pot);

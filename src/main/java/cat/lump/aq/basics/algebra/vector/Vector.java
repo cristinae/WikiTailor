@@ -275,6 +275,22 @@ public class Vector implements Serializable{
 			vector[i] = vector[i] * value;
 	}
 
+	@Override
+	public String toString() {
+	  StringBuilder sb = new StringBuilder();
+	  sb.append("[ ");
+	  for (int i = 0 ; i < vector.length ; i++){
+	    sb.append(vector[i])
+	      .append("\t");
+	  }
+	  
+	  sb.deleteCharAt(sb.length() - 1);
+    sb.append(" ]");
+	  
+	  return sb.toString();
+	}
+	
+	
 //	/**Crops the vector to the given length.
 //	 * @param newLength
 //	 * @return true if cropping was possible

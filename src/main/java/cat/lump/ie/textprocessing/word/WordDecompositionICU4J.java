@@ -3,6 +3,7 @@ package cat.lump.ie.textprocessing.word;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.ie.textprocessing.Decomposition;
@@ -71,6 +72,12 @@ public class WordDecompositionICU4J implements Decomposition{
 		
 		return spans;
 	}
+
+//  @Override
+//  public Map<String, Integer> getFreqs(String text) {
+//    // TODO Auto-generated method stub
+//    return null;
+//  }
 	
 	
 	

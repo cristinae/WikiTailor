@@ -1,7 +1,9 @@
 package cat.lump.ie.textprocessing.ngram;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.ie.textprocessing.Decomposition;
@@ -78,7 +80,21 @@ public class CharacterNgrams  implements Decomposition{
 				
 		return ngr;	
 	}	
-
+	
+//	@Override
+//	public Map<String, Integer> getFreqs(String text) {
+//	  Map<String, Integer> ngr = new LinkedHashMap<String, Integer>();
+//	  for (String n : getStrings(text)) {
+//	    if (! ngr.containsKey(n)) {
+//	      ngr.put(n, 0);
+//	    }
+//	    ngr.put(n, ngr.get(n)+1);
+//	  }
+//	  return ngr;
+//	}
+	
+	
+	
 	@Override
 	public List<Span> getSpans(String text) {
 		// TODO Auto-generated method stub
