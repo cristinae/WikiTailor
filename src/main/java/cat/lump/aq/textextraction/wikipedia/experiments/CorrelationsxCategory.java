@@ -75,7 +75,7 @@ public class CorrelationsxCategory {
 
 	/** Model from which we obtain the vocabulary 
 	 * (we want to be sure that it includes the top 10% terms) */
-	private String modelVocab = "0.5";
+	private String modelVocab = "0.5--1";
 
 	/** Path to the directory where the original articles are stored. */
 	private String rootDirectory;
@@ -144,9 +144,9 @@ public class CorrelationsxCategory {
 
 		//TODO Aixo es una guarrada feta pq han canviat el nom de les carpetes
 		//arreglar!!
-		if (lang.equalsIgnoreCase("ar") || lang.equalsIgnoreCase("el")){
-			modelVocab = "0.5--1";
-		}
+		//if (lang.equalsIgnoreCase("ar") || lang.equalsIgnoreCase("el")){
+		//	modelVocab = "0.5--1";
+		//}
 		File vocabulary = new File(folder.toString() + FileIO.separator + modelVocab + FileIO.separator);
 		String fileName = lookForFile(vocabulary, "dict");
 		File vocabularyF;
