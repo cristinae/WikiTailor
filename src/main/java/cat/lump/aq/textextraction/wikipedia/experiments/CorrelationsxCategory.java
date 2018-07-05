@@ -91,6 +91,7 @@ public class CorrelationsxCategory {
 		this.model = model;
 		this.modelRef = modelRef;
 		this.rootDirectory = path;
+		// this was for a concrete experiment 
 		if (model.equalsIgnoreCase("500") || model.equalsIgnoreCase("0.5-500")){
 			extractedArticlesExt = "ranked.extracted.articles";
 		}
