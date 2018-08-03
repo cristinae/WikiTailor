@@ -18,7 +18,7 @@ import cat.lump.aq.basics.check.CheckFailedError;
  * <li/> Euclidean distance against another vector (--> scalar)
  * </ul>
  * 
- * Properties of the vector ---magnitude, max, min, argmax, and argmin---
+ * Properties of the vector ---magnitude, max, min, median, argmax, and argmin---
  * are available as well.
  * <br/>
  * This class is partially inspired by Jama 

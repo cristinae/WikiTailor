@@ -3,6 +3,7 @@
 ### Set of selected categories
 
 The file `commonCats2015.enesdefrcaareuelrooc.tsv` contains the 743 categories in ten languages used in the empirical analysis of:
+
 * Cristina España-Bonet, Alberto Barrón-Cedeño and Lluís Màrquez.
 **Tailoring Wikipedia for in-Domain Comparable Corpora Extraction**.
 In preparation
