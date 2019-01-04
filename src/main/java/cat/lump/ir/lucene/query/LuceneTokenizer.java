@@ -24,13 +24,16 @@ import org.apache.lucene.analysis.el.GreekAnalyzer;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.eu.BasqueAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.hu.HungarianAnalyzer;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.ro.RomanianAnalyzer;
+import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 import cat.lump.ir.lucene.LuceneInterface;
+import cat.lump.ir.lucene.index.analyzers.LithuanianAnalyzer;
 import cat.lump.aq.basics.log.LumpLogger;
 
 
@@ -96,14 +99,23 @@ public class LuceneTokenizer {
 			case "fr":
 				analyzer = new FrenchAnalyzer(LuceneInterface.LUCENE_VERSION);
 				break;
+			case "hu":
+				analyzer = new HungarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				break;
 			case "it":
 				analyzer = new ItalianAnalyzer(LuceneInterface.LUCENE_VERSION);
 				break;
+			case "lt":
+				analyzer = new LithuanianAnalyzer();
+				break;	
 			case "pt":
 				analyzer = new PortugueseAnalyzer(LuceneInterface.LUCENE_VERSION);
 				break;
 			case "ro":
 				analyzer = new RomanianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				break;
+			case "ru":
+				analyzer = new RussianAnalyzer(LuceneInterface.LUCENE_VERSION);
 				break;
 			default:
 				log.warn("I cannot process the required language.");
