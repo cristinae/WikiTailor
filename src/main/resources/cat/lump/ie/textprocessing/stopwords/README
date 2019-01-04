@@ -41,14 +41,19 @@ From Lucene 3.5
 
 ______________________
 
-Czech stopwords
+Lithuanian, Czech stopwords
 
 From Lucene 3.5
-
+https://raw.githubusercontent.com/apache/lucene-solr/master/lucene/analysis/common/src/resources/org/apache/lucene/analysis/lt/stopwords.txt
 ______________________
 
-Italian stopwords
+Hungarian, Italian stopwords
 
 From Snowball
 
+______________________
+
+Russian stopwords
+
+https://pypi.org/project/stop-words/#files
 
