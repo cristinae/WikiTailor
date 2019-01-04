@@ -123,10 +123,16 @@ public class Stopwords {
 			model = "eu.sw";
 		} else if (language.equals(new Locale("fr"))){
 			model = "fr.sw";
+		} else if (language.equals(new Locale("hu"))){
+			model = "hu.sw";
 		} else if (language.equals(new Locale("it"))){
 			model = "it.sw";
+		} else if (language.equals(new Locale("lt"))){
+			model = "lt.sw";
 		} else if (language.equals(new Locale("ro"))){
 			model = "ro.sw";
+		} else if (language.equals(new Locale("ru"))){
+			model = "ru.sw";
 		} else if (language.equals(new Locale("oc"))){
 			model = "oc.sw";
 		} else if (language.equals(new Locale("pt"))){

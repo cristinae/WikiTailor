@@ -20,7 +20,8 @@ import org.tartarus.snowball.ext.swedishStemmer;
 import org.tartarus.snowball.ext.turkishStemmer;
 import org.tartarus.snowball.ext.contributed.basqueStemmer;
 import org.tartarus.snowball.ext.contributed.catalanStemmer;
-
+import org.tartarus.snowball.ext.contributed.czechStemmer;
+import org.tartarus.snowball.ext.contributed.lithuanianStemmer;
 
 import cat.lump.aq.basics.check.CHK;
 
@@ -45,6 +46,7 @@ public class StemmerFactory {
 		
 		if (l.equals("eu"))			return new basqueStemmer();
 		else if (l.equals("ca"))	return new catalanStemmer();
+		else if (l.equals("cs"))	return new czechStemmer();   //TODO check
 		else if (l.equals("oc"))	return new catalanStemmer();	//TODO we need an Occitan stemmer
 		else if (l.equals("da"))	return new danishStemmer();
 		else if (l.equals("nl"))	return new dutchStemmer();
@@ -54,6 +56,7 @@ public class StemmerFactory {
 		else if (l.equals("de"))	return new germanStemmer();
 		else if (l.equals("hu"))	return new hungarianStemmer(); 	//TODO check
 		else if (l.equals("it"))	return new italianStemmer();
+		else if (l.equals("lt"))	return new lithuanianStemmer();  //TODO check
 		else if (l.equals("no"))	return new norwegianStemmer();
 		else if (l.equals("pt"))	return new portugueseStemmer();
 		else if (l.equals("ro"))	return new romanianStemmer();

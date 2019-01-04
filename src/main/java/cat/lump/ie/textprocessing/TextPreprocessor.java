@@ -176,7 +176,7 @@ public class TextPreprocessor{
 			pattern = String.format("[\\p{IsArabic}\\p{Alnum}]{%d,}", minimumSize);
 		} else if(language.toString().equalsIgnoreCase("el"))  {
 			pattern = String.format("[\\p{IsGreek}\\p{Alnum}]{%d,}", minimumSize);			
-		} else if(language.toString().equalsIgnoreCase("bg"))  {
+		} else if(language.toString().equalsIgnoreCase("bg") || language.toString().equalsIgnoreCase("ru"))  {
 			pattern = String.format("[\\p{IsCyrillic}\\p{Alnum}]{%d,}", minimumSize);			
 		} else {
 			pattern = String.format("[\\p{Alnum}]{%d,}", minimumSize);
@@ -204,7 +204,7 @@ public class TextPreprocessor{
 			pattern = String.format("[\\p{IsArabic}\\p{Alpha}]{%d,}", minimumSize);
 		} else if(language.toString().equalsIgnoreCase("el"))  {
 			pattern = String.format("[\\p{IsGreek}\\p{Alpha}]{%d,}", minimumSize);			
-		} else if(language.toString().equalsIgnoreCase("bg"))  {
+		} else if(language.toString().equalsIgnoreCase("bg") || language.toString().equalsIgnoreCase("ru"))  {
 			pattern = String.format("[\\p{IsCyrillic}\\p{Alpha}]{%d,}", minimumSize);			
 		} else {
 			pattern = String.format("[\\p{Alpha}]{%d,}", minimumSize);

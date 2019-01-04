@@ -27,7 +27,7 @@ public class Languages {
 		put("el", Language.greek);			put("hi", Language.hindi);
 		put("it", Language.italian);		put("lv", Language.latvian);
 		put("lt", Language.lithuanian);		put("pt", Language.portuguese);
-		put("ro", Language.romanian);
+		put("ro", Language.romanian);       put("hu", Language.hungarian);
 		put("ru", Language.russian);		put("sl", Language.slovenian);
 		put("es", Language.spanish);		put("oc", Language.occitan);
 	}};
