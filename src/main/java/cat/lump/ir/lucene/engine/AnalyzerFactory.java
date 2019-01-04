@@ -20,14 +20,17 @@ import org.apache.lucene.analysis.el.GreekStemFilter;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.analysis.eu.BasqueAnalyzer;
 import org.apache.lucene.analysis.fr.FrenchAnalyzer;
+import org.apache.lucene.analysis.hu.HungarianAnalyzer;
 import org.apache.lucene.analysis.it.ItalianAnalyzer;
 import org.apache.lucene.analysis.lv.LatvianAnalyzer;
 import org.apache.lucene.analysis.pt.PortugueseAnalyzer;
 import org.apache.lucene.analysis.ro.RomanianAnalyzer;
+import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.ir.lucene.LuceneInterface;
+import cat.lump.ir.lucene.index.analyzers.LithuanianAnalyzer;
 
 /**
  * Factory that allows for getting a Lucene {@code Analyzer} with all the preprocess needed 
@@ -83,9 +86,15 @@ public class AnalyzerFactory {
 		case "fr":
 			analyzer = new FrenchAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
+		case "hu":
+			analyzer = new HungarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			break;
 		case "it":
 			analyzer = new ItalianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
+		case "lt":
+			analyzer = new LithuanianAnalyzer();
+			break;	
 		case "lv":
 			analyzer = new LatvianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;	
@@ -97,6 +106,9 @@ public class AnalyzerFactory {
 			break;
 		case "ro":
 			analyzer = new RomanianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			break;
+		case "ru":
+			analyzer = new RussianAnalyzer(LuceneInterface.LUCENE_VERSION);
 			break;
 		case "pt":
 			analyzer = new PortugueseAnalyzer(LuceneInterface.LUCENE_VERSION);
