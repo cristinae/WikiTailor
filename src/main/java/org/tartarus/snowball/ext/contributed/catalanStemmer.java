@@ -15,8 +15,6 @@ import org.tartarus.snowball.Among;
 
 public class catalanStemmer extends org.tartarus.snowball.SnowballStemmer {
 
-
-
         private final static catalanStemmer methodObject = new catalanStemmer ();
 
                 private final static Among a_0[] = {
