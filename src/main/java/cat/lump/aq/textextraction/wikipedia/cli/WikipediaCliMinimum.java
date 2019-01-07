@@ -171,7 +171,6 @@ public abstract class WikipediaCliMinimum {
 		System.exit(0);
 	}
 	
-	
 	/* 
 	 * Getters 
 	 */

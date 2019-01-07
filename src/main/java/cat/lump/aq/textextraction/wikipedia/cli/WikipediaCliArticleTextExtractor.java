@@ -95,5 +95,5 @@ public class WikipediaCliArticleTextExtractor extends WikipediaCliMinimum{
 	{
 		return directory;
 	}
-	
+
 }

@@ -23,8 +23,9 @@ import cat.lump.aq.basics.check.CHK;
 public class Dump {
 	
 	/**The file with a list of the available dumps */
-	private static final String CONFIG_FILE="cat/lump/aq/wikilink/config/availableDumps.properties";
-
+	//private static final String CONFIG_FILE="cat/lump/aq/wikilink/config/availableDumps.properties";
+	private static final String CONFIG_FILE="./configs/availableDumps.properties";
+	
 	/**The locale for the given dump */
 	private Locale locale;
 	
@@ -79,16 +80,21 @@ public class Dump {
 				
 		Class<Dump> c = Dump.class;
 		try {
-			File configPath = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-//			String configFile = configPath.getParent().toString().concat(CONFIG_FILE);
-			//InputStreamReader isr = new InputStreamReader(new FileInputStream(CONFIG_FILE), Charset.forName("UTF-8"));
-			InputStreamReader isr = new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(CONFIG_FILE));
-			p.load(isr);
-			isr.close();
+			//Configuration with config file within the jar
+			//	File configPath = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+//			// String configFile = configPath.getParent().toString().concat(CONFIG_FILE);
+			// //InputStreamReader isr = new InputStreamReader(new FileInputStream(CONFIG_FILE), Charset.forName("UTF-8"));
+			// InputStreamReader isr = new InputStreamReader(ClassLoader.getSystemClassLoader().getResourceAsStream(CONFIG_FILE));
+			// p.load(isr);
+			// isr.close();
+			
+			//Configuration with config file outside the jar
+			p.load(new FileInputStream(CONFIG_FILE));						
+
 		} catch (IOException e) { 
 			e.printStackTrace(); 
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+		//} catch (URISyntaxException e) {
+	    //		e.printStackTrace();
 		}
 		
 		
