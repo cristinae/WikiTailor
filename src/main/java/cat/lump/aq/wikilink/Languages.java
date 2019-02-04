@@ -30,6 +30,7 @@ public class Languages {
 		put("ro", Language.romanian);       put("hu", Language.hungarian);
 		put("ru", Language.russian);		put("sl", Language.slovenian);
 		put("es", Language.spanish);		put("oc", Language.occitan);
+		put("gu", Language.gujarati);
 	}};
 	
 	

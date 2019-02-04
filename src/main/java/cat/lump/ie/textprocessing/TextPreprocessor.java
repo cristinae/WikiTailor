@@ -22,6 +22,9 @@ import cat.lump.ie.textprocessing.word.StemmerFactory;
 import cat.lump.ie.textprocessing.word.WordDecompositionICU4J;
 //import cat.lump.ie.textprocessing.sentence.Punctuation;
 
+import cat.lump.aq.basics.log.LumpLogger;
+import cat.lump.aq.textextraction.wikipedia.experiments.CorrelationsxCategory;
+
 /**
  * <p>
  * This class represents an "interface" to the different text processing tools 
@@ -43,6 +46,7 @@ import cat.lump.ie.textprocessing.word.WordDecompositionICU4J;
  *  carried out on a copy
  * </p>
  * @author albarron
+ * @author cristinae
  *
  */
 public class TextPreprocessor{
@@ -79,9 +83,9 @@ public class TextPreprocessor{
 	// MDots to normalise
 	private final static Pattern r_mdot_norm = Pattern.compile("(…|\\.\\.)");
 	private final static String s_mdot_norm = "...";
-
 		
-	
+	private static LumpLogger logger = new LumpLogger (TextPreprocessor.class.getSimpleName());
+
 	//Constructors
 	
 	public TextPreprocessor(Locale lan)
@@ -105,17 +109,17 @@ public class TextPreprocessor{
 		if (StemmerFactory.loadStemmer(language) != null){
 			isSnowball = true;
 			stemmer = StemmerFactory.loadStemmer(language);	
-		} else{
-//		if (langS.equalsIgnoreCase("ar") ||
-//			langS.equalsIgnoreCase("el")) {
+		} else if (language.toString().equalsIgnoreCase("gu")) {
+			logger.warn("Please, add a stemmer for Gujarati, using English now (co, no doing anything!)");
+			isSnowball = true;
+			stemmer = StemmerFactory.loadStemmer(Locale.ENGLISH);	
+		} else {
 			isSnowball = false;
 		    analyzer = AnalyzerFactoryLucene.loadAnalyzer(language); 
-//		} else{
 		}
 	}
 	
-	// Public
-	
+	// Public	
 	/**Converts the string to lowercase */
 	public void toLowerCase(){
 		for (int i = 0 ; i<tokens.size() ; i++)
@@ -174,6 +178,8 @@ public class TextPreprocessor{
 		String pattern;
 		if (language.toString().equalsIgnoreCase("ar")) {	
 			pattern = String.format("[\\p{IsArabic}\\p{Alnum}]{%d,}", minimumSize);
+		} else if(language.toString().equalsIgnoreCase("gu"))  {
+			pattern = String.format("[\\p{IsGujarati}\\p{Alnum}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("el"))  {
 			pattern = String.format("[\\p{IsGreek}\\p{Alnum}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("bg") || language.toString().equalsIgnoreCase("ru"))  {
@@ -202,6 +208,8 @@ public class TextPreprocessor{
 		String pattern;
 		if (language.toString().equalsIgnoreCase("ar")) {	
 			pattern = String.format("[\\p{IsArabic}\\p{Alpha}]{%d,}", minimumSize);
+		} else if(language.toString().equalsIgnoreCase("gu"))  {
+			pattern = String.format("[\\p{IsGujarati}\\p{Alpha}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("el"))  {
 			pattern = String.format("[\\p{IsGreek}\\p{Alpha}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("bg") || language.toString().equalsIgnoreCase("ru"))  {

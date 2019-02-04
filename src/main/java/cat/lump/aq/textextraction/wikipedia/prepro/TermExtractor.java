@@ -71,9 +71,14 @@ public class TermExtractor {
 		if (locale.toString().equalsIgnoreCase("ar")) {	
 			prepro.removeEngStopwords();
 			prepro.removeNonAlphabetic(3);
-		} else if (locale.toString().equalsIgnoreCase("el")) {	
+		} else if (locale.toString().equalsIgnoreCase("el")  || locale.toString().equalsIgnoreCase("bg")
+				|| locale.toString().equalsIgnoreCase("ru") ) {	
 			prepro.removeEngStopwords();
 			prepro.removeDiacritics();
+			prepro.removeNonAlphabetic(minimumSize);
+		} else if (locale.toString().equalsIgnoreCase("gu")) {	
+			prepro.removeEngStopwords();
+			prepro.removeDiacritics();  //TODO see how to deal with Gujarati here
 			prepro.removeNonAlphabetic(minimumSize);
 		} else {
 			prepro.removeDiacritics();
