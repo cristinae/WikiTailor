@@ -346,7 +346,7 @@ public class CommonNamespaceFinder {
 			}
 			
  
-			logger.warn(" at ID  " + iter.toString());
+			// logger.warn(" at ID  " + iter.toString());
 			
 //			printArticlesIDFile(prefix+"intersection", intersectionList, false); // print last round of articles
 			printArticlesIDFile(prefix+"intersection", sb.toString(), false); // print last round of articles
@@ -700,7 +700,7 @@ public class CommonNamespaceFinder {
 		try {
 			File exe = new File(c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 			command = "java -cp " + exe.getName() + ' ' +c.getCanonicalName();
-			footer = "\nEx: "+ command +" -y 2015 -f ca.591034.4.articles  en.691182.4.articles  es.1733769.4.articles \n";
+			footer = "\nEx: "+ command +" -y 2015 -f ca.591034.4.articles  en.691182.4.articles  es.1733769.4.articles -n \n";
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
