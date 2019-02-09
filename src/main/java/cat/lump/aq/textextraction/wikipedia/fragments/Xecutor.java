@@ -17,10 +17,14 @@ import cat.lump.aq.textextraction.wikipedia.utilities.CommonArticlesFinder;
  * 
  * It covers from the alignment of the articles in the different languages to the
  * extraction of the comparable fragments as those with the highest similarity
+ * 
+ * Deprecated before finished in favor of ParallelSenteceExtractor
  *  
  * @author cristina
+ * @since Mar 3, 2015
  *
  */
+@Deprecated
 public class Xecutor {
 		
 	private Locale locale1;
