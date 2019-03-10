@@ -82,6 +82,7 @@ public abstract class MySQLWikiConfiguration {
 	 * page and langlinks tables.
 	 * @return the prefix for the dump
 	 */
+	
 	public static String getDBprefix(){
 		return db_prefix;
 	}

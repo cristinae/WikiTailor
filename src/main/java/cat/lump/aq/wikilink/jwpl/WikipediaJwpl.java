@@ -74,7 +74,6 @@ public class WikipediaJwpl extends Wikipedia {
 	 * 
 	 * @param lang
 	 * @param year
-	 *            can be only "2010", "2012", or "2013"
 	 * @throws WikiApiException
 	 */
 	public WikipediaJwpl(Locale lang, int year) throws WikiApiException {
