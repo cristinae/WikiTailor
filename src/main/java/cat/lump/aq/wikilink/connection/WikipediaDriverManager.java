@@ -118,7 +118,7 @@ class DB{
 			// nohup.arExtraction.outLoading class `com.mysql.jdbc.Driver'. This is deprecated. 
 			// The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered 
 			// via the SPI and manual loading of the driver class is generally unnecessary.
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			//Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection conn = DriverManager.getConnection(db_connect_string, db_userid, db_password);
 			logger.info("Connected to DB");
 			return conn;

@@ -11,7 +11,7 @@ import cat.lump.ir.retrievalmodels.document.RepresentationType;
 //import cat.talp.lump.ir.structures.InvIndexContainer;
 
 /**
- * An article object is the abstraction of a document to translate whith its
+ * An article object is the abstraction of a document to translate with its
  * related information.</br>
  * The related information is:</br>
  * <ul>
