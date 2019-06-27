@@ -141,6 +141,8 @@ public class Stopwords {
 			model = "pt.sw";
 		} else if (language.equals(new Locale("ar"))){
 			model = "ar.sw";
+		} else if (language.equals(new Locale("simple"))){
+			model = "en.sw";
 		} else {
 			CHK.CHECK(false, "No stopwords are available for the given language");
 		}	

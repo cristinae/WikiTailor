@@ -113,6 +113,9 @@ public class TextPreprocessor{
 			logger.warn("Please, add a stemmer for Gujarati, using English now (co, no doing anything!)");
 			isSnowball = true;
 			stemmer = StemmerFactory.loadStemmer(Locale.ENGLISH);	
+		} else if (language.toString().equalsIgnoreCase("simple")) {
+			isSnowball = true;
+			stemmer = StemmerFactory.loadStemmer(Locale.ENGLISH);	
 		} else {
 			isSnowball = false;
 		    analyzer = AnalyzerFactoryLucene.loadAnalyzer(language); 

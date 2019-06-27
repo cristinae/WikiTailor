@@ -8,7 +8,7 @@ import cat.lump.aq.basics.check.CHK;
 import de.tudarmstadt.ukp.wikipedia.api.WikiConstants.Language;
 
 /**
- * A collection of all the available languages in Wikipedia up to 2015
+ * A collection of all the available languages in Wikipedia up to 2019
  * 
  * @author albarron
  */
@@ -30,7 +30,7 @@ public class Languages {
 		put("ro", Language.romanian);       put("hu", Language.hungarian);
 		put("ru", Language.russian);		put("sl", Language.slovenian);
 		put("es", Language.spanish);		put("oc", Language.occitan);
-		put("gu", Language.gujarati);
+		put("gu", Language.gujarati);       put("simple", Language.simple_english);
 	}};
 	
 	
