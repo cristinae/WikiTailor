@@ -148,19 +148,20 @@ public class CommonNamespaceFinder {
 		
 		String[] langs = new String[numLangs]; 
 		for (int i=0; i<numLangs; ++i) {			
+			int lanEndPos = filesID[i].indexOf(".");
 			if (filesID[i].contains(File.separator)) {
 				/* The input files include a path. Therefore the language has to be loaded from the last
-				 * file separator and filesID does not require any adaptation. */				
+				 * file separator and filesID does not require any adaptation. */	
 				langs[i] = filesID[i].substring(
 						filesID[i].lastIndexOf(File.separator)+1, 
-						filesID[i].lastIndexOf(File.separator)+3);
-				//filesID[i] = path.concat(FileIO.separator).concat(filesID[i]);
+//						filesID[i].lastIndexOf(File.separator)+3);
+						lanEndPos);
 				
 			} else {
 				/* The input files includes no path. Therefore the current path is added to filesID. */
-				langs[i] = filesID[i].substring(0, 2);
+				//langs[i] = filesID[i].substring(0, 2);
+				langs[i] = filesID[i].substring(0, lanEndPos);
 				filesID[i] = String.format("%s%s%s", path, File.separator, filesID[i]); 
-//				filesID[i] = path.concat(FileIO.separator).concat(filesID[i]);
 			}
 			
 		}		
