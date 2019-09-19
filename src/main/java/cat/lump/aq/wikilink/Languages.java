@@ -21,14 +21,14 @@ public class Languages {
 	{
 		put("ar", Language.arabic);			
 		put("bg", Language.bulgarian);
- 	        put("cs", Language.czech);
+ 	    put("cs", Language.czech);
 		put("ca", Language.catalan);		
 		put("de", Language.german);
 		put("el", Language.greek);			
 		put("en", Language.english);		
 		put("et", Language.estonian);
 		put("es", Language.spanish);		
-                put("eu", Language.basque);
+        put("eu", Language.basque);
  		put("fr", Language.french);			
 		put("gu", Language.gujarati);       
 		put("hi", Language.hindi);
@@ -41,7 +41,7 @@ public class Languages {
 		put("pt", Language.portuguese);
 		put("ro", Language.romanian);       
 		put("ru", Language.russian);		
-		put("si", Language.sinhali);
+		put("si", Language.sinhalese);
 		put("sl", Language.slovenian);
 		put("oc", Language.occitan);
 		put("simple", Language.simple_english);
