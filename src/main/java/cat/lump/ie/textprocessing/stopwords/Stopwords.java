@@ -131,6 +131,8 @@ public class Stopwords {
 			model = "it.sw";
 		} else if (language.equals(new Locale("lt"))){
 			model = "lt.sw";
+		} else if (language.equals(new Locale("ne"))){
+			model = "ne.sw";
 		} else if (language.equals(new Locale("ro"))){
 			model = "ro.sw";
 		} else if (language.equals(new Locale("ru"))){
