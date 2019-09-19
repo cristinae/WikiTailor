@@ -109,8 +109,12 @@ public class TextPreprocessor{
 		if (StemmerFactory.loadStemmer(language) != null){
 			isSnowball = true;
 			stemmer = StemmerFactory.loadStemmer(language);	
+		} else if (language.toString().equalsIgnoreCase("ne")) {
+			logger.warn("Please, add a stemmer for Nepali, using English now (so, no doing anything!)");
+			isSnowball = true;
+			stemmer = StemmerFactory.loadStemmer(Locale.ENGLISH);	
 		} else if (language.toString().equalsIgnoreCase("gu")) {
-			logger.warn("Please, add a stemmer for Gujarati, using English now (co, no doing anything!)");
+			logger.warn("Please, add a stemmer for Gujarati, using English now (so, no doing anything!)");
 			isSnowball = true;
 			stemmer = StemmerFactory.loadStemmer(Locale.ENGLISH);	
 		} else if (language.toString().equalsIgnoreCase("simple")) {
@@ -181,8 +185,12 @@ public class TextPreprocessor{
 		String pattern;
 		if (language.toString().equalsIgnoreCase("ar")) {	
 			pattern = String.format("[\\p{IsArabic}\\p{Alnum}]{%d,}", minimumSize);
+		} else if(language.toString().equalsIgnoreCase("ne"))  {
+			pattern = String.format("[\\p{IsDevanagari}\\p{Alnum}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("gu"))  {
 			pattern = String.format("[\\p{IsGujarati}\\p{Alnum}]{%d,}", minimumSize);			
+		} else if(language.toString().equalsIgnoreCase("si"))  {
+			pattern = String.format("[\\p{IsSinhala}\\p{Alnum}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("el"))  {
 			pattern = String.format("[\\p{IsGreek}\\p{Alnum}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("bg") || language.toString().equalsIgnoreCase("ru"))  {
@@ -213,6 +221,10 @@ public class TextPreprocessor{
 			pattern = String.format("[\\p{IsArabic}\\p{Alpha}]{%d,}", minimumSize);
 		} else if(language.toString().equalsIgnoreCase("gu"))  {
 			pattern = String.format("[\\p{IsGujarati}\\p{Alpha}]{%d,}", minimumSize);			
+		} else if(language.toString().equalsIgnoreCase("ne"))  {
+			pattern = String.format("[\\p{IsDevanagari}\\p{Alpha}]{%d,}", minimumSize);			
+		} else if(language.toString().equalsIgnoreCase("si"))  {
+			pattern = String.format("[\\p{IsSinhala}\\p{Alpha}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("el"))  {
 			pattern = String.format("[\\p{IsGreek}\\p{Alpha}]{%d,}", minimumSize);			
 		} else if(language.toString().equalsIgnoreCase("bg") || language.toString().equalsIgnoreCase("ru"))  {

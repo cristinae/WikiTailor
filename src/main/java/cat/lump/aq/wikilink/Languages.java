@@ -19,20 +19,35 @@ public class Languages {
 			new TreeMap<String, Language>(){/***/
 		private static final long serialVersionUID = 2552098132934864032L;
 	{
-		put("ar", Language.arabic);			put("eu", Language.basque);
-		put("bg", Language.bulgarian);      put("cs", Language.czech);
-		put("ca", Language.catalan);		put("hr", Language.croatian);
-		put("en", Language.english);		put("et", Language.estonian);
-		put("fr", Language.french);			put("de", Language.german);
-		put("el", Language.greek);			put("hi", Language.hindi);
-		put("it", Language.italian);		put("lv", Language.latvian);
-		put("lt", Language.lithuanian);		put("pt", Language.portuguese);
-		put("ro", Language.romanian);       put("hu", Language.hungarian);
-		put("ru", Language.russian);		put("sl", Language.slovenian);
-		put("es", Language.spanish);		put("oc", Language.occitan);
-		put("gu", Language.gujarati);       put("simple", Language.simple_english);
+		put("ar", Language.arabic);			
+		put("bg", Language.bulgarian);
+ 	        put("cs", Language.czech);
+		put("ca", Language.catalan);		
+		put("de", Language.german);
+		put("el", Language.greek);			
+		put("en", Language.english);		
+		put("et", Language.estonian);
+		put("es", Language.spanish);		
+                put("eu", Language.basque);
+ 		put("fr", Language.french);			
+		put("gu", Language.gujarati);       
+		put("hi", Language.hindi);
+		put("hr", Language.croatian);
+		put("hu", Language.hungarian);
+		put("it", Language.italian);		
+		put("lv", Language.latvian);
+		put("lt", Language.lithuanian);		
+		put("ne", Language.nepali);		
+		put("pt", Language.portuguese);
+		put("ro", Language.romanian);       
+		put("ru", Language.russian);		
+		put("si", Language.sinhali);
+		put("sl", Language.slovenian);
+		put("oc", Language.occitan);
+		put("simple", Language.simple_english);
 	}};
 	
+
 	
 //	/**Relevant languages for the Tacardi project */
 //	public static final String[] langWikicardi = {
