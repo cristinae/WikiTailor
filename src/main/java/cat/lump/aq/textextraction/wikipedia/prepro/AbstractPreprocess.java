@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 
-import javax.xml.bind.JAXBException;
-
 import org.sweble.wikitext.engine.CompilerException;
 import org.sweble.wikitext.lazy.LinkTargetException;
 
@@ -140,7 +138,7 @@ public abstract class AbstractPreprocess extends Thread
 	 * @throws CompilerException
 	 */
 	public abstract ArrayList<String> preprocess(int id)
-			throws WikiApiException, FileNotFoundException, JAXBException,
+			throws WikiApiException, FileNotFoundException, 
 			IOException, LinkTargetException, CompilerException;// ParsedPage
 																// page);
 
@@ -203,7 +201,7 @@ public abstract class AbstractPreprocess extends Thread
 				{
 					result = preprocess(pageID);
 				}
-			} catch (WikiApiException | JAXBException | IOException
+			} catch (WikiApiException | IOException
 					| LinkTargetException | CompilerException e)
 			{
 				logger.error("Error during the preprocessing: " + pageID);
