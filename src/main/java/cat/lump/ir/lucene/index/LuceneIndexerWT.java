@@ -179,7 +179,6 @@ public class LuceneIndexerWT extends LuceneInterface{
     }
 
     IndexWriterConfig iwc = new IndexWriterConfig(
-        LUCENE_VERSION, 
         setAnalyzer(language)   //the analyser of the considered language
         );
     //We use the simple similarity model (tf-only)
