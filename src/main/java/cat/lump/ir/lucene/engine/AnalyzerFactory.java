@@ -57,61 +57,61 @@ public class AnalyzerFactory {
 		
 		switch(lang){
 		case "ar":
-			analyzer = new ArabicAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new ArabicAnalyzer();
 			break;
 		case "bg":
-			analyzer = new BulgarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new BulgarianAnalyzer();
 			break;
 		case "ca":
-			analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new CatalanAnalyzer();
 			break;
 		case "cs":
-			analyzer = new CzechAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new CzechAnalyzer();
 			break;
 		case "de":
-			analyzer = new GermanAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new GermanAnalyzer();
 			break;
 		case "el":
-			analyzer = new GreekAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new GreekAnalyzer();
 			break;
 		case "en":
-			analyzer = new StandardAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new StandardAnalyzer();
 			break;
 		case "es":
-			analyzer = new SpanishAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new SpanishAnalyzer();
 			break;
 		case "eu":
-			analyzer = new BasqueAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new BasqueAnalyzer();
 			break;
 		case "fr":
-			analyzer = new FrenchAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new FrenchAnalyzer();
 			break;
 		case "hu":
-			analyzer = new HungarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new HungarianAnalyzer();
 			break;
 		case "it":
-			analyzer = new ItalianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new ItalianAnalyzer();
 			break;
 		case "lt":
 			analyzer = new LithuanianAnalyzer();
 			break;	
 		case "lv":
-			analyzer = new LatvianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new LatvianAnalyzer();
 			break;	
 		case "oc":
 			//TODO Solve this!
-			analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);             
+			analyzer = new CatalanAnalyzer();             
 			CHK.CHECK(false, "Using the Catalan stemmer for language "+
 					language.getDisplayLanguage() );
 			break;
 		case "ro":
-			analyzer = new RomanianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new RomanianAnalyzer();
 			break;
 		case "ru":
-			analyzer = new RussianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new RussianAnalyzer();
 			break;
 		case "pt":
-			analyzer = new PortugueseAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new PortugueseAnalyzer();
 			break;
 		default:
 			CHK.CHECK(false, "No Lucene Analyzer is available for language "+
@@ -152,7 +152,7 @@ public class AnalyzerFactory {
 		case "de":
 			break;
 		case "el":
-			ts = new GreekLowerCaseFilter(LuceneInterface.LUCENE_VERSION, ts);
+			ts = new GreekLowerCaseFilter(ts);
 			ts = new GreekStemFilter(ts);
 			break;
 		case "en":
