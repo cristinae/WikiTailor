@@ -6,6 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.TermFreqVector;
 import org.apache.lucene.store.Directory;
@@ -17,9 +18,9 @@ public class LuceneIndexExplorer {
   
   public static void main(String[] args) throws IOException {
 	Path path = FileSystems.getDefault().getPath(indexPath);
-    Directory dir = FSDirectory.open(path);
+    Directory dir = FSDirectory.open(path);    
+    IndexReader reader = DirectoryReader.open(dir);
     
-    IndexReader reader = IndexReader.open(dir);
     for (int i=0; i<reader.maxDoc(); i++) {
       if (reader.isDeleted(i))
           continue;

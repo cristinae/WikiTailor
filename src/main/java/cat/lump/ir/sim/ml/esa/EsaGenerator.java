@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -113,10 +114,8 @@ public class EsaGenerator {
 	  try {
 		  
 		Path path = FileSystems.getDefault().getPath(indexPath);
-	    dir = FSDirectory.open(path);
-		  
-	    dir = FSDirectory.open(indexPath);
-	    INDEX_READER = IndexReader.open(dir);
+	    dir = FSDirectory.open(path);	    
+	    INDEX_READER = DirectoryReader.open(dir);
 	  } catch (IOException e) {
 	    e.printStackTrace();
 	  }   

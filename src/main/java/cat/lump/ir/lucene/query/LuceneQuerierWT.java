@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -108,7 +109,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 		try {
 			Path path = FileSystems.getDefault().getPath(indexDir); 
 			dir = FSDirectory.open(path);
-			reader = IndexReader.open(dir);
+			reader = DirectoryReader.open(dir);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
