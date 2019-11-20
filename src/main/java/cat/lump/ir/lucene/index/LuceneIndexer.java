@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
@@ -98,7 +100,8 @@ public class LuceneIndexer extends LuceneInterface{
 		
 		Directory dir = null;
 		try {
-			dir = FSDirectory.open(new File(indexDir));
+			Path path = FileSystems.getDefault().getPath(indexDir); 
+			dir = FSDirectory.open(path);			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
