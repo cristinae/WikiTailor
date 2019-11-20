@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -74,8 +74,7 @@ public class LuceneQuerier extends LuceneInterface{
 		}		
 		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(LUCENE_VERSION, 
-								"contents",
+		parser = new QueryParser("contents",
 								d2q.getAnalyzer()
 					);		
 		//indexDimension = reader.numDocs();		

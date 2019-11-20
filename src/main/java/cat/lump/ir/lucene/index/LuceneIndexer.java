@@ -200,7 +200,7 @@ public class LuceneIndexer extends LuceneInterface{
 				analyzer = new SpanishAnalyzer();
 				break;
 			case "et":	
-				analyzer = new EstonianAnalyzer();
+				analyzer = new EstonianAnalyzer(LUCENE_VERSION);
 				break;
 			case "eu":	
 				analyzer = new BasqueAnalyzer();

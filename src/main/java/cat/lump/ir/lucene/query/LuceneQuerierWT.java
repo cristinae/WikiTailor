@@ -8,10 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -39,8 +39,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 
 	private static LumpLogger logger = 
 			new LumpLogger(LuceneQuerierWT.class.getSimpleName());
-			
-	private final Version LUCENE_VERSION = Version.LUCENE_35;
+		
 	
 	private Analyzer analyzer;
 	
@@ -95,7 +94,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 		//In this concrete experiment our terms are already "analysed",
 		// we don't need to do it again, so Whitespace, which is indeed
 		// language independent
-		analyzer = new WhitespaceAnalyzer(LUCENE_VERSION);
+		analyzer = new WhitespaceAnalyzer();
 	}
 
 	/**Loads the Lucene index (previously created) with the reference 
@@ -111,7 +110,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 			e.printStackTrace();
 		}		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(LUCENE_VERSION, "contents", analyzer);		
+		parser = new QueryParser("contents", analyzer);		
 		logger.info("Index loaded");
 		//indexDimension = reader.numDocs();		
 		//loadDocIds();		
