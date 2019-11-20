@@ -17,7 +17,7 @@ import cat.lump.aq.basics.log.LumpLogger;
  */
 public abstract class LuceneInterface {	
 
-	public static final Version LUCENE_VERSION = Version.LUCENE_35;
+	public static final Version LUCENE_VERSION = Version.LATEST;
 	
 	/**Directory where the Lucene index has to be stored*/
 	protected final String indexDir;

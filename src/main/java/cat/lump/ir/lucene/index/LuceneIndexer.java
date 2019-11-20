@@ -103,8 +103,7 @@ public class LuceneIndexer extends LuceneInterface{
 			e.printStackTrace();
 		}
 		
-		IndexWriterConfig iwc = new IndexWriterConfig(
-				LUCENE_VERSION, 
+		IndexWriterConfig iwc = new IndexWriterConfig(				
 				analyzer 	//the analyser of the considered language
 				);
 		//We use the simple similarity model (tf-only)
@@ -177,40 +176,40 @@ public class LuceneIndexer extends LuceneInterface{
 	  Analyzer analyzer;
 		switch (lan.getLanguage()) {
 			case "ar":	
-				analyzer = new ArabicAnalyzer(LUCENE_VERSION);
+				analyzer = new ArabicAnalyzer();
 				break;			
 			case "bg":	
-				analyzer = new BulgarianAnalyzer(LUCENE_VERSION);
+				analyzer = new BulgarianAnalyzer();
 				break;
 			case "ca":	
-				analyzer = new CatalanAnalyzer(LUCENE_VERSION);
+				analyzer = new CatalanAnalyzer();
 				break;
 			case "cs":	
-				analyzer = new CzechAnalyzer(LUCENE_VERSION);
+				analyzer = new CzechAnalyzer();
 				break;				
 			case "de":	
-				analyzer = new GermanAnalyzer(LUCENE_VERSION);
+				analyzer = new GermanAnalyzer();
 				break;
 			case "el":	
-				analyzer = new GreekAnalyzer(LUCENE_VERSION);
+				analyzer = new GreekAnalyzer();
 				break;
 			case "en":	
-				analyzer = new StandardAnalyzer(LUCENE_VERSION);
+				analyzer = new StandardAnalyzer();
 				break;
 			case "es":	
-				analyzer = new SpanishAnalyzer(LUCENE_VERSION);
+				analyzer = new SpanishAnalyzer();
 				break;
 			case "et":	
-				analyzer = new EstonianAnalyzer(LUCENE_VERSION);
+				analyzer = new EstonianAnalyzer();
 				break;
 			case "eu":	
-				analyzer = new BasqueAnalyzer(LUCENE_VERSION);
+				analyzer = new BasqueAnalyzer();
 				break;
 			case "pt":	
-				analyzer = new PortugueseAnalyzer(LUCENE_VERSION);
+				analyzer = new PortugueseAnalyzer();
 				break;
 			case "fr":	
-				analyzer = new FrenchAnalyzer(LUCENE_VERSION);
+				analyzer = new FrenchAnalyzer();
 				break;
 			case "hr":	
 				analyzer = new CroatianAnalyzer();
@@ -219,10 +218,10 @@ public class LuceneIndexer extends LuceneInterface{
 				analyzer = new LithuanianAnalyzer();
 				break;
 			case "lv":	
-				analyzer = new LatvianAnalyzer(LUCENE_VERSION);
+				analyzer = new LatvianAnalyzer();
 				break;
 			case "ro":	
-				analyzer = new RomanianAnalyzer(LUCENE_VERSION);
+				analyzer = new RomanianAnalyzer();
 				break;
 			case "sl":	
 				analyzer = new SlovenianAnalyzer();
@@ -230,7 +229,7 @@ public class LuceneIndexer extends LuceneInterface{
 			default:	
 				logger.warn("I cannot process the required language. "
 						+ "English used.");
-				analyzer = new StandardAnalyzer(LUCENE_VERSION);
+				analyzer = new StandardAnalyzer();
 		}
 		return analyzer;
 	}

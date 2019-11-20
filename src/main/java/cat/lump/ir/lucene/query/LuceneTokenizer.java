@@ -32,7 +32,6 @@ import org.apache.lucene.analysis.ru.RussianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
-import cat.lump.ir.lucene.LuceneInterface;
 import cat.lump.ir.lucene.index.analyzers.LithuanianAnalyzer;
 import cat.lump.aq.basics.log.LumpLogger;
 
@@ -70,52 +69,52 @@ public class LuceneTokenizer {
 	protected void setAnalyzer(Locale lan){
 		switch(lan.getLanguage()){
 			case "ar":
-				analyzer = new ArabicAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new ArabicAnalyzer();
 				break;
 			case "bg":
-				analyzer = new BulgarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new BulgarianAnalyzer();
 				break;
 			case "ca":
-				analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new CatalanAnalyzer();
 				break;
 			case "cs":
-				analyzer = new CzechAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new CzechAnalyzer();
 				break;
 			case "de":
-				analyzer = new GermanAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new GermanAnalyzer();
 				break;
 			case "el":
-				analyzer = new GreekAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new GreekAnalyzer();
 				break;
 			case "en":
-				analyzer = new StandardAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new StandardAnalyzer();
 				break;
 			case "es":
-				analyzer = new SpanishAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new SpanishAnalyzer();
 				break;
 			case "eu":
-				analyzer = new BasqueAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new BasqueAnalyzer();
 				break;
 			case "fr":
-				analyzer = new FrenchAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new FrenchAnalyzer();
 				break;
 			case "hu":
-				analyzer = new HungarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new HungarianAnalyzer();
 				break;
 			case "it":
-				analyzer = new ItalianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new ItalianAnalyzer();
 				break;
 			case "lt":
 				analyzer = new LithuanianAnalyzer();
 				break;	
 			case "pt":
-				analyzer = new PortugueseAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new PortugueseAnalyzer();
 				break;
 			case "ro":
-				analyzer = new RomanianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new RomanianAnalyzer();
 				break;
 			case "ru":
-				analyzer = new RussianAnalyzer(LuceneInterface.LUCENE_VERSION);
+				analyzer = new RussianAnalyzer();
 				break;
 			default:
 				log.warn("I cannot process the required language.");
