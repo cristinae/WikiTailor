@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -87,7 +89,7 @@ public class EsaGenerator {
 //	}	
 	
 	
-	public EsaGenerator(File indexPath, Locale language) {
+	public EsaGenerator(String indexPath, Locale language) {
 	  this(indexPath, language, MINIMUM_DOC_FREQ_DEFAULT);
 	}
 	
@@ -101,7 +103,7 @@ public class EsaGenerator {
 	 * @param language
 	 *               locale of the language in hand
 	 */
-	public EsaGenerator(File indexPath, Locale language, int minimumDocFreq){		
+	public EsaGenerator(String indexPath, Locale language, int minimumDocFreq){		
 	  indexPath = checkIndexPath(indexPath);
 	  D2Q = new Document2Query();
 	  
@@ -109,6 +111,10 @@ public class EsaGenerator {
 
 	  Directory dir;
 	  try {
+		  
+		Path path = FileSystems.getDefault().getPath(indexPath);
+	    dir = FSDirectory.open(path);
+		  
 	    dir = FSDirectory.open(indexPath);
 	    INDEX_READER = IndexReader.open(dir);
 	  } catch (IOException e) {
@@ -122,7 +128,7 @@ public class EsaGenerator {
 	  MORE_LIKE_THIS.setMinTermFreq(MINIMUM_TERM_FREQ);
 	  MORE_LIKE_THIS.setMinDocFreq(minimumDocFreq);
 	  
-	  QUERY_PARSER = new QueryParser(LuceneInterface.LUCENE_VERSION, 
+	  QUERY_PARSER = new QueryParser( 
 	      LuceneIndexerWT.CONTENTS_NAME,
 	      LUCENE_ANALYZER
 	      );    
@@ -334,8 +340,8 @@ public class EsaGenerator {
    * @param index_path
    * @return 
    */
-  private File checkIndexPath(File indexPath){
-    if (!indexPath.isDirectory()) {
+  private String checkIndexPath(String indexPath){
+    if (!new File(indexPath).isDirectory()) {
       logger.error(String.format("I cannot read the directory %s", indexPath));
       System.exit(1);     
     }

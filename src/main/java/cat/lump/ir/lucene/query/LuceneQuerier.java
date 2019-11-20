@@ -2,6 +2,8 @@ package cat.lump.ir.lucene.query;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import org.apache.lucene.index.IndexReader;
@@ -67,7 +69,9 @@ public class LuceneQuerier extends LuceneInterface{
 		d2q = new Document2Query(lan);
 		Directory dir;
 		try {
-			dir = FSDirectory.open(new File(indexDir));
+			
+			Path path = FileSystems.getDefault().getPath(indexDir);
+			dir = FSDirectory.open(path);
 			reader = IndexReader.open(dir);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -2,6 +2,8 @@ package cat.lump.ir.lucene.query;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -104,7 +106,8 @@ public class LuceneQuerierWT extends LuceneInterface{
 	public void loadIndex(Locale lan){
 		Directory dir;
 		try {
-			dir = FSDirectory.open(new File(indexDir));
+			Path path = FileSystems.getDefault().getPath(indexDir); 
+			dir = FSDirectory.open(path);
 			reader = IndexReader.open(dir);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -2,6 +2,8 @@ package cat.lump.ir.lucene.index;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -14,7 +16,9 @@ public class LuceneIndexExplorer {
   private static final String indexPath = "/data/alt/corpora/semeval2017/task1/clesa/tinyindex/ar";
   
   public static void main(String[] args) throws IOException {
-    Directory dir = FSDirectory.open(new File(indexPath));
+	Path path = FileSystems.getDefault().getPath(indexPath);
+    Directory dir = FSDirectory.open(path);
+    
     IndexReader reader = IndexReader.open(dir);
     for (int i=0; i<reader.maxDoc(); i++) {
       if (reader.isDeleted(i))
