@@ -31,8 +31,11 @@ import org.apache.lucene.analysis.ro.RomanianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -250,20 +253,38 @@ public class LuceneIndexer extends LuceneInterface{
 	}
 	
 	protected Document getDocument(File f) throws IOException{
-		Document doc = new Document();
-		//TermVector.WITH... allows for getting the vector later on 
-		// and potentially allows for computing the cosine similarity between 
-		//documents' vectors 		
+		// FieldType s the new way to set the configuration. Before, in version 3.6, 
+		// we had 
+		// doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
+		//		TermVector.WITH_POSITIONS_OFFSETS));
+		// Now we simply set this up in FieldType
 		
-		doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
-				TermVector.WITH_POSITIONS_OFFSETS)); 
+		Document doc = new Document();	
 		
-		doc.add(new Field("filename", f.getName(),	//Index file name
-				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
+		FieldType tft = new FieldType(TextField.TYPE_STORED);
+		tft.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+		Field textField = new Field(CONTENTS_NAME, new FileReader(f), tft);
+		doc.add(textField);
+		 
+		// TODO uncertain whether we need TYPE_STORED 
+		FieldType sft = new FieldType(StringField.TYPE_STORED);
+		//tft.setIndexOptions(IndexOptions.);
+		Field stringField = new Field("filename", f.getName(), sft);
+		doc.add(stringField); 
 		
-		doc.add(new Field("fullpath", f.getCanonicalPath(),	//Index file full path
-				Field.Store.YES, Field.Index.NOT_ANALYZED));
+		FieldType pft = new FieldType(StringField.TYPE_STORED);
+		Field pathField = new Field("fullpath", f.getCanonicalPath(), pft);
 		
+		doc.add(pathField);
+		
+		/*
+		 * doc.add(new Field("filename", f.getName(), //Index file name Field.Store.YES,
+		 * Field.Index.NOT_ANALYZED));
+		 * 
+		 * doc.add(new Field("fullpath", f.getCanonicalPath(), //Index file full path
+		 * Field.Store.YES, Field.Index.NOT_ANALYZED));
+		 * 
+		 */		
 		return doc;
 	}
 
