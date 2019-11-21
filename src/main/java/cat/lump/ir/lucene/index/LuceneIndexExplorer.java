@@ -1,6 +1,5 @@
 package cat.lump.ir.lucene.index;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -9,7 +8,8 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.MultiBits;
-import org.apache.lucene.index.TermFreqVector;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Bits;
@@ -42,10 +42,13 @@ public class LuceneIndexExplorer {
       String docId = doc.get("filename");
       
       System.out.println(docId);
-      TermFreqVector x = reader.getTermFreqVector(i, LuceneIndexerWT.CONTENTS_NAME);
-      for (String s : x.getTerms()) {
-        System.out.print(s + " ");
-      }
+      Terms terms = reader.getTermVector(i, LuceneIndexerWT.CONTENTS_NAME);
+      
+      TermsEnum iterator = terms.iterator();
+      while (iterator.next() != null) {
+    	  System.out.print(iterator.term().utf8ToString() + " ");
+      }    
+      
       System.out.println();
 //      doc.get
 //      System.out.println(doc.getFields());
