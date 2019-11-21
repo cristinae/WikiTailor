@@ -160,7 +160,8 @@ public class LuceneIndexer extends LuceneInterface{
 				
 			}
 		}
-		numIndexed = writer.numDocs();
+		
+		numIndexed = writer.getDocStats().numDocs;
 	}
 	
 	/**Closes the Lucene index

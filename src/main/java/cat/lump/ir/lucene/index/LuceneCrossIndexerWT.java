@@ -83,7 +83,7 @@ public class LuceneCrossIndexerWT extends LuceneIndexerWT {
     }
     logger.info(String.format(
         "%d documents indexed for language %s", 
-        iw.numDocs(), lan)); 
+        iw.getDocStats().numDocs, lan)); 
     iw.close();
   }
   

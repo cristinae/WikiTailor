@@ -111,7 +111,7 @@ public class LuceneIndexerWT extends LuceneInterface{
 	public void close() throws IOException{
 	  logger.info(String.format(
 	      "PROCESS TERMINATED:  %d documents indexed in %d miliseconds", 
-	      INDEX_WRITER.numDocs(), System.currentTimeMillis() - PROCESS_START)); 
+	      INDEX_WRITER.getDocStats().numDocs, System.currentTimeMillis() - PROCESS_START)); 
 		INDEX_WRITER.close();	
 		
 	}

@@ -115,9 +115,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 		}		
 		searcher = new IndexSearcher(reader);		
 		parser = new QueryParser("contents", analyzer);		
-		logger.info("Index loaded");
-		//indexDimension = reader.numDocs();		
-		//loadDocIds();		
+		logger.info("Index loaded");		
 	}
 	
 	

@@ -81,8 +81,7 @@ public class LuceneQuerier extends LuceneInterface{
 		searcher = new IndexSearcher(reader);		
 		parser = new QueryParser("contents",
 								d2q.getAnalyzer()
-					);		
-		//indexDimension = reader.numDocs();		
+					);
 		//loadDocIds();		
 	}
 	
