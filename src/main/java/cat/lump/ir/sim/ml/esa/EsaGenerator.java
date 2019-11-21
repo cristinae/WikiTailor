@@ -13,6 +13,7 @@ import java.util.Locale;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiBits;
 import org.apache.lucene.queries.mlt.MoreLikeThis;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -22,6 +23,7 @@ import org.apache.lucene.search.TopDocs;
 //import org.apache.lucene.search.similar.MoreLikeThis;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Bits;
 
 import cat.lump.ir.lucene.LuceneInterface;
 import cat.lump.ir.lucene.query.Document2Query;
@@ -195,7 +197,7 @@ public class EsaGenerator {
 		//System.out.println(q);
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
-			Query query = QUERY_PARSER.parse(q);			
+			Query query = QUERY_PARSER.parse(q);
 			TopDocs hits = INDEX_SEARCHER.search(query, INDEX_SEARCHER.maxDoc());
 
 			//fill the array with the scores
@@ -314,7 +316,6 @@ public class EsaGenerator {
 	 */
 	protected void finalize() {				
 		try {
-			INDEX_SEARCHER.close();
 			INDEX_READER.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -359,8 +360,9 @@ public class EsaGenerator {
     int j = 0;
 
     for (int i=0; i<INDEX_READER.maxDoc(); i++) {
-      if (INDEX_READER.isDeleted(i))
-        continue;
+    	Bits liveDocs = MultiBits.getLiveDocs(INDEX_READER);
+    	if (liveDocs != null && !liveDocs.get(i)) 
+          continue;      
       ids.put(i, j++);
     }
     return ids;
