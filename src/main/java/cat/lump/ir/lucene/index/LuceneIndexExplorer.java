@@ -27,10 +27,14 @@ public class LuceneIndexExplorer {
     	Bits liveDocs = MultiBits.getLiveDocs(reader);
     	if (liveDocs != null && !liveDocs.get(i)) 
           continue;
-    	// TODO before we had this to check if a document has been
-          // deleted. According to this, though, this should not be
-//          neessary:
+//    	 TODO before we had this to check if a document has been
+//           deleted. According to this, though, this should not be
+//          necessary:
 //        	  https://lucene.apache.org/core/8_0_0/core/org/apache/lucene/index/IndexReader.html
+//    	Check this as well:
+//    		https://lucene.apache.org/core/4_1_0/MIGRATE.html
+//    	(search for "IndexReaders are now read-only")
+    	
 //    	if (reader.isDeleted(i))
 //          continue;
 
