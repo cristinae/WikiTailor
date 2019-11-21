@@ -132,9 +132,14 @@ public class LuceneQuerierWT extends LuceneInterface{
 		LinkedHashMap<Float, String> idsLHM = new LinkedHashMap<Float, String>();
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
-			Query query = parser.parse(text);	
-			TopDocs topHits = searcher.search(query, TOP);	
-			float maxScore = topHits.getMaxScore();
+			Query query = parser.parse(text);			
+			
+			// getting the max score			
+			TopDocs topHit = searcher.search(query, 1); 
+			float maxScore = topHit.scoreDocs.length == 0 ? Float.NaN : topHit.scoreDocs[0].score;
+			
+			// getting the top hits
+			TopDocs topHits = searcher.search(query, TOP);
 			
 			for (ScoreDoc scoreDoc : topHits.scoreDocs) {	
 				Float score = scoreDoc.score;
