@@ -8,9 +8,11 @@ import java.nio.file.Path;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiBits;
 import org.apache.lucene.index.TermFreqVector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Bits;
 
 public class LuceneIndexExplorer {
   
@@ -22,8 +24,15 @@ public class LuceneIndexExplorer {
     IndexReader reader = DirectoryReader.open(dir);
     
     for (int i=0; i<reader.maxDoc(); i++) {
-      if (reader.isDeleted(i))
+    	Bits liveDocs = MultiBits.getLiveDocs(reader);
+    	if (liveDocs != null && !liveDocs.get(i)) 
           continue;
+    	// TODO before we had this to check if a document has been
+          // deleted. According to this, though, this should not be
+//          neessary:
+//        	  https://lucene.apache.org/core/8_0_0/core/org/apache/lucene/index/IndexReader.html
+//    	if (reader.isDeleted(i))
+//          continue;
 
       Document doc = reader.document(i);
       String docId = doc.get("filename");
