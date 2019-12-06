@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.SnowballProgram;
+// import org.tartarus.snowball.SnowballStemmer;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.ie.textprocessing.TextPreprocessor;
@@ -39,7 +40,7 @@ class BoW extends Representation{
 	private transient Stopwords sw;
 	
 	/** Instance of a snowball stemmer */
-	private transient  SnowballStemmer stemmer;	
+	private transient  SnowballProgram stemmer;	
 	
 	/**
 	 * @param text from the document

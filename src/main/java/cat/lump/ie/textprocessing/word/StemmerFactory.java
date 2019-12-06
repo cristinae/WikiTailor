@@ -2,7 +2,8 @@ package cat.lump.ie.textprocessing.word;
 
 import java.util.Locale;
 
-import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.SnowballProgram;
+//import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.danishStemmer;
 import org.tartarus.snowball.ext.dutchStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
@@ -18,10 +19,17 @@ import org.tartarus.snowball.ext.russianStemmer;
 import org.tartarus.snowball.ext.spanishStemmer;
 import org.tartarus.snowball.ext.swedishStemmer;
 import org.tartarus.snowball.ext.turkishStemmer;
-import org.tartarus.snowball.ext.contributed.basqueStemmer;
-import org.tartarus.snowball.ext.contributed.catalanStemmer;
+
+import org.tartarus.snowball.ext.BasqueStemmer;
+import org.tartarus.snowball.ext.CatalanStemmer;
+import org.tartarus.snowball.ext.EstonianStemmer;
+import org.tartarus.snowball.ext.LithuanianStemmer;
+
+
+//import org.tartarus.snowball.ext.contributed.basqueStemmer;
+//import org.tartarus.snowball.ext.contributed.catalanStemmer;
 import org.tartarus.snowball.ext.contributed.czechStemmer;
-import org.tartarus.snowball.ext.contributed.lithuanianStemmer;
+
 
 import cat.lump.aq.basics.check.CHK;
 
@@ -40,23 +48,25 @@ public class StemmerFactory {
 	 * @param language
 	 * @return The Snowball stemmer for the required language; error if not available.
 	 */
-	public static SnowballStemmer loadStemmer(Locale language){
+	public static SnowballProgram loadStemmer(Locale language){
+	// public static SnowballStemmer loadStemmer(Locale language){
 		CHK.CHECK_NOT_NULL(language);
 		String l = language.getLanguage();
 		
-		if (l.equals("eu"))			return new basqueStemmer();
-		else if (l.equals("ca"))	return new catalanStemmer();
+		if (l.equals("eu"))			return new BasqueStemmer();
+		else if (l.equals("ca"))	return new CatalanStemmer();
 		else if (l.equals("cs"))	return new czechStemmer();   //TODO check
-		else if (l.equals("oc"))	return new catalanStemmer();	//TODO we need an Occitan stemmer
+		else if (l.equals("oc"))	return new CatalanStemmer();	//TODO we need an Occitan stemmer
 		else if (l.equals("da"))	return new danishStemmer();
 		else if (l.equals("nl"))	return new dutchStemmer();
 		else if (l.equals("en"))	return new englishStemmer();
+		else if (l.equals("et"))	return new EstonianStemmer();
 		else if (l.equals("fi"))	return new finnishStemmer();	//TODO check
 		else if (l.equals("fr"))	return new frenchStemmer();
 		else if (l.equals("de"))	return new germanStemmer();
 		else if (l.equals("hu"))	return new hungarianStemmer(); 	//TODO check
 		else if (l.equals("it"))	return new italianStemmer();
-		else if (l.equals("lt"))	return new lithuanianStemmer();  //TODO check
+		else if (l.equals("lt"))	return new LithuanianStemmer();  //TODO check
 		else if (l.equals("no"))	return new norwegianStemmer();
 		else if (l.equals("pt"))	return new portugueseStemmer();
 		else if (l.equals("ro"))	return new romanianStemmer();
