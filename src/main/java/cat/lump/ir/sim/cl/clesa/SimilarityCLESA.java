@@ -51,7 +51,7 @@ public abstract class SimilarityCLESA extends SimilarityESA{
 		super(indexApath, new Locale(lanA), overrideObjects);
 
 		//esaGen is in SimilarityESA and has the generator for the source language
-		esaGenB =  new EsaGenerator(new File(indexBpath), new Locale(lanB));
+		esaGenB =  new EsaGenerator(indexBpath, new Locale(lanB));
 		if (esaGen.getIndexDimension() != esaGenB.getIndexDimension())
 			log.errorEnd("The source and target languages indexes should have"
 					+ "the same amount of (comparable) documents");

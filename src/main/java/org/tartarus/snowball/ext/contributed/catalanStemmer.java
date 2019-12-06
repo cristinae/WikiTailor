@@ -4,6 +4,9 @@
 //are available at http://snowball.tartarus.org/algorithms/catalan/stemmer.html
 
 
+// TODO CANDIDATE TO BE DELETED IF THE NEW IMPORT IN 
+// cat.lump.ie.textprocessing.word.StemmerFactory AS SnowballProgram (instead of 
+// SnowballStemmer) works
 package org.tartarus.snowball.ext.contributed;
 
 import org.tartarus.snowball.Among;

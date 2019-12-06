@@ -3,7 +3,9 @@
 //http://snowball.tartarus.org/algorithms/basque/. The author and original post 
 //are available at http://snowball.tartarus.org/algorithms/basque/stemmer.html
 
-
+// TODO CANDIDATE TO BE DELETED IF THE NEW IMPORT IN 
+// cat.lump.ie.textprocessing.word.StemmerFactory AS SnowballProgram (instead of 
+// SnowballStemmer) works
 
 package org.tartarus.snowball.ext.contributed;
 

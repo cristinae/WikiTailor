@@ -11,7 +11,8 @@ import java.util.regex.Pattern;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.SnowballProgram;
+//import org.tartarus.snowball.SnowballStemmer;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.ie.textprocessing.sentence.Diacritics;
@@ -55,7 +56,7 @@ public class TextPreprocessor{
 	private WordDecompositionICU4J tokenizer;
 	private Stopwords stop;
 	private Stopwords stopEng;
-	private SnowballStemmer stemmer;
+	private SnowballProgram stemmer;
 	private Analyzer analyzer; 
 	
 	/**The string on which all the operations are applied*/

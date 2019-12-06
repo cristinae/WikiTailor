@@ -79,7 +79,7 @@ public abstract class EuclideanESA extends Esa{
 	public EuclideanESA(String indexPath, Locale lan, Boolean overrideObjects){
 		super(new VectorEuclideanDistance());
 		//invoke ESA generator with a given index path and language
-		esaGen = new EsaGenerator(new File(indexPath), lan);				
+		esaGen = new EsaGenerator(indexPath, lan);				
 		this.overrideObjects = overrideObjects;		
 	}
 	

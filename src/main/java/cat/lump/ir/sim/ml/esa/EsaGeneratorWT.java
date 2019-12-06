@@ -23,7 +23,7 @@ import cat.lump.ir.lucene.engine.WTAnalyzer;
  */
 public class EsaGeneratorWT extends EsaGenerator{
 
-  public EsaGeneratorWT(File indexPath, Locale language, int minimumDocFreq) {
+  public EsaGeneratorWT(String indexPath, Locale language, int minimumDocFreq) {
     super(indexPath, language, minimumDocFreq);
   }
   
@@ -33,7 +33,7 @@ public class EsaGeneratorWT extends EsaGenerator{
 	 * @param indexPath
 	 * @param language
 	 */
-	public EsaGeneratorWT(File indexPath, Locale language){		
+	public EsaGeneratorWT(String indexPath, Locale language){		
 		super(indexPath, language);
 //		setAnalyzer(language);
 //		setIndexPath(indexPath);
