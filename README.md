@@ -59,7 +59,7 @@ For a complete analysis of the methods implemented see:
 
 * Cristina España-Bonet, Alberto Barrón-Cedeño and Lluís Màrquez.
 **Tailoring Wikipedia for in-Domain Comparable Corpora Extraction**.
-In preparation
+[preprint arXiv:2005.01177] (https://arxiv.org/abs/2005.01177)
 
 * Alberto Barrón-Cedeño, Cristina España-Bonet, Josu Boldoba and Lluís Màrquez.
 **A Factory of Comparable Corpora from Wikipedia**.
