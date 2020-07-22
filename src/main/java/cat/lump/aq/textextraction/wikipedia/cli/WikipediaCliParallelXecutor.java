@@ -16,12 +16,12 @@ import de.tudarmstadt.ukp.wikipedia.api.exception.WikiApiException;
  * with WikiTailor textextraction.wikipedia.
  *  
  * TODO implement the extraction of parallel sentences!
- * TO BE REMOVED when parallelXecutor works
  *  
  * @author cristina
+ * @since 28th June 2019
  *
  */
-public class WikipediaCliFragmentsXecutor extends WikipediaCliMinimum{
+public class WikipediaCliParallelXecutor extends WikipediaCliMinimum{
 
 	/**Second language involved*/
 	private Locale language2;
@@ -53,7 +53,7 @@ public class WikipediaCliFragmentsXecutor extends WikipediaCliMinimum{
 	/**File containing the union/intersection of articles */
 	private String fileCommonArticles;
 	
-	public WikipediaCliFragmentsXecutor() {
+	public WikipediaCliParallelXecutor() {
 		super();
 		LABEL = "Xecutor";
 		logger = new LumpLogger (LABEL);

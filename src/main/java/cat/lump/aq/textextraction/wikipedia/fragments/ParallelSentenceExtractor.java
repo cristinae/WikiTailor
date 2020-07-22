@@ -2,19 +2,11 @@ package cat.lump.aq.textextraction.wikipedia.fragments;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -22,16 +14,14 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.io.FilenameUtils;
 
 import cat.lump.aq.basics.check.CHK;
 import cat.lump.aq.basics.io.files.FileIO;
 import cat.lump.aq.basics.log.LumpLogger;
-import cat.lump.aq.textextraction.wikipedia.cli.WikipediaCliArticleSelector;
 
 
 /**
- * TODO: implement margin-based approach to parallalel sentence extraction
+ * TODO: implement margin-based approach to parallel sentence extraction
  * 
  * @author cristina
  * @since Feb 08, 2019
@@ -54,17 +44,23 @@ public class ParallelSentenceExtractor {
 	/** Tab separated file with the comparable article's IDs and titles */
 	private String comparableArtFile;
 
+	/** Pair of languages to extract the sentences*/
+	private String l1;
+	private String l2;
+	
 	private static LumpLogger logger = 
 			new LumpLogger (ParallelSentenceExtractor.class.getSimpleName());
 
 
-	public ParallelSentenceExtractor (String inputFile, String path, String outpath){
+	public ParallelSentenceExtractor (String inputFile, String inputFileAll, String path, String outpath, String l1, String l2){
 		CHK.CHECK_NOT_NULL(inputFile);
 		CHK.CHECK_NOT_NULL(path);
 		CHK.CHECK_NOT_NULL(outpath);
 		this.rootDirectory = path;
 		this.outDirectory = outpath;
 		this.comparableArtFile = inputFile;
+		this.l1 = l1;
+		this.l2 = l2;
 	}
 	
 
@@ -79,58 +75,52 @@ public class ParallelSentenceExtractor {
         CHK.CHECK(directory.isDirectory(), "I cannot access the directory " + outDirectory);	
 
         String [] languages = getLanguages();
-        //String [][] titles = new ;
         
-		Path path = Paths.get(comparableArtFile);
-		long lineCount = 0;
-		try {
-			lineCount = Files.lines(path).count();
-		} catch (IOException e1) {
-			logger.warn("A problem occured when reading the number of lines of the input file.");
-			e1.printStackTrace();
-		}
-		
-		// For large files we split every 1000 articles
-		if (lineCount > 2000){
-			int counter = 0;
-			
-			
-		}
-		
-		
-		// NOPE cap abaix
-        // Output file
-        String csvFile = String.format("PMI.csv");
-        File output = new File(rootDirectory + FileIO.separator + csvFile);
-        String csvValues = "pmiMedian,npmiMedian,pmiMean,npmiMean,pmiCatMedian,npmiCatMedian,pmiCatMean,npmiCatMean,artsInCat,catID,depth\n";
+        // Load the multilingual titles
+        // TODO: load from a different file
+		List<ArrayList<String>> mlTits = loadFieldCompArts(2, comparableArtFile);
+		// Load the multilingual IDs
+        List<ArrayList<String>> mlIDs = loadFieldCompArts(1, comparableArtFile);
+       
         
-		// Select the subfolders representing each category
-		File[] fList = directory.listFiles();  
-		List<File> listOfFolders = new ArrayList<File>();
-		String lang = "";
-		for (File file : fList) {
-			if (file.isDirectory() && file.getName().matches("^"+lang+".\\d+")) {
-				listOfFolders.add(file.getAbsoluteFile());
-	        }
-	    }
-		
-		// Go into every subfolder (category)
-		for (File folder : listOfFolders) {
-			//sString result = processCategory(folder);
-			String result = "kk";
-			if (result.equals(String.valueOf(ERRORINT))) {
-				continue;
-			} else {
-				csvValues = csvValues + result;
-			}
-	    } //end category
-
-		try {
-			FileIO.stringToFile(output, csvValues, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.warn("Some problem occured when writing results into " + csvFile);
-		}
+        // Detects the desired languages
+        int l = 0;
+        int idL1=0;
+        int idL2=0;
+        for (String language : languages ){
+        	if (language.equals(l1)){idL1=l;}
+        	if (language.equals(l2)){idL2=l;}
+        	l++;
+        }
+		    
+        for (ArrayList<String> articleIDs : mlIDs){
+        	int ilan = 0;
+        	for (String articleID : articleIDs){
+        		if (ilan==idL1 || ilan==idL2){
+                int index =  Integer.parseInt(articleID)/IDS_PER_DIR;
+        		String articleLocation = rootDirectory+languages[ilan]+".0"+ FileIO.separator+"plain"+ FileIO.separator + languages[ilan]
+        				+ FileIO.separator + index + FileIO.separator + articleID + "." + languages[ilan] + ".txt";
+        		try {
+					String [] article = FileIO.fileToLines(new File(articleLocation));
+					int j=1;
+					for ( String sentence : article){
+						String line =  languages[ilan] + "."  + articleID + "."  + j + " " + sentence;
+					
+						System.out.println(line);	
+						j++;
+					}
+					if (j>15){
+						
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        		} //endif language correct
+        		ilan++;
+        	} //rof 
+        } //rof an article
+        
 		logger.info("END ");
 	}
 	
@@ -160,117 +150,49 @@ public class ParallelSentenceExtractor {
 		return languages.toString().split(",");
 	}
 
-
-	/** NOPE
-	 * Checks if a file with the desired extension exists in folder {@code folder}
-	 * 
-	 * @param folder
-	 * @param extension
-	 * @return String file
-	 */
-	private String lookForFile(File folder, String extension) {
-
-		List<String> listFiles = FileIO.getFilesExt(folder, extension);
-
-		String file = "NONE";
-		if (listFiles.size()>0) {
-			file =  FileIO.getFilesExt(folder, extension).get(0);
-			if (!(new File(file).exists())) {
-				 file = "NONE";
-			}
-		}
-		
-		return file;
-	}
-
-
-	/** NOPE
-	 * For an article with id {@code id}, the frequencies for all its terms are retrieved from 
-	 * the file generated by prepo.TermExtractor. The total number of terms are stored as 
-	 * a fake term NUM_TERMS
-	 * 
-	 * @param id
-	 * @return HashMap<String, Integer> hmapTFs
-	 */
-	private HashMap<String, Integer> readArticleTFsSum(String id) {
-		
-		String lang = "en";
-		int index =  Integer.parseInt(id)/IDS_PER_DIR;
-		String pathToFile = rootDirectory + FileIO.separator + "tfs" + FileIO.separator + lang
-				+ FileIO.separator + index + FileIO.separator + id + "." + lang + ".txt" ;
-		
-		HashMap<String, Integer> hmapTFs = new HashMap<String, Integer>();		
-	    BufferedReader br;
-		try {
-			br = new BufferedReader(new FileReader(new File(pathToFile)));
-	        String line = br.readLine();
-	        String[] columns;
-	        Integer numTerms = 0; 
-	        while (line != null) {
-		        columns = line.split("\\s+");
-		        hmapTFs.put(columns[1], Integer.parseInt(columns[0]));
-		        numTerms = numTerms + Integer.parseInt(columns[0]);
-	            line = br.readLine();
-	        }
-	        hmapTFs.put("NUM_TERMS", numTerms);  
-	        br.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return hmapTFs;
-	}
-
-
-	/** NOPE
-	 * Reads {@codeFile articlesF} and extracts the list of IDs with all the
-	 * articles extracted for the category
-	 *  
-	 * @param articlesF
-	 * @return List<String> ids
-	 */
-	@SuppressWarnings("unused")
-	private List<String> readArticlesID(File articlesF) {
-		return readArticlesIDsizeMax(articlesF, -1);
-	}
 	
+    /**
+     * Extracts a list with the required field (ID/title) per language for each article in the
+     * input file. The input file has been generated in the format given by {@code CommonNamespaceFinder.java}.
+     * 
+     * @param field (1: ID; 2:title)
+	 * @param fileComparable (file with the comparable articles)
+     * 
+     * @return List<ArrayList<String>> fieldArticles
+     */
+	private List<ArrayList<String>> loadFieldCompArts(int field, String fileComparable) {
 
-	/** NOPE
-	 * Reads {@codeFile articlesF} and extracts the list of IDs with all the
-	 * articles extracted for the category with a maximum size of sizeRef
-	 *  
-	 * @param articlesF
-	 * @param sizeRef
-	 * @return List<String> ids
-	 */
-	private List<String> readArticlesIDsizeMax(File articlesF, int sizeRef) {
-		List<String> ids =new ArrayList<String>();
-	    BufferedReader br;
+		List<ArrayList<String>> fieldArticles = new ArrayList<ArrayList<String>>();
 		try {
-			br = new BufferedReader(new FileReader(articlesF));
-	        String line = br.readLine();
-	        if(sizeRef == -1){  //there is no limit, let's take all the elements
-		        while (line != null) {
-			        ids.add(line.toString());
-		            line = br.readLine();
-		        }	        	
-	        } else {
-		        int i = 0;
-		        while (line != null && i < sizeRef) {
-			        ids.add(line.toString());
-		            line = br.readLine();
-		            i++;
+			FileInputStream fis = new FileInputStream(new File(fileComparable));
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+			String line = null;
+			while ((line = br.readLine()) != null) { //for every article
+				ArrayList<String> list = new ArrayList<String>();   
+		        String[] infoArticles = line.split("\t");
+		        for (String info : infoArticles){
+		        	String[] idTit = info.split("\\s+", 2);
+		        	if (field == 1){  // let's store the IDs
+		        		list.add(idTit[0]);
+		        	} else {  // let's store the titles
+		        		String title = idTit[1].trim().replaceAll("_"," ");
+		        		list.add(title);		        		
+		        	}
 		        }
-	        }
-	        br.close();
+		        fieldArticles.add(list);
+			}
+			br.close();
+			fis.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error("IO Error with file " + comparableArtFile + " (@loadFieldCompArts())");
 		}
-		return ids;
+		logger.info("Information extracted from input files (field "+field+")");
+		return fieldArticles;
 	}
 
+
+	
 	
 	
 	private static CommandLine parseArguments(String[] args)
@@ -285,10 +207,17 @@ public class ParallelSentenceExtractor {
 		options.addOption("p", "path2root", true,
 				    "Absolute Path to the folder where plain/ is (default: current)");
 		options.addOption("f", "file", true,
-	 				"Absolute path to the input file with the comparable articles across languages"
+	 				"Absolute path to the input file with the in-domain comparable articles across languages"
 						+ "(generated with CommonNamespaceFinder)");
+		options.addOption("a", "file", true,
+ 					"Absolute path to the input file with all the comparable articles across languages"
+					+ "(generated with CommonNamespaceFinder)");
 		options.addOption("o", "outpath", true,
 					"Path to the output directory (default: current)");
+		options.addOption("l", "L1", true,
+				"Language to extract (iso 639 code)");
+		options.addOption("i", "L2", true,
+				"Language to extract (iso 639 code)");
 
 
 		try {			
@@ -320,8 +249,12 @@ public class ParallelSentenceExtractor {
 	 * 
 	 * @param args
 	 *      -f Input file with the comparable article's IDs and titles
+	 *      -l Language to extract parallel sentences for, l1
+	 *      -i Language to extract parallel sentences for, l2
 	 * 		-o Path to the output folder
-	 * 		-p Path to the root folder for the given language
+	 * 		-p Path to the root folder
+	 *      -f path to the input file with the in-domain comparable articles across languages
+	 *      -a path to the input file with all the comparable articles across languages
 	 */
 	public static void main(String[] args) {
 
@@ -330,18 +263,22 @@ public class ParallelSentenceExtractor {
  		String inputFile =  cLine.getOptionValue("f");	
  		String path = cLine.hasOption("p") ?
 				  cLine.getOptionValue("p") : System.getProperty("user.dir");	
-		CHK.CHECK(new File(path).isDirectory(), "I cannot access the directory with the articles");
+		CHK.CHECK(new File(path).isDirectory(), "I cannot access the directory with the in-domain articles");
 		String outpath = cLine.hasOption("o") ? 
 				  cLine.getOptionValue("o") : System.getProperty("user.dir");
 	    CHK.CHECK(new File(outpath).isDirectory(), "I cannot access the output directory");
-	    */
+		String L1 =  cLine.getOptionValue("l");	
+ 		String L2 =  cLine.getOptionValue("i");	
+ 	    */
 		
-	    
-		String path = "/home/cristinae/pln/WikiTailor/oc.0";
+	    String L1 = "ca";
+	    String L2 = "es";
+		String path = "/home/cristinae/pln/WikiTailor/";
 		String outpath = "/home/cristinae/pln/WikiTailor/";
-		String inputFile = "/home/cristinae/pln/WikiTailor/es.45961.oc.54634.ro.34.ca.4564.union";
+		String inputFile = "/home/cristinae/pln/WikiTailor/en.22.ar.22.de.22.es.22.ca.22.fr.22.intersection";
+		String inputFileAll = "/home/cristinae/pln/WikiTailor/es.45961.oc.54634.ro.34.ca.4564.union";
 
-		ParallelSentenceExtractor xtractor = new ParallelSentenceExtractor(inputFile, path, outpath);
+		ParallelSentenceExtractor xtractor = new ParallelSentenceExtractor(inputFile, inputFileAll, path, outpath, L1, L2);
 		xtractor.processAll();
 
 	}

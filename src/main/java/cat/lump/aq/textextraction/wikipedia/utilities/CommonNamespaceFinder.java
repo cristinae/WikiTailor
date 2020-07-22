@@ -154,12 +154,10 @@ public class CommonNamespaceFinder {
 				 * file separator and filesID does not require any adaptation. */	
 				langs[i] = filesID[i].substring(
 						filesID[i].lastIndexOf(File.separator)+1, 
-//						filesID[i].lastIndexOf(File.separator)+3);
 						lanEndPos);
 				
 			} else {
 				/* The input files includes no path. Therefore the current path is added to filesID. */
-				//langs[i] = filesID[i].substring(0, 2);
 				langs[i] = filesID[i].substring(0, lanEndPos);
 				filesID[i] = String.format("%s%s%s", path, File.separator, filesID[i]); 
 			}
