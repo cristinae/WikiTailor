@@ -1,11 +1,13 @@
 package cat.lump.ir.lucene.query;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Locale;
 
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -67,18 +69,19 @@ public class LuceneQuerier extends LuceneInterface{
 		d2q = new Document2Query(lan);
 		Directory dir;
 		try {
-			dir = FSDirectory.open(new File(indexDir));
-			reader = IndexReader.open(dir);
+			
+			Path path = FileSystems.getDefault().getPath(indexDir);
+			dir = FSDirectory.open(path);
+			
+			reader = DirectoryReader.open(dir);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(LUCENE_VERSION, 
-								"contents",
+		parser = new QueryParser("contents",
 								d2q.getAnalyzer()
-					);		
-		//indexDimension = reader.numDocs();		
+					);
 		//loadDocIds();		
 	}
 	

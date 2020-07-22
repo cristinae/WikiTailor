@@ -4,14 +4,19 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -106,7 +111,7 @@ public class LuceneIndexerWT extends LuceneInterface{
 	public void close() throws IOException{
 	  logger.info(String.format(
 	      "PROCESS TERMINATED:  %d documents indexed in %d miliseconds", 
-	      INDEX_WRITER.numDocs(), System.currentTimeMillis() - PROCESS_START)); 
+	      INDEX_WRITER.getDocStats().numDocs, System.currentTimeMillis() - PROCESS_START)); 
 		INDEX_WRITER.close();	
 		
 	}
@@ -138,21 +143,30 @@ public class LuceneIndexerWT extends LuceneInterface{
 	}
 	
 	protected Document getDocument(File f) throws IOException{
-		Document doc = new Document();
-		//TermVector.WITH... allows for getting the vector later on 
-		// and potentially allows for computing the cosine similarity between 
-		//documents' vectors 		
+		// TODO duplicated from LuceneIndexer
+		// FieldType s the new way to set the configuration. Before, in version 3.6, 
+		// we had 
+		// doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
+		//		TermVector.WITH_POSITIONS_OFFSETS));
+		// Now we simply set this up in FieldType
 		
-		doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
-				TermVector.WITH_POSITIONS_OFFSETS)); 
+		Document doc = new Document();	
 		
-		doc.add(new Field("filename", f.getName(),	//Index file name
-				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
+		FieldType tft = new FieldType(TextField.TYPE_STORED);
+		tft.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+		Field textField = new Field(CONTENTS_NAME, new FileReader(f), tft);
+		doc.add(textField);
+		 
+		// TODO uncertain whether we need TYPE_STORED 
+		FieldType sft = new FieldType(StringField.TYPE_STORED);
+		//tft.setIndexOptions(IndexOptions.);
+		Field stringField = new Field("filename", f.getName(), sft);
+		doc.add(stringField); 
 		
-		doc.add(new Field("fullpath", f.getCanonicalPath(),	//Index file full path
-				Field.Store.YES, Field.Index.NOT_ANALYZED));
+		FieldType pft = new FieldType(StringField.TYPE_STORED);
+		Field pathField = new Field("fullpath", f.getCanonicalPath(), pft);
 		
-		//System.out.println(doc.toString());
+		doc.add(pathField);
 		
 		return doc;
 	}
@@ -172,14 +186,14 @@ public class LuceneIndexerWT extends LuceneInterface{
     //Setup the index path
     Directory indexDir = null;
     try {
-      indexDir = FSDirectory.open(new File(indexPath));
+    	Path path = FileSystems.getDefault().getPath(indexPath);
+    	indexDir = FSDirectory.open(path);
     } catch (IOException e) {
       e.printStackTrace();
       System.exit(-1);
     }
 
     IndexWriterConfig iwc = new IndexWriterConfig(
-        LUCENE_VERSION, 
         setAnalyzer(language)   //the analyser of the considered language
         );
     //We use the simple similarity model (tf-only)

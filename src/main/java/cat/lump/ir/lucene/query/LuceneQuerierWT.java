@@ -1,24 +1,25 @@
 package cat.lump.ir.lucene.query;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 
 import cat.lump.aq.basics.log.LumpLogger;
 import cat.lump.ir.lucene.LuceneInterface;
@@ -39,8 +40,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 
 	private static LumpLogger logger = 
 			new LumpLogger(LuceneQuerierWT.class.getSimpleName());
-			
-	private final Version LUCENE_VERSION = Version.LUCENE_35;
+		
 	
 	private Analyzer analyzer;
 	
@@ -95,7 +95,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 		//In this concrete experiment our terms are already "analysed",
 		// we don't need to do it again, so Whitespace, which is indeed
 		// language independent
-		analyzer = new WhitespaceAnalyzer(LUCENE_VERSION);
+		analyzer = new WhitespaceAnalyzer();
 	}
 
 	/**Loads the Lucene index (previously created) with the reference 
@@ -105,16 +105,15 @@ public class LuceneQuerierWT extends LuceneInterface{
 	public void loadIndex(Locale lan){
 		Directory dir;
 		try {
-			dir = FSDirectory.open(new File(indexDir));
-			reader = IndexReader.open(dir);
+			Path path = FileSystems.getDefault().getPath(indexDir); 
+			dir = FSDirectory.open(path);
+			reader = DirectoryReader.open(dir);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 		searcher = new IndexSearcher(reader);		
-		parser = new QueryParser(LUCENE_VERSION, "contents", analyzer);		
-		logger.info("Index loaded");
-		//indexDimension = reader.numDocs();		
-		//loadDocIds();		
+		parser = new QueryParser("contents", analyzer);		
+		logger.info("Index loaded");		
 	}
 	
 	
@@ -131,9 +130,14 @@ public class LuceneQuerierWT extends LuceneInterface{
 		LinkedHashMap<Float, String> idsLHM = new LinkedHashMap<Float, String>();
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
-			Query query = parser.parse(text);	
-			TopDocs topHits = searcher.search(query, TOP);	
-			float maxScore = topHits.getMaxScore();
+			Query query = parser.parse(text);			
+			
+			// getting the max score			
+			TopDocs topHit = searcher.search(query, 1); 
+			float maxScore = topHit.scoreDocs.length == 0 ? Float.NaN : topHit.scoreDocs[0].score;
+			
+			// getting the top hits
+			TopDocs topHits = searcher.search(query, TOP);
 			
 			for (ScoreDoc scoreDoc : topHits.scoreDocs) {	
 				Float score = scoreDoc.score;
@@ -148,7 +152,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 				}
 			}
 		
-		    searcher.close();
+		    //searcher.close();
 		
 		} catch (Exception e) {
 			logger.warn("Empty query");
@@ -173,9 +177,14 @@ public class LuceneQuerierWT extends LuceneInterface{
 		String ids = "";
 		try {
 			//Necessary if the query is empty (e.g. text ha stopwords only)
-			Query query = parser.parse(text);	
-			TopDocs topHits = searcher.search(query, TOP);	
-			float maxScore = topHits.getMaxScore();
+			Query query = parser.parse(text);
+			
+			// getting the max score			
+			TopDocs topHit = searcher.search(query, 1); 
+			float maxScore = topHit.scoreDocs.length == 0 ? Float.NaN : topHit.scoreDocs[0].score;
+			
+			// getting the top hits
+			TopDocs topHits = searcher.search(query, TOP);
 			
 			logger.info("Obtained " + topHits.totalHits + " hits with a maximum score of " + maxScore); 
 			for (ScoreDoc scoreDoc : topHits.scoreDocs) {	
@@ -199,7 +208,7 @@ public class LuceneQuerierWT extends LuceneInterface{
 				}
 			}
 		
-		    searcher.close();
+		    // searcher.close();
 		
 		} catch (Exception e) {
 			logger.warn("Empty query");

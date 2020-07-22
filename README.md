@@ -1,4 +1,7 @@
 # WikiTailor 
+
+WikiTailor is temporarily out of business as it is refurbishing to use up-to-date Lucene libraries. We are currently working on it and hoping it will be ready soon. 
+
 ### Your à-la-carte corpora extraction tool
 
 WikiTailor is a tool for extracting in-domain corpora from Wikipedia. A domain must be defined as an existing category in Wikipedia (or in Vikipèdia, or in ويكيبيديا or in Βικιπαίδεια) and the articles belonging to that domain are extracted even if they are not tagged as such. Two extraction methods are implemented: the main system is based on the exploration of Wikipedia's category graph and a secondary one based information retrieval techniques is also included.
@@ -56,7 +59,7 @@ For a complete analysis of the methods implemented see:
 
 * Cristina España-Bonet, Alberto Barrón-Cedeño and Lluís Màrquez.
 **Tailoring Wikipedia for in-Domain Comparable Corpora Extraction**.
-In preparation
+[Preprint arXiv:2005.01177](https://arxiv.org/abs/2005.01177)
 
 * Alberto Barrón-Cedeño, Cristina España-Bonet, Josu Boldoba and Lluís Màrquez.
 **A Factory of Comparable Corpora from Wikipedia**.

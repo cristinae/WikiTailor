@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,8 +31,11 @@ import org.apache.lucene.analysis.ro.RomanianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
@@ -98,13 +103,13 @@ public class LuceneIndexer extends LuceneInterface{
 		
 		Directory dir = null;
 		try {
-			dir = FSDirectory.open(new File(indexDir));
+			Path path = FileSystems.getDefault().getPath(indexDir); 
+			dir = FSDirectory.open(path);			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		IndexWriterConfig iwc = new IndexWriterConfig(
-				LUCENE_VERSION, 
+		IndexWriterConfig iwc = new IndexWriterConfig(				
 				analyzer 	//the analyser of the considered language
 				);
 		//We use the simple similarity model (tf-only)
@@ -155,7 +160,8 @@ public class LuceneIndexer extends LuceneInterface{
 				
 			}
 		}
-		numIndexed = writer.numDocs();
+		
+		numIndexed = writer.getDocStats().numDocs;
 	}
 	
 	/**Closes the Lucene index
@@ -177,40 +183,40 @@ public class LuceneIndexer extends LuceneInterface{
 	  Analyzer analyzer;
 		switch (lan.getLanguage()) {
 			case "ar":	
-				analyzer = new ArabicAnalyzer(LUCENE_VERSION);
+				analyzer = new ArabicAnalyzer();
 				break;			
 			case "bg":	
-				analyzer = new BulgarianAnalyzer(LUCENE_VERSION);
+				analyzer = new BulgarianAnalyzer();
 				break;
 			case "ca":	
-				analyzer = new CatalanAnalyzer(LUCENE_VERSION);
+				analyzer = new CatalanAnalyzer();
 				break;
 			case "cs":	
-				analyzer = new CzechAnalyzer(LUCENE_VERSION);
+				analyzer = new CzechAnalyzer();
 				break;				
 			case "de":	
-				analyzer = new GermanAnalyzer(LUCENE_VERSION);
+				analyzer = new GermanAnalyzer();
 				break;
 			case "el":	
-				analyzer = new GreekAnalyzer(LUCENE_VERSION);
+				analyzer = new GreekAnalyzer();
 				break;
 			case "en":	
-				analyzer = new StandardAnalyzer(LUCENE_VERSION);
+				analyzer = new StandardAnalyzer();
 				break;
 			case "es":	
-				analyzer = new SpanishAnalyzer(LUCENE_VERSION);
+				analyzer = new SpanishAnalyzer();
 				break;
 			case "et":	
 				analyzer = new EstonianAnalyzer(LUCENE_VERSION);
 				break;
 			case "eu":	
-				analyzer = new BasqueAnalyzer(LUCENE_VERSION);
+				analyzer = new BasqueAnalyzer();
 				break;
 			case "pt":	
-				analyzer = new PortugueseAnalyzer(LUCENE_VERSION);
+				analyzer = new PortugueseAnalyzer();
 				break;
 			case "fr":	
-				analyzer = new FrenchAnalyzer(LUCENE_VERSION);
+				analyzer = new FrenchAnalyzer();
 				break;
 			case "hr":	
 				analyzer = new CroatianAnalyzer();
@@ -219,10 +225,10 @@ public class LuceneIndexer extends LuceneInterface{
 				analyzer = new LithuanianAnalyzer();
 				break;
 			case "lv":	
-				analyzer = new LatvianAnalyzer(LUCENE_VERSION);
+				analyzer = new LatvianAnalyzer();
 				break;
 			case "ro":	
-				analyzer = new RomanianAnalyzer(LUCENE_VERSION);
+				analyzer = new RomanianAnalyzer();
 				break;
 			case "sl":	
 				analyzer = new SlovenianAnalyzer();
@@ -230,7 +236,7 @@ public class LuceneIndexer extends LuceneInterface{
 			default:	
 				logger.warn("I cannot process the required language. "
 						+ "English used.");
-				analyzer = new StandardAnalyzer(LUCENE_VERSION);
+				analyzer = new StandardAnalyzer();
 		}
 		return analyzer;
 	}
@@ -248,20 +254,38 @@ public class LuceneIndexer extends LuceneInterface{
 	}
 	
 	protected Document getDocument(File f) throws IOException{
-		Document doc = new Document();
-		//TermVector.WITH... allows for getting the vector later on 
-		// and potentially allows for computing the cosine similarity between 
-		//documents' vectors 		
+		// FieldType s the new way to set the configuration. Before, in version 3.6, 
+		// we had 
+		// doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
+		//		TermVector.WITH_POSITIONS_OFFSETS));
+		// Now we simply set this up in FieldType
 		
-		doc.add(new Field(CONTENTS_NAME, new FileReader(f),	//Index file content
-				TermVector.WITH_POSITIONS_OFFSETS)); 
+		Document doc = new Document();	
 		
-		doc.add(new Field("filename", f.getName(),	//Index file name
-				Field.Store.YES, Field.Index.NOT_ANALYZED)); 
+		FieldType tft = new FieldType(TextField.TYPE_STORED);
+		tft.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+		Field textField = new Field(CONTENTS_NAME, new FileReader(f), tft);
+		doc.add(textField);
+		 
+		// TODO uncertain whether we need TYPE_STORED 
+		FieldType sft = new FieldType(StringField.TYPE_STORED);
+		//tft.setIndexOptions(IndexOptions.);
+		Field stringField = new Field("filename", f.getName(), sft);
+		doc.add(stringField); 
 		
-		doc.add(new Field("fullpath", f.getCanonicalPath(),	//Index file full path
-				Field.Store.YES, Field.Index.NOT_ANALYZED));
+		FieldType pft = new FieldType(StringField.TYPE_STORED);
+		Field pathField = new Field("fullpath", f.getCanonicalPath(), pft);
 		
+		doc.add(pathField);
+		
+		/*
+		 * doc.add(new Field("filename", f.getName(), //Index file name Field.Store.YES,
+		 * Field.Index.NOT_ANALYZED));
+		 * 
+		 * doc.add(new Field("fullpath", f.getCanonicalPath(), //Index file full path
+		 * Field.Store.YES, Field.Index.NOT_ANALYZED));
+		 * 
+		 */		
 		return doc;
 	}
 

@@ -5,25 +5,24 @@
 
 package cat.lump.ir.lucene.index;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileReader;
-import java.io.IOException;
-
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.TermVector;
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.store.LockObtainFailedException;
-import org.apache.lucene.util.Version;
-
-import cat.lump.aq.basics.check.CHK;
-import cat.lump.aq.basics.log.LumpLogger;
+//import java.io.File;
+//import java.io.FileFilter;
+//import java.io.FileReader;
+//import java.io.IOException;
+//
+//import org.apache.lucene.analysis.Analyzer;
+//import org.apache.lucene.document.Document;
+//import org.apache.lucene.document.Field;
+//import org.apache.lucene.index.CorruptIndexException;
+//import org.apache.lucene.index.IndexWriter;
+//import org.apache.lucene.index.IndexWriterConfig;
+//import org.apache.lucene.store.Directory;
+//import org.apache.lucene.store.FSDirectory;
+//import org.apache.lucene.store.LockObtainFailedException;
+//import org.apache.lucene.util.Version;
+//
+//import cat.lump.aq.basics.check.CHK;
+//import cat.lump.aq.basics.log.LumpLogger;
 
 /**
  * An indexer based on Lucene in Action 2nd edition.

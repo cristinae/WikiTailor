@@ -26,7 +26,6 @@ import org.apache.lucene.analysis.ro.RomanianAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 
 import cat.lump.aq.basics.check.CHK;
-import cat.lump.ir.lucene.LuceneInterface;
 
 /**
  * Factory that allows for getting a Lucene {@code Analyzer} and a stemmer for the 
@@ -53,48 +52,48 @@ public class AnalyzerFactoryLucene {
 		
 		switch(lang){
 		case "ar":
-			analyzer = new ArabicAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new ArabicAnalyzer();
 			break;
 		case "bg":
-			analyzer = new BulgarianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new BulgarianAnalyzer();
 			break;
 		case "ca":
-			analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new CatalanAnalyzer();
 			break;
 		case "cs":
-			analyzer = new CzechAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new CzechAnalyzer();
 			break;
 		case "de":
-			analyzer = new GermanAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new GermanAnalyzer();
 			break;
 		case "el":
-			analyzer = new GreekAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new GreekAnalyzer();
 			break;
 		case "en":
-			analyzer = new StandardAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new StandardAnalyzer();
 			break;
 		case "es":
-			analyzer = new SpanishAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new SpanishAnalyzer();
 			break;
 		case "eu":
-			analyzer = new BasqueAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new BasqueAnalyzer();
 			break;
 		case "fr":
-			analyzer = new FrenchAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new FrenchAnalyzer();
 			break;
 		case "it":
-			analyzer = new ItalianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new ItalianAnalyzer();
 			break;
 		case "oc":
-			analyzer = new CatalanAnalyzer(LuceneInterface.LUCENE_VERSION);             //TODO Solve this!
+			analyzer = new CatalanAnalyzer();             //TODO Solve this!
 			CHK.CHECK(false, "Using the Catalan stemmer for language "+
 					language.getDisplayLanguage() );
 			break;
 		case "pt":
-			analyzer = new PortugueseAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new PortugueseAnalyzer();
 			break;
 		case "ro":
-			analyzer = new RomanianAnalyzer(LuceneInterface.LUCENE_VERSION);
+			analyzer = new RomanianAnalyzer();
 			break;
 		default:
 			CHK.CHECK(false, "No Lucene Analyzer is available for language "+
@@ -135,7 +134,7 @@ public class AnalyzerFactoryLucene {
 		case "de":
 			break;
 		case "el":
-			ts = new GreekLowerCaseFilter(LuceneInterface.LUCENE_VERSION, ts);
+			ts = new GreekLowerCaseFilter(ts);
 			ts = new GreekStemFilter(ts);
 			break;
 		case "en":
